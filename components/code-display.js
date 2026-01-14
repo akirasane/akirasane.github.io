@@ -2,6 +2,9 @@ class CodeDisplay extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
+
+        // ✅ Capture content ONCE before shadow renders
+        this.rawCode = this.innerHTML;
     }
 
     connectedCallback() {
@@ -18,7 +21,10 @@ class CodeDisplay extends HTMLElement {
     }
 
     render() {
-        const lines = this.textContent.trim().split('\n');
+        const lines = this.rawCode
+            .trim()
+            .split('\n')
+            .map(line => line.replace(/&nbsp;/g, ' ').trimEnd());
 
         this.shadowRoot.innerHTML = `
             <style>
@@ -38,8 +44,7 @@ class CodeDisplay extends HTMLElement {
                     box-shadow:
                         0 0 0 1px rgba(148,163,184,0.1),
                         0 20px 50px rgba(0,0,0,0.6),
-                        inset 0 0 40px rgba(99,102,241,0.1);
-                    animation: fadeIn 0.8s ease-out;
+                        inset 0 0 40px rgba(99,102,241,0.15);
                 }
 
                 .line {
@@ -60,29 +65,15 @@ class CodeDisplay extends HTMLElement {
                 .function { color: #34d399; }
                 .variable { color: #f472b6; }
                 .string { color: #fbbf24; }
-
-                @keyframes fadeIn {
-                    from {
-                        opacity: 0;
-                        transform: translateY(10px) scale(0.98);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: none;
-                    }
-                }
             </style>
 
             <div class="code-container">
-                ${lines
-                    .map(
-                        (line, i) => `
-                        <div class="line">
-                            <div class="line-number">${i + 1}</div>
-                            <div class="code">${this.highlight(line)}</div>
-                        </div>`
-                    )
-                    .join('')}
+                ${lines.map((line, i) => `
+                    <div class="line">
+                        <div class="line-number">${i + 1}</div>
+                        <div class="code">${this.highlight(line)}</div>
+                    </div>
+                `).join('')}
             </div>
         `;
     }
