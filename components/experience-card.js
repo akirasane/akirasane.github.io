@@ -5,6 +5,7 @@ class ExperienceCard extends HTMLElement {
     }
 
     connectedCallback() {
+        this.classList.add('fade-in');
         this.render();
     }
 

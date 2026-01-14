@@ -5,6 +5,7 @@ class SkillCard extends HTMLElement {
     }
 
     connectedCallback() {
+        this.classList.add('fade-in');
         this.render();
     }
 

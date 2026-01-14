@@ -10,6 +10,23 @@
     <script src="components/experience-card.js"></script>
     <script src="components/project-item.js"></script>
     <style>
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+        }
+
+        body {
+            scroll-snap-type: y mandatory;
+        }
+
+        section {
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
         .fade-in {
             opacity: 0;
             transform: translateY(30px);
