@@ -1,23 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Akira Sane</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-gray-50">
     <div class="min-h-screen flex items-center justify-center p-4">
-        <div class="max-w-2xl w-full bg-white rounded-lg shadow-lg p-8">
-            <h1 class="text-4xl font-bold text-gray-900 mb-4">Welcome</h1>
-            <p class="text-lg text-gray-600 mb-6">
+        <div class="relative max-w-2xl w-full bg-white rounded-lg shadow-lg pt-12 p-8">
+
+            <!-- Avatar / Icon -->
+            <div class="absolute -top-5 left-1/2 -translate-x-1/2">
+                <div
+                    class="relative w-100 h-100 overflow-hidden bg-neutral-secondary-medium rounded-full flex items-center justify-center">
+                    <img class="w-100 h-100 rounded-full" src="/Images/profile.png" alt="Rounded avatar">
+                </div>
+            </div>
+
+            <!-- Content -->
+            <h1 class="text-4xl font-bold text-gray-900 mb-4 text-center">Welcome</h1>
+            <p class="text-lg text-gray-600 mb-6 text-center">
                 This is a simple page built with Tailwind CSS.
             </p>
+
             <div class="space-y-4">
                 <div class="p-4 bg-blue-50 rounded-lg">
                     <h2 class="text-xl font-semibold text-blue-900 mb-2">About</h2>
                     <p class="text-blue-700">Add your content here.</p>
                 </div>
+
                 <div class="p-4 bg-green-50 rounded-lg">
                     <h2 class="text-xl font-semibold text-green-900 mb-2">Projects</h2>
                     <p class="text-green-700">Showcase your work here.</p>
@@ -25,5 +39,7 @@
             </div>
         </div>
     </div>
+
 </body>
+
 </html>
