@@ -48,12 +48,13 @@ class ExperienceCard extends HTMLElement {
                 }
 
                 .card {
-                    background-color: #f9fafb;
+                    background-color: #1f2937;
                     padding: 2rem;
                     border-radius: 0.5rem;
-                    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+                    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
                     transition: box-shadow 0.2s ease;
                     animation: fadeInUp 0.6s ease-out;
+                    border: 1px solid #374151;
                 }
 
                 .card:hover {
@@ -78,7 +79,7 @@ class ExperienceCard extends HTMLElement {
                 .info h3 {
                     font-size: 1.5rem;
                     font-weight: bold;
-                    color: #111827;
+                    color: #f3f4f6;
                     margin: 0;
                 }
 
@@ -89,13 +90,13 @@ class ExperienceCard extends HTMLElement {
                 }
 
                 .period {
-                    color: #6b7280;
+                    color: #9ca3af;
                     font-size: 0.875rem;
                     white-space: nowrap;
                 }
 
                 .description {
-                    color: #4b5563;
+                    color: #d1d5db;
                     margin-bottom: 1rem;
                 }
 

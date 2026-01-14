@@ -36,12 +36,13 @@ class SkillCard extends HTMLElement {
                 }
 
                 .card {
-                    background-color: white;
+                    background-color: #1f2937;
                     padding: 1.5rem;
                     border-radius: 0.5rem;
-                    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+                    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
                     transition: box-shadow 0.2s ease;
                     animation: fadeInUp 0.6s ease-out;
+                    border: 1px solid #374151;
                 }
 
                 .card:hover {

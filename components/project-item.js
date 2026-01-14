@@ -45,12 +45,12 @@ class ProjectItem extends HTMLElement {
 
                 .title {
                     font-weight: 600;
-                    color: #111827;
+                    color: #f3f4f6;
                     margin-bottom: 0.5rem;
                 }
 
                 .description {
-                    color: #4b5563;
+                    color: #d1d5db;
                     font-size: 0.875rem;
                     margin-bottom: 0.5rem;
                 }
