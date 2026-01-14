@@ -8,70 +8,82 @@ class CodeDisplay extends HTMLElement {
         this.render();
     }
 
+    highlight(line) {
+        return line
+            .replace(/\b(private|static|new|return)\b/g, `<span class="keyword">$1</span>`)
+            .replace(/\b(Developer|int|string|void)\b/g, `<span class="type">$1</span>`)
+            .replace(/(\w+)\(/g, `<span class="function">$1</span>(`)
+            .replace(/\b(me)\b/g, `<span class="variable">$1</span>`)
+            .replace(/"([^"]*)"/g, `<span class="string">"$1"</span>`);
+    }
+
     render() {
-        const code = this.textContent.trim();
-        
+        const lines = this.textContent.trim().split('\n');
+
         this.shadowRoot.innerHTML = `
             <style>
                 :host {
                     display: block;
+                    max-width: 900px;
+                    margin: auto;
                 }
 
                 .code-container {
-                    background-color: #0f172a;
-                    border: 1px solid #334155;
-                    border-radius: 0.5rem;
-                    padding: 1.5rem;
-                    overflow-x: auto;
-                    font-family: 'Courier New', monospace;
-                    font-size: 0.875rem;
-                    line-height: 1.5;
-                    color: #cbd5e1;
+                    background: radial-gradient(circle at top, #1e293b, #020617);
+                    border-radius: 16px;
+                    padding: 24px;
+                    font-family: 'JetBrains Mono', monospace;
+                    font-size: 14px;
+                    color: #e5e7eb;
+                    box-shadow:
+                        0 0 0 1px rgba(148,163,184,0.1),
+                        0 20px 50px rgba(0,0,0,0.6),
+                        inset 0 0 40px rgba(99,102,241,0.1);
+                    animation: fadeIn 0.8s ease-out;
                 }
 
                 .line {
-                    display: flex;
-                    margin-bottom: 0.5rem;
+                    display: grid;
+                    grid-template-columns: 40px 1fr;
+                    gap: 16px;
+                    padding: 2px 0;
                 }
 
                 .line-number {
-                    color: #64748b;
-                    margin-right: 1.5rem;
-                    min-width: 2rem;
                     text-align: right;
+                    color: #475569;
                     user-select: none;
                 }
 
-                .keyword {
-                    color: #c084fc;
-                }
+                .keyword { color: #c084fc; }
+                .type { color: #60a5fa; }
+                .function { color: #34d399; }
+                .variable { color: #f472b6; }
+                .string { color: #fbbf24; }
 
-                .type {
-                    color: #60a5fa;
-                }
-
-                .function {
-                    color: #34d399;
-                }
-
-                .variable {
-                    color: #f472b6;
-                }
-
-                .string {
-                    color: #fbbf24;
-                }
-
-                .comment {
-                    color: #6b7280;
-                }
-
-                .punctuation {
-                    color: #cbd5e1;
+                @keyframes fadeIn {
+                    from {
+                        opacity: 0;
+                        transform: translateY(10px) scale(0.98);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: none;
+                    }
                 }
             </style>
 
-            <pre class="code-container"><slot></slot></pre>
+            <div class="code-container">
+                ${lines
+                    .map(
+                        (line, i) => `
+                        <div class="line">
+                            <div class="line-number">${i + 1}</div>
+                            <div class="code">${this.highlight(line)}</div>
+                        </div>`
+                    )
+                    .join('')}
+            </div>
         `;
     }
 }
