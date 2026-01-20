@@ -66,10 +66,12 @@ $me = Developer::createMe();`;
                     position: relative;
                     width: 100%;
                     min-height: 85vh;
+                    max-height: 100vh;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     overflow: hidden;
+                    padding: 2rem 0;
                 }
 
                 /* Animated background gradient */
@@ -165,6 +167,11 @@ $me = Developer::createMe();`;
                         0 0 100px rgba(99, 102, 241, 0.2);
                     animation: fadeInUp 1s ease-out 0.3s both;
                     transition: transform 0.3s ease, box-shadow 0.3s ease;
+                    max-width: 100%;
+                    width: 100%;
+                    max-height: 70vh;
+                    display: flex;
+                    flex-direction: column;
                 }
 
                 .code-window:hover {
@@ -224,9 +231,10 @@ $me = Developer::createMe();`;
                     font-size: clamp(0.75rem, 1.5vw, 0.95rem);
                     line-height: 1.8;
                     color: #e5e7eb;
-                    overflow-x: auto;
-                    min-height: 400px;
-                    max-height: 500px;
+                    overflow: auto;
+                    min-height: 300px;
+                    max-height: min(60vh, 500px);
+                    position: relative;
                 }
 
                 .line {
@@ -268,6 +276,31 @@ $me = Developer::createMe();`;
                     background: linear-gradient(180deg, #60a5fa, #a78bfa);
                     animation: blink 1s infinite;
                     box-shadow: 0 0 8px rgba(96, 165, 250, 0.5);
+                }
+
+                /* Custom scrollbar for code container */
+                .code-container::-webkit-scrollbar {
+                    width: 8px;
+                    height: 8px;
+                }
+
+                .code-container::-webkit-scrollbar-track {
+                    background: rgba(15, 23, 42, 0.5);
+                    border-radius: 4px;
+                }
+
+                .code-container::-webkit-scrollbar-thumb {
+                    background: rgba(99, 102, 241, 0.3);
+                    border-radius: 4px;
+                    transition: background 0.3s ease;
+                }
+
+                .code-container::-webkit-scrollbar-thumb:hover {
+                    background: rgba(99, 102, 241, 0.5);
+                }
+
+                .code-container::-webkit-scrollbar-corner {
+                    background: rgba(15, 23, 42, 0.5);
                 }
 
                 @keyframes blink {
@@ -319,18 +352,33 @@ $me = Developer::createMe();`;
 
                 @media (max-width: 768px) {
                     .hero-header {
-                        margin-bottom: 2rem;
+                        margin-bottom: 1.5rem;
+                    }
+
+                    .hero-wrapper {
+                        min-height: 90vh;
+                        max-height: 100vh;
+                        padding: 1rem 0;
+                    }
+
+                    .code-window {
+                        max-height: 60vh;
                     }
 
                     .code-container {
                         padding: 1rem;
                         font-size: 0.75rem;
+                        max-height: 50vh;
                     }
 
                     .cta-button {
                         display: block;
                         margin: 0.5rem auto;
                         max-width: 250px;
+                    }
+
+                    .hero-title {
+                        font-size: 2.5rem;
                     }
                 }
             </style>
