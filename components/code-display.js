@@ -65,13 +65,13 @@ $me = Developer::createMe();`;
                 .hero-wrapper {
                     position: relative;
                     width: 100%;
-                    min-height: 85vh;
-                    max-height: 100vh;
+                    height: 100vh;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     overflow: hidden;
-                    padding: 2rem 0;
+                    padding: 1rem;
+                    box-sizing: border-box;
                 }
 
                 /* Animated background gradient */
@@ -118,13 +118,19 @@ $me = Developer::createMe();`;
                     z-index: 10;
                     width: 100%;
                     max-width: 1400px;
-                    padding: 0 2rem;
+                    padding: 0 1rem;
+                    height: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    box-sizing: border-box;
                 }
 
                 .hero-header {
                     text-align: center;
-                    margin-bottom: 3rem;
+                    margin-bottom: 2rem;
                     animation: fadeInDown 1s ease-out;
+                    flex-shrink: 0;
                 }
 
                 @keyframes fadeInDown {
@@ -169,9 +175,10 @@ $me = Developer::createMe();`;
                     transition: transform 0.3s ease, box-shadow 0.3s ease;
                     max-width: 100%;
                     width: 100%;
-                    max-height: 70vh;
                     display: flex;
                     flex-direction: column;
+                    flex: 1;
+                    min-height: 0;
                 }
 
                 .code-window:hover {
@@ -200,6 +207,7 @@ $me = Developer::createMe();`;
                     align-items: center;
                     gap: 0.5rem;
                     border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+                    flex-shrink: 0;
                 }
 
                 .window-dot {
@@ -226,15 +234,14 @@ $me = Developer::createMe();`;
 
                 .code-container {
                     background: #0f172a;
-                    padding: 2rem;
+                    padding: 1.5rem;
                     font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
-                    font-size: clamp(0.75rem, 1.5vw, 0.95rem);
-                    line-height: 1.8;
+                    font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+                    line-height: 1.6;
                     color: #e5e7eb;
                     overflow: auto;
-                    min-height: 300px;
-                    max-height: min(60vh, 500px);
-                    position: relative;
+                    flex: 1;
+                    min-height: 0;
                 }
 
                 .line {
@@ -310,8 +317,9 @@ $me = Developer::createMe();`;
 
                 .cta-section {
                     text-align: center;
-                    margin-top: 3rem;
+                    margin-top: 2rem;
                     animation: fadeIn 1s ease-out 0.6s both;
+                    flex-shrink: 0;
                 }
 
                 @keyframes fadeIn {
@@ -352,33 +360,38 @@ $me = Developer::createMe();`;
 
                 @media (max-width: 768px) {
                     .hero-header {
-                        margin-bottom: 1.5rem;
+                        margin-bottom: 1rem;
                     }
 
                     .hero-wrapper {
-                        min-height: 90vh;
-                        max-height: 100vh;
-                        padding: 1rem 0;
-                    }
-
-                    .code-window {
-                        max-height: 60vh;
+                        height: 100vh;
+                        padding: 0.5rem;
                     }
 
                     .code-container {
                         padding: 1rem;
-                        font-size: 0.75rem;
-                        max-height: 50vh;
+                        font-size: 0.7rem;
+                        line-height: 1.5;
+                    }
+
+                    .cta-section {
+                        margin-top: 1rem;
                     }
 
                     .cta-button {
                         display: block;
                         margin: 0.5rem auto;
                         max-width: 250px;
+                        padding: 0.8rem 2rem;
+                        font-size: 1rem;
                     }
 
                     .hero-title {
                         font-size: 2.5rem;
+                    }
+
+                    .hero-subtitle {
+                        font-size: 1rem;
                     }
                 }
             </style>
