@@ -68,28 +68,20 @@
 
     <!-- Hero Section -->
     <section id="home"
-        class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800 pt-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-950 via-gray-900 to-purple-950 pt-16 relative overflow-hidden">
+        <!-- Animated background elements -->
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl -top-48 -left-48 animate-pulse"></div>
+            <div class="absolute w-96 h-96 bg-purple-500/10 rounded-full blur-3xl -bottom-48 -right-48 animate-pulse" style="animation-delay: 2s;"></div>
+            <div class="absolute w-96 h-96 bg-blue-500/10 rounded-full blur-3xl top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse" style="animation-delay: 4s;"></div>
+        </div>
+        
+        <!-- Grid pattern overlay -->
+        <div class="absolute inset-0 bg-[linear-gradient(rgba(99,102,241,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(99,102,241,0.03)_1px,transparent_1px)] bg-[size:50px_50px]"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <code-display>
-                private static Developer createMe() {
-                Developer me = new Developer("John Doe");
-
-                me.setTitle("Software Developer & System Analyst");
-                me.setPassion("Building elegant solutions to complex problems");
-
-                me.addSkills("Full-Stack Development", "System Design", "Architecture");
-                me.setExperience(5);
-
-                return me;
-                }
             </code-display>
-
-
-            <div class="mt-12">
-                <a href="#contact"
-                    class="inline-block bg-indigo-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-indigo-700 transition shadow-lg hover:shadow-xl">Contact
-                    Me</a>
-            </div>
         </div>
     </section>
 
