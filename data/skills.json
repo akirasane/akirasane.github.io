@@ -1,0 +1,185 @@
+{
+  "skills": [
+    {
+      "category": "Frontend",
+      "color": "indigo",
+      "items": [
+        {
+          "name": "React",
+          "proficiency": 90,
+          "years": 5
+        },
+        {
+          "name": "Vue.js",
+          "proficiency": 85,
+          "years": 4
+        },
+        {
+          "name": "TypeScript",
+          "proficiency": 88,
+          "years": 4
+        },
+        {
+          "name": "Tailwind CSS",
+          "proficiency": 92,
+          "years": 3
+        },
+        {
+          "name": "HTML5/CSS3",
+          "proficiency": 95,
+          "years": 5
+        }
+      ]
+    },
+    {
+      "category": "Backend",
+      "color": "emerald",
+      "items": [
+        {
+          "name": "Node.js",
+          "proficiency": 87,
+          "years": 4
+        },
+        {
+          "name": "REST API",
+          "proficiency": 90,
+          "years": 5
+        },
+        {
+          "name": "C#",
+          "proficiency": 82,
+          "years": 3
+        },
+        {
+          "name": ".NET MVC",
+          "proficiency": 80,
+          "years": 3
+        },
+        {
+          "name": "PHP",
+          "proficiency": 85,
+          "years": 4
+        },
+        {
+          "name": "Laravel",
+          "proficiency": 88,
+          "years": 4
+        },
+        {
+          "name": "FilamentPHP",
+          "proficiency": 75,
+          "years": 2
+        }
+      ]
+    },
+    {
+      "category": "Database",
+      "color": "gray",
+      "items": [
+        {
+          "name": "PostgreSQL",
+          "proficiency": 85,
+          "years": 4
+        },
+        {
+          "name": "MongoDB",
+          "proficiency": 80,
+          "years": 3
+        },
+        {
+          "name": "Redis",
+          "proficiency": 78,
+          "years": 3
+        },
+        {
+          "name": "MySQL",
+          "proficiency": 90,
+          "years": 5
+        }
+      ]
+    },
+    {
+      "category": "DevOps & Tools",
+      "color": "indigo",
+      "items": [
+        {
+          "name": "Docker",
+          "proficiency": 83,
+          "years": 3
+        },
+        {
+          "name": "Git",
+          "proficiency": 92,
+          "years": 5
+        },
+        {
+          "name": "CI/CD",
+          "proficiency": 80,
+          "years": 3
+        },
+        {
+          "name": "AWS",
+          "proficiency": 75,
+          "years": 2
+        },
+        {
+          "name": "Linux",
+          "proficiency": 85,
+          "years": 4
+        }
+      ]
+    },
+    {
+      "category": "System Analysis",
+      "color": "emerald",
+      "items": [
+        {
+          "name": "UML",
+          "proficiency": 88,
+          "years": 4
+        },
+        {
+          "name": "Requirements Analysis",
+          "proficiency": 90,
+          "years": 5
+        },
+        {
+          "name": "System Design",
+          "proficiency": 87,
+          "years": 4
+        },
+        {
+          "name": "Agile/Scrum",
+          "proficiency": 85,
+          "years": 4
+        }
+      ]
+    },
+    {
+      "category": "Soft Skills",
+      "color": "gray",
+      "items": [
+        {
+          "name": "Problem Solving",
+          "proficiency": 92,
+          "years": 5
+        },
+        {
+          "name": "Team Leadership",
+          "proficiency": 85,
+          "years": 4
+        },
+        {
+          "name": "Communication",
+          "proficiency": 88,
+          "years": 5
+        },
+        {
+          "name": "Critical Thinking",
+          "proficiency": 90,
+          "years": 5
+        }
+      ]
+    }
+  ]
+}

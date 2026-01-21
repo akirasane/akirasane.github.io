@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Handling Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="components/experience-timeline.js"></script>
+    <script src="components/projects-showcase.js"></script>
+    <script src="components/badge-tag.js"></script>
+    <script src="components/project-item.js"></script>
+</head>
+<body class="bg-gray-900 text-gray-100 p-8">
+    <div class="max-w-7xl mx-auto space-y-12">
+        <h1 class="text-4xl font-bold text-center mb-8">Error Handling & Loading States Test</h1>
+        
+        <!-- Test 1: Valid Data Source (should show skeleton then content) -->
+        <section class="bg-gray-800 p-6 rounded-lg">
+            <h2 class="text-2xl font-semibold mb-4">Test 1: Valid Data Source</h2>
+            <p class="text-gray-400 mb-4">Should show skeleton loader, then load experiences successfully</p>
+            <experience-timeline data-source="data/experiences.json"></experience-timeline>
+        </section>
+
+        <!-- Test 2: Invalid Data Source (should show skeleton then error with retry) -->
+        <section class="bg-gray-800 p-6 rounded-lg">
+            <h2 class="text-2xl font-semibold mb-4">Test 2: Invalid Data Source</h2>
+            <p class="text-gray-400 mb-4">Should show skeleton loader, then error message with retry button</p>
+            <experience-timeline data-source="data/nonexistent.json"></experience-timeline>
+        </section>
+
+        <!-- Test 3: Projects with Valid Data -->
+        <section class="bg-gray-800 p-6 rounded-lg">
+            <h2 class="text-2xl font-semibold mb-4">Test 3: Projects - Valid Data</h2>
+            <p class="text-gray-400 mb-4">Should show skeleton loader, then load projects successfully</p>
+            <projects-showcase data-source="data/experiences.json"></projects-showcase>
+        </section>
+
+        <!-- Test 4: Projects with Invalid Data -->
+        <section class="bg-gray-800 p-6 rounded-lg">
+            <h2 class="text-2xl font-semibold mb-4">Test 4: Projects - Invalid Data</h2>
+            <p class="text-gray-400 mb-4">Should show skeleton loader, then error message with retry button</p>
+            <projects-showcase data-source="data/invalid.json"></projects-showcase>
+        </section>
+
+        <!-- Test 5: Image Error Handling -->
+        <section class="bg-gray-800 p-6 rounded-lg">
+            <h2 class="text-2xl font-semibold mb-4">Test 5: Image Error Handling</h2>
+            <p class="text-gray-400 mb-4">Should show placeholder when image fails to load</p>
+            <div class="flex gap-4">
+                <div>
+                    <p class="text-sm text-gray-500 mb-2">Valid Image:</p>
+                    <img id="validImage" src="Images/profile.webp" alt="Valid profile" class="w-32 h-32 rounded-lg object-cover">
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500 mb-2">Invalid Image:</p>
+                    <img id="invalidImage" src="Images/nonexistent.jpg" alt="Invalid image" class="w-32 h-32 rounded-lg object-cover">
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Image Error Handling
+        (function initImageErrorHandling() {
+            // Create a placeholder SVG for failed images
+            const createPlaceholderSVG = (width, height) => {
+                return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='${width}' height='${height}' viewBox='0 0 ${width} ${height}'%3E%3Crect width='${width}' height='${height}' fill='%231f2937'/%3E%3Cpath d='M${width/2-20} ${height/2-20}L${width/2+20} ${height/2+20}M${width/2+20} ${height/2-20}L${width/2-20} ${height/2+20}' stroke='%236b7280' stroke-width='3' stroke-linecap='round'/%3E%3Ctext x='50%25' y='60%25' text-anchor='middle' fill='%239ca3af' font-family='system-ui' font-size='14' dy='.3em'%3EImage not found%3C/text%3E%3C/svg%3E`;
+            };
+
+            // Global image error handler
+            document.addEventListener('error', function(e) {
+                if (e.target.tagName === 'IMG') {
+                    const img = e.target;
+                    
+                    // Avoid infinite loop if placeholder also fails
+                    if (img.src.startsWith('data:image/svg+xml')) {
+                        return;
+                    }
+
+                    console.error('[ImageError] Failed to load image:', img.src);
+                    
+                    // Get image dimensions or use defaults
+                    const width = img.width || img.naturalWidth || 128;
+                    const height = img.height || img.naturalHeight || 128;
+                    
+                    // Replace with placeholder
+                    img.src = createPlaceholderSVG(width, height);
+                    img.alt = img.alt ? `${img.alt} (failed to load)` : 'Image failed to load';
+                    
+                    // Add visual styling
+                    img.style.opacity = '0.6';
+                }
+            }, true);
+        })();
+    </script>
+</body>
+</html>

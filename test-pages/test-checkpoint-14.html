@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkpoint 14 - Interactive Features Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: #111827;
+            color: #f3f4f6;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        .test-section {
+            background: rgba(31, 41, 55, 0.5);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .test-result {
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+        .test-pass {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #4ade80;
+        }
+        .test-fail {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #f87171;
+        }
+        .test-info {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #60a5fa;
+        }
+        button {
+            background: linear-gradient(135deg, #6366f1 0%, #a78bfa 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(99, 102, 241, 0.5);
+        }
+        .test-button {
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body class="p-8">
+    <div class="max-w-6xl mx-auto">
+        <h1 class="text-4xl font-bold mb-2 bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+            Checkpoint 14: Interactive Features Test
+        </h1>
+        <p class="text-gray-400 mb-8">Testing scroll progress, active section highlighting, theme toggle, and project filtering</p>
+
+        <!-- Test 1: Scroll Progress Indicator -->
+        <div class="test-section">
+            <h2 class="text-2xl font-semibold mb-4 text-indigo-400">1. Scroll Progress Indicator</h2>
+            <p class="text-gray-300 mb-4">Tests the scroll progress bar component</p>
+            <button class="test-button" onclick="testScrollProgress()">Run Test</button>
+            <div id="scrollProgressResults"></div>
+        </div>
+
+        <!-- Test 2: Active Section Highlighting -->
+        <div class="test-section">
+            <h2 class="text-2xl font-semibold mb-4 text-indigo-400">2. Active Section Highlighting</h2>
+            <p class="text-gray-300 mb-4">Tests navigation link highlighting based on visible section</p>
+            <button class="test-button" onclick="testActiveSectionHighlighting()">Run Test</button>
+            <div id="activeSectionResults"></div>
+        </div>
+
+        <!-- Test 3: Theme Toggle -->
+        <div class="test-section">
+            <h2 class="text-2xl font-semibold mb-4 text-indigo-400">3. Theme Toggle & Persistence</h2>
+            <p class="text-gray-300 mb-4">Tests theme switching and localStorage persistence</p>
+            <button class="test-button" onclick="testThemeToggle()">Run Test</button>
+            <div id="themeToggleResults"></div>
+        </div>
+
+        <!-- Test 4: Project Filtering -->
+        <div class="test-section">
+            <h2 class="text-2xl font-semibold mb-4 text-indigo-400">4. Project Filtering</h2>
+            <p class="text-gray-300 mb-4">Tests project filter functionality and animations</p>
+            <button class="test-button" onclick="testProjectFiltering()">Run Test</button>
+            <div id="projectFilterResults"></div>
+        </div>
+
+        <!-- Run All Tests -->
+        <div class="test-section bg-gradient-to-r from-indigo-500/10 to-purple-500/10">
+            <h2 class="text-2xl font-semibold mb-4 text-purple-400">Run All Tests</h2>
+            <button class="test-button" onclick="runAllTests()">Run All Tests</button>
+            <button class="test-button" onclick="openMainPage()">Open Main Portfolio Page</button>
+        </div>
+    </div>
+
+    <script>
+        function logResult(containerId, message, type = 'info') {
+            const container = document.getElementById(containerId);
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `test-result test-${type}`;
+            resultDiv.textContent = message;
+            container.appendChild(resultDiv);
+        }
+
+        function clearResults(containerId) {
+            document.getElementById(containerId).innerHTML = '';
+        }
+
+        // Test 1: Scroll Progress Indicator
+        async function testScrollProgress() {
+            clearResults('scrollProgressResults');
+            logResult('scrollProgressResults', '🔄 Testing scroll progress indicator...', 'info');
+
+            try {
+                // Open main page in new window
+                const testWindow = window.open('index.html', '_blank');
+                
+                if (!testWindow) {
+                    logResult('scrollProgressResults', '❌ Failed to open test window. Please allow popups.', 'fail');
+                    return;
+                }
+
+                logResult('scrollProgressResults', '✓ Opened portfolio page in new window', 'pass');
+                logResult('scrollProgressResults', '📋 Manual checks required:', 'info');
+                logResult('scrollProgressResults', '  1. Verify scroll progress bar appears at top of page', 'info');
+                logResult('scrollProgressResults', '  2. Scroll down and verify progress bar fills from 0% to 100%', 'info');
+                logResult('scrollProgressResults', '  3. Verify smooth animation as you scroll', 'info');
+                logResult('scrollProgressResults', '  4. Verify gradient color (indigo to purple)', 'info');
+
+            } catch (error) {
+                logResult('scrollProgressResults', `❌ Error: ${error.message}`, 'fail');
+            }
+        }
+
+        // Test 2: Active Section Highlighting
+        async function testActiveSectionHighlighting() {
+            clearResults('activeSectionResults');
+            logResult('activeSectionResults', '🔄 Testing active section highlighting...', 'info');
+
+            try {
+                const testWindow = window.open('index.html', '_blank');
+                
+                if (!testWindow) {
+                    logResult('activeSectionResults', '❌ Failed to open test window. Please allow popups.', 'fail');
+                    return;
+                }
+
+                logResult('activeSectionResults', '✓ Opened portfolio page in new window', 'pass');
+                logResult('activeSectionResults', '📋 Manual checks required:', 'info');
+                logResult('activeSectionResults', '  1. Scroll through sections (Home, About, Skills, etc.)', 'info');
+                logResult('activeSectionResults', '  2. Verify navigation link highlights when section is 50%+ visible', 'info');
+                logResult('activeSectionResults', '  3. Verify only one link is highlighted at a time', 'info');
+                logResult('activeSectionResults', '  4. Verify URL hash updates without page jump', 'info');
+                logResult('activeSectionResults', '  5. Verify active link has indigo color (#818cf8)', 'info');
+
+            } catch (error) {
+                logResult('activeSectionResults', `❌ Error: ${error.message}`, 'fail');
+            }
+        }
+
+        // Test 3: Theme Toggle
+        async function testThemeToggle() {
+            clearResults('themeToggleResults');
+            logResult('themeToggleResults', '🔄 Testing theme toggle...', 'info');
+
+            try {
+                const testWindow = window.open('index.html', '_blank');
+                
+                if (!testWindow) {
+                    logResult('themeToggleResults', '❌ Failed to open test window. Please allow popups.', 'fail');
+                    return;
+                }
+
+                logResult('themeToggleResults', '✓ Opened portfolio page in new window', 'pass');
+                logResult('themeToggleResults', '📋 Manual checks required:', 'info');
+                logResult('themeToggleResults', '  1. Click theme toggle button in navigation', 'info');
+                logResult('themeToggleResults', '  2. Verify theme switches between dark and light', 'info');
+                logResult('themeToggleResults', '  3. Verify smooth 300ms transition', 'info');
+                logResult('themeToggleResults', '  4. Verify icon changes (moon for dark, sun for light)', 'info');
+                logResult('themeToggleResults', '  5. Refresh page and verify theme persists', 'info');
+                logResult('themeToggleResults', '  6. Check localStorage for "theme-preference" key', 'info');
+
+            } catch (error) {
+                logResult('themeToggleResults', `❌ Error: ${error.message}`, 'fail');
+            }
+        }
+
+        // Test 4: Project Filtering
+        async function testProjectFiltering() {
+            clearResults('projectFilterResults');
+            logResult('projectFilterResults', '🔄 Testing project filtering...', 'info');
+
+            try {
+                const testWindow = window.open('index.html#portfolio', '_blank');
+                
+                if (!testWindow) {
+                    logResult('projectFilterResults', '❌ Failed to open test window. Please allow popups.', 'fail');
+                    return;
+                }
+
+                logResult('projectFilterResults', '✓ Opened portfolio page at projects section', 'pass');
+                logResult('projectFilterResults', '📋 Manual checks required:', 'info');
+                logResult('projectFilterResults', '  1. Verify filter buttons appear above projects', 'info');
+                logResult('projectFilterResults', '  2. Click different technology filters (React, Node.js, etc.)', 'info');
+                logResult('projectFilterResults', '  3. Verify only matching projects are shown', 'info');
+                logResult('projectFilterResults', '  4. Verify smooth fade-in/out animations (300ms)', 'info');
+                logResult('projectFilterResults', '  5. Verify active filter button is highlighted', 'info');
+                logResult('projectFilterResults', '  6. Click "All" and verify all projects appear', 'info');
+                logResult('projectFilterResults', '  7. Verify project count updates correctly', 'info');
+
+            } catch (error) {
+                logResult('projectFilterResults', `❌ Error: ${error.message}`, 'fail');
+            }
+        }
+
+        // Run all tests
+        async function runAllTests() {
+            await testScrollProgress();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            await testActiveSectionHighlighting();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            await testThemeToggle();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            await testProjectFiltering();
+        }
+
+        // Open main page
+        function openMainPage() {
+            window.open('index.html', '_blank');
+        }
+
+        // Display initial instructions
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('Checkpoint 14 Test Suite Loaded');
+            console.log('This test suite will open the main portfolio page for manual verification');
+            console.log('Please allow popups to run the tests');
+        });
+    </script>
+</body>
+</html>

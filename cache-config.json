@@ -1,0 +1,29 @@
+{
+  "description": "Cache Headers Configuration for Production",
+  "headers": {
+    "*.html": {
+      "Cache-Control": "public, max-age=0, must-revalidate"
+    },
+    "*.js": {
+      "Cache-Control": "public, max-age=31536000, immutable"
+    },
+    "*.css": {
+      "Cache-Control": "public, max-age=31536000, immutable"
+    },
+    "*.{jpg,jpeg,png,gif,webp,svg}": {
+      "Cache-Control": "public, max-age=31536000, immutable"
+    },
+    "*.{woff,woff2,ttf,eot}": {
+      "Cache-Control": "public, max-age=31536000, immutable"
+    },
+    "*.json": {
+      "Cache-Control": "public, max-age=0, must-revalidate"
+    }
+  },
+  "notes": [
+    "HTML files: No cache (always fetch fresh)",
+    "Static assets (JS, CSS, images, fonts): Cache for 1 year with immutable flag",
+    "JSON data files: No cache (always fetch fresh)",
+    "Use versioning or cache busting for updated assets"
+  ]
+}

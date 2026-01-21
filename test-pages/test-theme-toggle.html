@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theme Toggle Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="components/theme-toggle.js"></script>
+    <style>
+        /* CSS Custom Properties for Theming */
+        :root {
+            /* Dark theme colors (default) */
+            --bg-primary: #111827;
+            --bg-secondary: #1f2937;
+            --bg-tertiary: #374151;
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --text-tertiary: #6b7280;
+            --accent-primary: #6366f1;
+            --accent-secondary: #a78bfa;
+            --accent-tertiary: #818cf8;
+            --border-color: rgba(99, 102, 241, 0.1);
+            --shadow-color: rgba(99, 102, 241, 0.05);
+            --gradient-from: #111827;
+            --gradient-via: #1f2937;
+            --gradient-to: #374151;
+            --card-bg: rgba(31, 41, 55, 0.5);
+            --card-border: rgba(99, 102, 241, 0.2);
+        }
+
+        [data-theme="light"] {
+            /* Light theme colors */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f3f4f6;
+            --bg-tertiary: #e5e7eb;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-tertiary: #9ca3af;
+            --accent-primary: #4f46e5;
+            --accent-secondary: #7c3aed;
+            --accent-tertiary: #6366f1;
+            --border-color: rgba(79, 70, 229, 0.2);
+            --shadow-color: rgba(79, 70, 229, 0.1);
+            --gradient-from: #ffffff;
+            --gradient-via: #f9fafb;
+            --gradient-to: #f3f4f6;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --card-border: rgba(79, 70, 229, 0.3);
+        }
+
+        /* Smooth theme transition */
+        body {
+            transition: background-color 0.3s ease, color 0.3s ease;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .test-card {
+            background-color: var(--card-bg);
+            border: 2px solid var(--card-border);
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-8">
+    <div class="max-w-4xl mx-auto">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-4xl font-bold">Theme Toggle Test</h1>
+            <theme-toggle></theme-toggle>
+        </div>
+
+        <div class="test-card p-6 rounded-lg mb-6">
+            <h2 class="text-2xl font-semibold mb-4">Test Card</h2>
+            <p class="mb-2">This card should change colors when you toggle the theme.</p>
+            <p class="text-sm" style="color: var(--text-secondary);">Secondary text color</p>
+        </div>
+
+        <div class="test-card p-6 rounded-lg">
+            <h3 class="text-xl font-semibold mb-3">Instructions:</h3>
+            <ol class="list-decimal list-inside space-y-2">
+                <li>Click the theme toggle button in the top right</li>
+                <li>The page should smoothly transition between dark and light themes</li>
+                <li>Refresh the page - your theme preference should be remembered</li>
+                <li>Check localStorage for 'theme-preference' key</li>
+            </ol>
+        </div>
+
+        <div class="mt-8 p-4 rounded-lg" style="background-color: var(--bg-secondary);">
+            <h4 class="font-semibold mb-2">Current Theme Info:</h4>
+            <p id="theme-info" class="font-mono text-sm"></p>
+        </div>
+    </div>
+
+    <script>
+        // Display current theme info
+        function updateThemeInfo() {
+            const themeToggle = document.querySelector('theme-toggle');
+            const themeInfo = document.getElementById('theme-info');
+            const savedTheme = localStorage.getItem('theme-preference');
+            const dataTheme = document.documentElement.getAttribute('data-theme');
+            
+            if (themeInfo) {
+                themeInfo.innerHTML = `
+                    Current Theme: ${themeToggle ? themeToggle.currentTheme : 'N/A'}<br>
+                    LocalStorage: ${savedTheme || 'Not set'}<br>
+                    data-theme attribute: ${dataTheme || 'Not set (dark mode)'}
+                `;
+            }
+        }
+
+        // Update info on load and when theme changes
+        document.addEventListener('DOMContentLoaded', () => {
+            updateThemeInfo();
+            
+            // Listen for clicks on the theme toggle
+            const themeToggle = document.querySelector('theme-toggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    setTimeout(updateThemeInfo, 100);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

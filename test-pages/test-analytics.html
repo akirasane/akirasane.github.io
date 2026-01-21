@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Test</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            background: #111827;
+            color: #f3f4f6;
+        }
+        h1 {
+            color: #818cf8;
+        }
+        .test-section {
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        button {
+            background: linear-gradient(to right, #6366f1, #a855f7);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        .log {
+            background: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 4px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-family: monospace;
+            font-size: 0.875rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .log-entry {
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        .log-entry.success {
+            border-left: 3px solid #10b981;
+        }
+        .log-entry.info {
+            border-left: 3px solid #3b82f6;
+        }
+        .log-entry.warning {
+            border-left: 3px solid #f59e0b;
+        }
+        .status {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+        .status.enabled {
+            background: #10b981;
+            color: white;
+        }
+        .status.disabled {
+            background: #ef4444;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Analytics Tracking Test</h1>
+    
+    <div class="test-section">
+        <h2>Analytics Status</h2>
+        <p>
+            Tracking: <span class="status" id="trackingStatus">Loading...</span>
+        </p>
+        <p>
+            Opted Out: <span id="optOutStatus">Loading...</span>
+        </p>
+        <p>
+            Debug Mode: <span id="debugStatus">Loading...</span>
+        </p>
+        <button onclick="toggleOptOut()">Toggle Opt-Out</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Test Tracking Events</h2>
+        <button onclick="testPageView()">Track Page View</button>
+        <button onclick="testSectionView()">Track Section View</button>
+        <button onclick="testButtonClick()">Track Button Click</button>
+        <button onclick="testFormSubmission()">Track Form Submission</button>
+        <button onclick="testThemeToggle()">Track Theme Toggle</button>
+        <button onclick="testFilterUsage()">Track Filter Usage</button>
+        <button onclick="testDownload()">Track Download</button>
+        <button onclick="testExternalLink()">Track External Link</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Event Log</h2>
+        <button onclick="clearLog()">Clear Log</button>
+        <div class="log" id="eventLog"></div>
+    </div>
+
+    <script src="utils/analytics.js"></script>
+    <script>
+        // Override console methods to capture logs
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+
+        function addLogEntry(message, type = 'info') {
+            const log = document.getElementById('eventLog');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            log.insertBefore(entry, log.firstChild);
+        }
+
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            if (args[0] && args[0].includes('[Analytics]')) {
+                addLogEntry(args.join(' '), 'info');
+            }
+        };
+
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            if (args[0] && args[0].includes('[Analytics]')) {
+                addLogEntry(args.join(' '), 'warning');
+            }
+        };
+
+        // Wait for analytics to load
+        window.addEventListener('load', () => {
+            updateStatus();
+            addLogEntry('Analytics test page loaded', 'success');
+        });
+
+        function updateStatus() {
+            const trackingStatus = document.getElementById('trackingStatus');
+            const optOutStatus = document.getElementById('optOutStatus');
+            const debugStatus = document.getElementById('debugStatus');
+
+            if (window.analytics) {
+                const canTrack = analytics.canTrack();
+                trackingStatus.textContent = canTrack ? 'Enabled' : 'Disabled';
+                trackingStatus.className = `status ${canTrack ? 'enabled' : 'disabled'}`;
+                
+                optOutStatus.textContent = analytics.optedOut ? 'Yes' : 'No';
+                debugStatus.textContent = analytics.config.debug ? 'Yes' : 'No';
+            } else {
+                trackingStatus.textContent = 'Not Loaded';
+                trackingStatus.className = 'status disabled';
+            }
+        }
+
+        function toggleOptOut() {
+            if (window.analytics) {
+                const newOptOut = !analytics.optedOut;
+                analytics.setOptOut(newOptOut);
+                updateStatus();
+                addLogEntry(`Opt-out ${newOptOut ? 'enabled' : 'disabled'}`, 'success');
+            }
+        }
+
+        function testPageView() {
+            if (window.analytics) {
+                analytics.trackPageView('/test-page', 'Test Page');
+                addLogEntry('Page view tracked: /test-page', 'success');
+            }
+        }
+
+        function testSectionView() {
+            if (window.analytics) {
+                analytics.trackSectionView('test-section', 'Test Section');
+                addLogEntry('Section view tracked: test-section', 'success');
+            }
+        }
+
+        function testButtonClick() {
+            if (window.analytics) {
+                analytics.trackButtonClick('test_button', 'Test Button');
+                addLogEntry('Button click tracked: test_button', 'success');
+            }
+        }
+
+        function testFormSubmission() {
+            if (window.analytics) {
+                analytics.trackFormSubmission('test_form', true);
+                addLogEntry('Form submission tracked: test_form (success)', 'success');
+            }
+        }
+
+        function testThemeToggle() {
+            if (window.analytics) {
+                analytics.trackThemeToggle('light');
+                addLogEntry('Theme toggle tracked: light', 'success');
+            }
+        }
+
+        function testFilterUsage() {
+            if (window.analytics) {
+                analytics.trackFilterUsage('technology', 'React');
+                addLogEntry('Filter usage tracked: technology = React', 'success');
+            }
+        }
+
+        function testDownload() {
+            if (window.analytics) {
+                analytics.trackDownload('resume.pdf', 'pdf');
+                addLogEntry('Download tracked: resume.pdf', 'success');
+            }
+        }
+
+        function testExternalLink() {
+            if (window.analytics) {
+                analytics.trackExternalLink('https://github.com', 'GitHub');
+                addLogEntry('External link tracked: https://github.com', 'success');
+            }
+        }
+
+        function clearLog() {
+            document.getElementById('eventLog').innerHTML = '';
+        }
+    </script>
+</body>
+</html>

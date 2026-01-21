@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skills Debug Test</title>
+    <style>
+        body {
+            background: #111827;
+            color: white;
+            font-family: system-ui;
+            padding: 2rem;
+        }
+        .test-section {
+            background: #1f2937;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+        .success { color: #10b981; }
+        .error { color: #ef4444; }
+        pre {
+            background: #0f172a;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Skills Progress Debug Test</h1>
+    
+    <div class="test-section">
+        <h2>1. Test JSON File Access</h2>
+        <button onclick="testJSONAccess()">Test JSON Load</button>
+        <div id="json-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Test Web Component</h2>
+        <div id="component-test"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Console Logs</h2>
+        <div id="console-logs"></div>
+    </div>
+
+    <script src="components/skill-card.js"></script>
+    <script>
+        // Capture console logs
+        const logs = [];
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+        
+        console.log = function(...args) {
+            logs.push({ type: 'log', message: args.join(' ') });
+            originalLog.apply(console, args);
+            updateConsoleLogs();
+        };
+        
+        console.error = function(...args) {
+            logs.push({ type: 'error', message: args.join(' ') });
+            originalError.apply(console, args);
+            updateConsoleLogs();
+        };
+        
+        console.warn = function(...args) {
+            logs.push({ type: 'warn', message: args.join(' ') });
+            originalWarn.apply(console, args);
+            updateConsoleLogs();
+        };
+        
+        function updateConsoleLogs() {
+            const logsDiv = document.getElementById('console-logs');
+            logsDiv.innerHTML = logs.map(log => 
+                `<div class="${log.type}">[${log.type.toUpperCase()}] ${log.message}</div>`
+            ).join('');
+        }
+
+        async function testJSONAccess() {
+            const resultDiv = document.getElementById('json-result');
+            resultDiv.innerHTML = '<p>Loading...</p>';
+            
+            try {
+                const response = await fetch('data/skills.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <p class="success">✓ JSON loaded successfully!</p>
+                    <p>Categories found: ${data.skills.length}</p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <p class="error">✗ Failed to load JSON</p>
+                    <p class="error">Error: ${error.message}</p>
+                `;
+            }
+        }
+
+        // Test component
+        window.addEventListener('DOMContentLoaded', () => {
+            const componentTest = document.getElementById('component-test');
+            
+            // Create skill card
+            const skillCard = document.createElement('skill-card');
+            skillCard.setAttribute('title', 'Frontend');
+            skillCard.setAttribute('color', 'indigo');
+            skillCard.setAttribute('data-source', 'data/skills.json');
+            
+            componentTest.appendChild(skillCard);
+            
+            console.log('Skill card component created');
+            
+            // Check after 2 seconds
+            setTimeout(() => {
+                console.log('Checking component state after 2 seconds...');
+                console.log('Component shadowRoot:', skillCard.shadowRoot);
+                if (skillCard.shadowRoot) {
+                    const skillItems = skillCard.shadowRoot.querySelectorAll('.skill-item');
+                    console.log('Skill items found:', skillItems.length);
+                }
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

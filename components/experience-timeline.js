@@ -8,12 +8,215 @@ class ExperienceTimeline extends HTMLElement {
     }
 
     connectedCallback() {
+        this.showSkeletonLoader();
         this.loadExperiences();
+    }
+
+    showSkeletonLoader() {
+        this.shadowRoot.innerHTML = `
+            <style>
+                .skeleton-container {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                }
+
+                .skeleton-nav {
+                    display: flex;
+                    justify-content: center;
+                    gap: 2rem;
+                    margin-bottom: 2rem;
+                    padding: 1.5rem 0;
+                }
+
+                .skeleton-dot {
+                    width: 60px;
+                    height: 60px;
+                    border-radius: 50%;
+                    background: linear-gradient(90deg, rgba(99, 102, 241, 0.1) 25%, rgba(99, 102, 241, 0.2) 50%, rgba(99, 102, 241, 0.1) 75%);
+                    background-size: 200% 100%;
+                    animation: shimmer 1.5s infinite;
+                }
+
+                .skeleton-card {
+                    background: linear-gradient(145deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.7) 100%);
+                    backdrop-filter: blur(10px);
+                    padding: 2rem;
+                    border-radius: 1.5rem;
+                    border: 1px solid rgba(99, 102, 241, 0.2);
+                    height: 400px;
+                }
+
+                .skeleton-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                    margin-bottom: 1.5rem;
+                    gap: 1rem;
+                }
+
+                .skeleton-title {
+                    width: 60%;
+                    height: 2rem;
+                    background: linear-gradient(90deg, rgba(99, 102, 241, 0.1) 25%, rgba(99, 102, 241, 0.2) 50%, rgba(99, 102, 241, 0.1) 75%);
+                    background-size: 200% 100%;
+                    animation: shimmer 1.5s infinite;
+                    border-radius: 0.5rem;
+                    margin-bottom: 0.5rem;
+                }
+
+                .skeleton-company {
+                    width: 40%;
+                    height: 1.5rem;
+                    background: linear-gradient(90deg, rgba(99, 102, 241, 0.1) 25%, rgba(99, 102, 241, 0.2) 50%, rgba(99, 102, 241, 0.1) 75%);
+                    background-size: 200% 100%;
+                    animation: shimmer 1.5s infinite;
+                    border-radius: 0.5rem;
+                }
+
+                .skeleton-period {
+                    width: 120px;
+                    height: 2rem;
+                    background: linear-gradient(90deg, rgba(99, 102, 241, 0.1) 25%, rgba(99, 102, 241, 0.2) 50%, rgba(99, 102, 241, 0.1) 75%);
+                    background-size: 200% 100%;
+                    animation: shimmer 1.5s infinite;
+                    border-radius: 0.5rem;
+                }
+
+                .skeleton-description {
+                    width: 100%;
+                    height: 1rem;
+                    background: linear-gradient(90deg, rgba(99, 102, 241, 0.1) 25%, rgba(99, 102, 241, 0.2) 50%, rgba(99, 102, 241, 0.1) 75%);
+                    background-size: 200% 100%;
+                    animation: shimmer 1.5s infinite;
+                    border-radius: 0.5rem;
+                    margin-bottom: 0.75rem;
+                }
+
+                .skeleton-project {
+                    background: rgba(15, 23, 42, 0.5);
+                    padding: 1.25rem;
+                    border-radius: 1rem;
+                    margin-bottom: 1rem;
+                }
+
+                .skeleton-project-title {
+                    width: 50%;
+                    height: 1.25rem;
+                    background: linear-gradient(90deg, rgba(99, 102, 241, 0.1) 25%, rgba(99, 102, 241, 0.2) 50%, rgba(99, 102, 241, 0.1) 75%);
+                    background-size: 200% 100%;
+                    animation: shimmer 1.5s infinite;
+                    border-radius: 0.5rem;
+                    margin-bottom: 0.75rem;
+                }
+
+                .skeleton-project-desc {
+                    width: 100%;
+                    height: 0.875rem;
+                    background: linear-gradient(90deg, rgba(99, 102, 241, 0.1) 25%, rgba(99, 102, 241, 0.2) 50%, rgba(99, 102, 241, 0.1) 75%);
+                    background-size: 200% 100%;
+                    animation: shimmer 1.5s infinite;
+                    border-radius: 0.5rem;
+                    margin-bottom: 0.5rem;
+                }
+
+                .skeleton-tags {
+                    display: flex;
+                    gap: 0.5rem;
+                    flex-wrap: wrap;
+                }
+
+                .skeleton-tag {
+                    width: 80px;
+                    height: 1.75rem;
+                    background: linear-gradient(90deg, rgba(99, 102, 241, 0.1) 25%, rgba(99, 102, 241, 0.2) 50%, rgba(99, 102, 241, 0.1) 75%);
+                    background-size: 200% 100%;
+                    animation: shimmer 1.5s infinite;
+                    border-radius: 0.5rem;
+                }
+
+                @keyframes shimmer {
+                    0% {
+                        background-position: 200% 0;
+                    }
+                    100% {
+                        background-position: -200% 0;
+                    }
+                }
+
+                @media (max-width: 768px) {
+                    .skeleton-nav {
+                        gap: 1rem;
+                        padding: 1rem 0;
+                    }
+
+                    .skeleton-dot {
+                        width: 40px;
+                        height: 40px;
+                    }
+
+                    .skeleton-card {
+                        padding: 1.5rem;
+                        height: 450px;
+                    }
+                }
+            </style>
+
+            <div class="skeleton-container">
+                <!-- Skeleton Navigation -->
+                <div class="skeleton-nav">
+                    <div class="skeleton-dot"></div>
+                    <div class="skeleton-dot"></div>
+                    <div class="skeleton-dot"></div>
+                    <div class="skeleton-dot"></div>
+                </div>
+
+                <!-- Skeleton Card -->
+                <div class="skeleton-card">
+                    <div class="skeleton-header">
+                        <div style="flex: 1;">
+                            <div class="skeleton-title"></div>
+                            <div class="skeleton-company"></div>
+                        </div>
+                        <div class="skeleton-period"></div>
+                    </div>
+                    
+                    <div class="skeleton-description"></div>
+                    <div class="skeleton-description" style="width: 90%;"></div>
+                    <div class="skeleton-description" style="width: 70%; margin-bottom: 1.5rem;"></div>
+                    
+                    <div class="skeleton-project">
+                        <div class="skeleton-project-title"></div>
+                        <div class="skeleton-project-desc"></div>
+                        <div class="skeleton-project-desc" style="width: 80%;"></div>
+                        <div class="skeleton-tags">
+                            <div class="skeleton-tag"></div>
+                            <div class="skeleton-tag"></div>
+                            <div class="skeleton-tag"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="skeleton-project">
+                        <div class="skeleton-project-title"></div>
+                        <div class="skeleton-project-desc"></div>
+                        <div class="skeleton-project-desc" style="width: 85%;"></div>
+                        <div class="skeleton-tags">
+                            <div class="skeleton-tag"></div>
+                            <div class="skeleton-tag"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
     }
 
     async loadExperiences() {
         try {
             const response = await fetch(this.dataSource);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
             const data = await response.json();
             this.experiences = data.experiences || [];
             
@@ -21,11 +224,92 @@ class ExperienceTimeline extends HTMLElement {
                 this.render();
                 this.attachEventListeners();
             } else {
-                this.shadowRoot.innerHTML = '<p style="color: #ef4444; text-align: center;">No experience data found.</p>';
+                this.showNoDataMessage();
             }
         } catch (error) {
-            console.error('Error loading experiences:', error);
-            this.shadowRoot.innerHTML = '<p style="color: #ef4444; text-align: center;">Failed to load experience data.</p>';
+            console.error('[ExperienceTimeline] Error loading experiences:', error);
+            this.showErrorMessage(error);
+        }
+    }
+
+    showNoDataMessage() {
+        this.shadowRoot.innerHTML = `
+            <style>
+                .message-container {
+                    text-align: center;
+                    padding: 2rem;
+                    color: #9ca3af;
+                }
+            </style>
+            <div class="message-container">
+                <p>No experience data found.</p>
+            </div>
+        `;
+    }
+
+    showErrorMessage(error) {
+        this.shadowRoot.innerHTML = `
+            <style>
+                .error-container {
+                    text-align: center;
+                    padding: 2rem;
+                    background: rgba(239, 68, 68, 0.1);
+                    border: 1px solid rgba(239, 68, 68, 0.3);
+                    border-radius: 1rem;
+                    max-width: 600px;
+                    margin: 0 auto;
+                }
+                .error-title {
+                    color: #ef4444;
+                    font-size: 1.25rem;
+                    font-weight: 600;
+                    margin-bottom: 0.75rem;
+                }
+                .error-message {
+                    color: #fca5a5;
+                    margin-bottom: 1.5rem;
+                    font-size: 0.9375rem;
+                }
+                .retry-button {
+                    padding: 0.75rem 1.5rem;
+                    background: rgba(239, 68, 68, 0.2);
+                    color: #fca5a5;
+                    border: 1px solid rgba(239, 68, 68, 0.4);
+                    border-radius: 0.5rem;
+                    cursor: pointer;
+                    font-weight: 500;
+                    transition: all 0.3s ease;
+                }
+                .retry-button:hover {
+                    background: rgba(239, 68, 68, 0.3);
+                    border-color: rgba(239, 68, 68, 0.6);
+                    transform: translateY(-2px);
+                }
+                .retry-button:active {
+                    transform: translateY(0);
+                }
+            </style>
+            <div class="error-container">
+                <div class="error-title">Failed to Load Experience Data</div>
+                <div class="error-message">
+                    Unable to connect. Please check your internet connection and try again.
+                </div>
+                <button class="retry-button" id="retryButton">
+                    <svg style="display: inline-block; width: 1rem; height: 1rem; margin-right: 0.5rem; vertical-align: middle;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    Retry
+                </button>
+            </div>
+        `;
+
+        // Attach retry button event listener
+        const retryButton = this.shadowRoot.getElementById('retryButton');
+        if (retryButton) {
+            retryButton.addEventListener('click', () => {
+                this.shadowRoot.innerHTML = '<p style="color: #9ca3af; text-align: center; padding: 2rem;">Loading experiences...</p>';
+                this.loadExperiences();
+            });
         }
     }
 
@@ -191,7 +475,7 @@ class ExperienceTimeline extends HTMLElement {
                     overflow-y: auto;
                     overflow-x: hidden;
                     animation: slideIn 0.5s ease-out;
-                    height: 500px;
+                    height: 400px;
                 }
 
                 /* Custom scrollbar */

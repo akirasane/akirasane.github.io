@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Filter Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="components/badge-tag.js"></script>
+    <script src="components/project-item.js"></script>
+    <script src="components/project-filter.js"></script>
+    <style>
+        :root {
+            --bg-primary: #111827;
+            --bg-secondary: #1f2937;
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 2rem;
+        }
+
+        .project-card {
+            background: rgba(31, 41, 55, 0.5);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: opacity 300ms ease, transform 300ms ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="max-w-6xl mx-auto">
+        <h1 class="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+            Project Filter Test
+        </h1>
+
+        <!-- Project Filter -->
+        <project-filter></project-filter>
+
+        <!-- Projects -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+            <div class="project-card">
+                <project-item 
+                    title="E-commerce Platform" 
+                    color="indigo"
+                    description="Full-stack e-commerce solution with real-time inventory management.">
+                    <badge-tag color="indigo">React</badge-tag>
+                    <badge-tag color="indigo">Node.js</badge-tag>
+                    <badge-tag color="indigo">PostgreSQL</badge-tag>
+                </project-item>
+            </div>
+
+            <div class="project-card">
+                <project-item 
+                    title="Task Management App" 
+                    color="emerald"
+                    description="Collaborative task management with real-time updates.">
+                    <badge-tag color="emerald">Vue.js</badge-tag>
+                    <badge-tag color="emerald">TypeScript</badge-tag>
+                    <badge-tag color="emerald">MongoDB</badge-tag>
+                </project-item>
+            </div>
+
+            <div class="project-card">
+                <project-item 
+                    title="Analytics Dashboard" 
+                    color="indigo"
+                    description="Real-time analytics with data visualization.">
+                    <badge-tag color="indigo">React</badge-tag>
+                    <badge-tag color="indigo">TypeScript</badge-tag>
+                    <badge-tag color="indigo">PostgreSQL</badge-tag>
+                </project-item>
+            </div>
+
+            <div class="project-card">
+                <project-item 
+                    title="Social Media API" 
+                    color="emerald"
+                    description="RESTful API for social media platform.">
+                    <badge-tag color="emerald">Node.js</badge-tag>
+                    <badge-tag color="emerald">MongoDB</badge-tag>
+                    <badge-tag color="emerald">Redis</badge-tag>
+                </project-item>
+            </div>
+
+            <div class="project-card">
+                <project-item 
+                    title="CMS Platform" 
+                    color="gray"
+                    description="Headless CMS with drag-and-drop builder.">
+                    <badge-tag color="gray">PHP</badge-tag>
+                    <badge-tag color="gray">Laravel</badge-tag>
+                    <badge-tag color="gray">MySQL</badge-tag>
+                </project-item>
+            </div>
+
+            <div class="project-card">
+                <project-item 
+                    title="Mobile App Backend" 
+                    color="indigo"
+                    description="Scalable backend for mobile application.">
+                    <badge-tag color="indigo">Node.js</badge-tag>
+                    <badge-tag color="indigo">PostgreSQL</badge-tag>
+                    <badge-tag color="indigo">AWS</badge-tag>
+                </project-item>
+            </div>
+        </div>
+
+        <div class="mt-8 p-4 bg-gray-800 rounded-lg">
+            <h2 class="text-xl font-semibold mb-4">Test Instructions:</h2>
+            <ol class="list-decimal list-inside space-y-2 text-gray-300">
+                <li>Click on different technology filter buttons</li>
+                <li>Verify that only projects with the selected technology are shown</li>
+                <li>Check that the project count updates correctly</li>
+                <li>Click "All" to show all projects again</li>
+                <li>Verify smooth fade-in/out animations (300ms)</li>
+                <li>Check that the active filter button is highlighted</li>
+            </ol>
+        </div>
+    </div>
+</body>
+</html>

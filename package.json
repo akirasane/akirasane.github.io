@@ -1,0 +1,34 @@
+{
+  "name": "akirasane.github.io",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "vitest --run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akirasane/akirasane.github.io.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/akirasane/akirasane.github.io/issues"
+  },
+  "homepage": "https://github.com/akirasane/akirasane.github.io#readme",
+  "devDependencies": {
+    "@vitest/ui": "^4.0.17",
+    "fast-check": "^4.5.3",
+    "jsdom": "^27.4.0",
+    "sharp": "^0.34.5",
+    "vitest": "^4.0.17"
+  }
+}

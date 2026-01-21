@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inline Skills Test</title>
+    <style>
+        body {
+            background: #111827;
+            color: white;
+            font-family: system-ui;
+            padding: 2rem;
+        }
+        .skill-card {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.8) 0%, rgba(30, 41, 59, 0.6) 100%);
+            padding: 2rem;
+            border-radius: 1.25rem;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            margin: 1rem 0;
+        }
+        .title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #6366f1, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+        }
+        .skill-item {
+            margin: 1rem 0;
+        }
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        .skill-name {
+            font-weight: 600;
+        }
+        .skill-percentage {
+            color: #818cf8;
+            font-weight: 700;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(31, 41, 55, 0.8);
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6366f1, #818cf8);
+            border-radius: 9999px;
+            transition: width 1s ease;
+        }
+    </style>
+</head>
+<body>
+    <h1>Inline Skills Test (No Web Components)</h1>
+    <div id="skills-container"></div>
+
+    <script>
+        async function loadAndDisplaySkills() {
+            try {
+                console.log('Fetching skills.json...');
+                const response = await fetch('data/skills.json');
+                console.log('Response status:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('Data loaded:', data);
+                
+                const container = document.getElementById('skills-container');
+                
+                data.skills.forEach(category => {
+                    const card = document.createElement('div');
+                    card.className = 'skill-card';
+                    
+                    let html = `<h3 class="title">${category.category}</h3>`;
+                    
+                    category.items.forEach(skill => {
+                        html += `
+                            <div class="skill-item">
+                                <div class="skill-header">
+                                    <span class="skill-name">${skill.name}</span>
+                                    <span class="skill-percentage">${skill.proficiency}%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%" data-width="${skill.proficiency}"></div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    card.innerHTML = html;
+                    container.appendChild(card);
+                });
+                
+                // Animate progress bars
+                setTimeout(() => {
+                    document.querySelectorAll('.progress-fill').forEach(bar => {
+                        const width = bar.getAttribute('data-width');
+                        bar.style.width = width + '%';
+                    });
+                }, 100);
+                
+                console.log('Skills displayed successfully!');
+                
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('skills-container').innerHTML = 
+                    `<div style="color: #ef4444;">Error loading skills: ${error.message}</div>`;
+            }
+        }
+
+        loadAndDisplaySkills();
+    </script>
+</body>
+</html>

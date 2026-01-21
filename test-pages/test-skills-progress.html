@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skills Progress Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="components/skill-card.js"></script>
+    <style>
+        body {
+            background: linear-gradient(to bottom right, #111827, #1f2937);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="max-w-7xl mx-auto">
+        <h1 class="text-4xl font-bold text-center mb-12 text-white">Skills Progress Visualization Test</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Frontend -->
+            <skill-card title="Frontend" color="indigo" data-source="data/skills.json"></skill-card>
+            
+            <!-- Backend -->
+            <skill-card title="Backend" color="emerald" data-source="data/skills.json"></skill-card>
+            
+            <!-- Database -->
+            <skill-card title="Database" color="gray" data-source="data/skills.json"></skill-card>
+            
+            <!-- DevOps & Tools -->
+            <skill-card title="DevOps & Tools" color="indigo" data-source="data/skills.json"></skill-card>
+            
+            <!-- System Analysis -->
+            <skill-card title="System Analysis" color="emerald" data-source="data/skills.json"></skill-card>
+            
+            <!-- Soft Skills -->
+            <skill-card title="Soft Skills" color="gray" data-source="data/skills.json"></skill-card>
+        </div>
+
+        <div class="mt-12 p-6 bg-gray-800 rounded-lg text-white">
+            <h2 class="text-2xl font-bold mb-4">Test Checklist:</h2>
+            <ul class="space-y-2">
+                <li>✓ Skills load from skills.json</li>
+                <li>✓ Progress bars display for each skill</li>
+                <li>✓ Percentage indicators show proficiency levels</li>
+                <li>✓ Progress bars animate when cards enter viewport</li>
+                <li>✓ Gradient colors match theme (indigo, emerald, gray)</li>
+                <li>✓ Staggered animation for multiple skills</li>
+                <li>✓ Shimmer effect on progress bars</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Log when skills are loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Skills Progress Test Page Loaded');
+            
+            // Check if skills.json is accessible
+            fetch('data/skills.json')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Skills data loaded successfully:', data);
+                })
+                .catch(error => {
+                    console.error('Error loading skills data:', error);
+                });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+# Cache Headers Configuration
+
+# HTML files - no cache
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+# JavaScript files - cache for 1 year
+/*.js
+  Cache-Control: public, max-age=31536000, immutable
+
+# CSS files - cache for 1 year
+/*.css
+  Cache-Control: public, max-age=31536000, immutable
+
+# Images - cache for 1 year
+/*.jpg
+  Cache-Control: public, max-age=31536000, immutable
+/*.jpeg
+  Cache-Control: public, max-age=31536000, immutable
+/*.png
+  Cache-Control: public, max-age=31536000, immutable
+/*.gif
+  Cache-Control: public, max-age=31536000, immutable
+/*.webp
+  Cache-Control: public, max-age=31536000, immutable
+/*.svg
+  Cache-Control: public, max-age=31536000, immutable
+
+# Fonts - cache for 1 year
+/*.woff
+  Cache-Control: public, max-age=31536000, immutable
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+/*.ttf
+  Cache-Control: public, max-age=31536000, immutable
+/*.eot
+  Cache-Control: public, max-age=31536000, immutable
+
+# JSON data files - no cache
+/*.json
+  Cache-Control: public, max-age=0, must-revalidate

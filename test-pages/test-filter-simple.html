@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Filter Test</title>
+    <script src="components/badge-tag.js"></script>
+    <script src="components/project-item.js"></script>
+    <script src="components/project-filter.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #111827;
+            color: #f3f4f6;
+        }
+        .project-card {
+            background: #1f2937;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Simple Filter Test</h1>
+    
+    <p>Open the browser console (F12) to see debug logs.</p>
+    
+    <project-filter></project-filter>
+    
+    <div class="project-card">
+        <project-item title="Project 1" description="Test project 1">
+            <badge-tag>React</badge-tag>
+            <badge-tag>Node.js</badge-tag>
+        </project-item>
+    </div>
+    
+    <div class="project-card">
+        <project-item title="Project 2" description="Test project 2">
+            <badge-tag>Vue.js</badge-tag>
+            <badge-tag>MongoDB</badge-tag>
+        </project-item>
+    </div>
+    
+    <div class="project-card">
+        <project-item title="Project 3" description="Test project 3">
+            <badge-tag>React</badge-tag>
+            <badge-tag>PostgreSQL</badge-tag>
+        </project-item>
+    </div>
+    
+    <script>
+        // Debug: Check if elements are found
+        setTimeout(() => {
+            console.log('=== Manual Check ===');
+            console.log('Project items:', document.querySelectorAll('project-item').length);
+            document.querySelectorAll('project-item').forEach((item, i) => {
+                console.log(`Project ${i + 1} badges:`, item.querySelectorAll('badge-tag').length);
+                item.querySelectorAll('badge-tag').forEach(badge => {
+                    console.log('  -', badge.textContent);
+                });
+            });
+        }, 1000);
+    </script>
+</body>
+</html>
