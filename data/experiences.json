@@ -1,0 +1,106 @@
+{
+  "experiences": [
+    {
+      "year": "2025",
+      "title": "System Analyst",
+      "company": "Bangkok Expressway and Metro Public Company Limited.",
+      "period": "Oct 2025 - Present",
+      "color": "indigo",
+      "description": "Analyzing business requirements and designing technical solutions. Leading system architecture decisions and ensuring alignment with business objectives.",
+      "projects": [
+        {
+          "title": "Enterprise System Integration",
+          "description": "Designed and implemented integration solutions connecting multiple enterprise systems. Conducted requirements analysis and created comprehensive system documentation.",
+          "tags": [
+            { "text": "System Design", "color": "indigo" },
+            { "text": "UML", "color": "indigo" },
+            { "text": "REST API", "color": "indigo" },
+            { "text": "Microservices", "color": "indigo" }
+          ]
+        }
+      ]
+    },
+    {
+      "year": "2022",
+      "title": "System Analyst & Full Stack Developer",
+      "company": "Club 21 (Thailand) Co. Ltd.",
+      "period": "Jul 2022 - Aug 2025",
+      "color": "emerald",
+      "description": "Analyzed business requirements and developed full-stack solutions. Collaborated with stakeholders to deliver high-quality software products.",
+      "projects": [
+        {
+          "title": "Real-Time Analytics Dashboard",
+          "description": "Built a real-time analytics dashboard for monitoring business metrics. Implemented WebSocket connections for live data updates and created interactive visualizations.",
+          "tags": [
+            { "text": "Vue.js", "color": "emerald" },
+            { "text": "Python", "color": "emerald" },
+            { "text": "MongoDB", "color": "emerald" },
+            { "text": "Redis", "color": "emerald" }
+          ]
+        },
+        {
+          "title": "E-Commerce Platform",
+          "description": "Developed a full-stack e-commerce platform handling thousands of daily transactions. Implemented secure payment integration and scalable architecture.",
+          "tags": [
+            { "text": "React", "color": "emerald" },
+            { "text": "Node.js", "color": "emerald" },
+            { "text": "PostgreSQL", "color": "emerald" },
+            { "text": "Docker", "color": "emerald" }
+          ]
+        }
+      ]
+    },
+    {
+      "year": "2021",
+      "title": "Senior Programmer Support",
+      "company": "Club 21 (Thailand) Co. Ltd.",
+      "period": "Mar 2021 - Jun 2022",
+      "color": "gray",
+      "description": "Provided technical support and developed custom solutions for manufacturing operations. Maintained and enhanced existing systems.",
+      "projects": [
+        {
+          "title": "ERP System Development",
+          "description": "Led development of ERP modules for inventory, HR, and finance management. Conducted system analysis and designed database architecture.",
+          "tags": [
+            { "text": "Angular", "color": "gray" },
+            { "text": "Django", "color": "gray" },
+            { "text": "PostgreSQL", "color": "gray" },
+            { "text": "REST API", "color": "gray" }
+          ]
+        }
+      ]
+    },
+    {
+      "year": "2020",
+      "title": "Website Developer",
+      "company": "Jowit Global Co.,Ltd.",
+      "period": "Jan 2020 - Apr 2021",
+      "color": "indigo",
+      "description": "Developed and maintained responsive websites for various clients. Worked with modern web technologies and ensured cross-browser compatibility.",
+      "projects": [
+        {
+          "title": "Corporate Website Portfolio",
+          "description": "Created responsive websites for multiple corporate clients. Implemented dynamic features and integrated with backend systems.",
+          "tags": [
+            { "text": "HTML5", "color": "indigo" },
+            { "text": "CSS3", "color": "indigo" },
+            { "text": "JavaScript", "color": "indigo" },
+            { "text": "PHP", "color": "indigo" },
+            { "text": "MySQL", "color": "indigo" }
+          ]
+        },
+        {
+          "title": "Internal Website Improvement",
+          "description": "Improve parking report website.",
+          "tags": [
+            { "text": "HTML", "color": "indigo" },
+            { "text": "CSS", "color": "indigo" },
+            { "text": "JavaScript", "color": "indigo" },
+            { "text": "PHP", "color": "indigo" },
+            { "text": "MySQL", "color": "indigo" }
+          ]
+        }
+      ]
+    }
+  ]
+}

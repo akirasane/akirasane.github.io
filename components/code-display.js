@@ -4,12 +4,10 @@ class CodeDisplay extends HTMLElement {
         this.attachShadow({ mode: 'open' });
         
         // Define the code directly
-        this.codeText = `<?php
-
+        this.codeText = `
 class Developer {
     private string $name;
     private string $title;
-    private string $passion;
     private array $skills = [];
     private int $experience;
 
@@ -22,31 +20,12 @@ class Developer {
         return $this;
     }
 
-    public function setPassion(string $passion): self {
-        $this->passion = $passion;
-        return $this;
-    }
-
-    public function addSkills(string ...$skills): self {
-        $this->skills = array_merge($this->skills, $skills);
-        return $this;
-    }
-
-    public function setExperience(int $years): self {
-        $this->experience = $years;
-        return $this;
-    }
-
     public static function createMe(): self {
         return (new self("Chatkawin Taola"))
             ->setTitle("Software Developer & System Analyst")
-            ->setPassion("Building elegant solutions to complex problems")
-            ->addSkills("Full-Stack Development", "System Design", "Architecture")
             ->setExperience(5);
     }
-}
-
-$me = Developer::createMe();`;
+}`;
     }
 
     connectedCallback() {
@@ -70,7 +49,7 @@ $me = Developer::createMe();`;
                     align-items: center;
                     justify-content: center;
                     overflow: hidden;
-                    padding: 1rem;
+                    padding: 5rem 0 1rem 0;
                     box-sizing: border-box;
                 }
 
@@ -86,38 +65,155 @@ $me = Developer::createMe();`;
                 }
 
                 @keyframes gradientShift {
-                    0%, 100% { opacity: 1; transform: scale(1); }
-                    50% { opacity: 0.8; transform: scale(1.1); }
+                    0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
+                    33% { opacity: 0.8; transform: scale(1.1) rotate(2deg); }
+                    66% { opacity: 0.9; transform: scale(1.05) rotate(-2deg); }
+                }
+
+                /* Animated light beams */
+                .light-beam {
+                    position: absolute;
+                    width: 2px;
+                    height: 100%;
+                    background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.3) 50%, transparent 100%);
+                    animation: beamMove 8s ease-in-out infinite;
+                    opacity: 0.5;
+                }
+
+                .light-beam:nth-child(1) { left: 20%; animation-delay: 0s; }
+                .light-beam:nth-child(2) { left: 50%; animation-delay: 2s; }
+                .light-beam:nth-child(3) { left: 80%; animation-delay: 4s; }
+
+                @keyframes beamMove {
+                    0%, 100% { transform: translateX(-20px) scaleY(0.8); opacity: 0.3; }
+                    50% { transform: translateX(20px) scaleY(1.2); opacity: 0.6; }
+                }
+
+                /* Glowing orbs */
+                .glow-orb {
+                    position: absolute;
+                    border-radius: 50%;
+                    filter: blur(60px);
+                    opacity: 0.4;
+                    animation: orbFloat 20s ease-in-out infinite;
+                }
+
+                .glow-orb.orb-1 {
+                    width: 300px;
+                    height: 300px;
+                    background: radial-gradient(circle, rgba(99, 102, 241, 0.6) 0%, transparent 70%);
+                    top: 10%;
+                    left: 10%;
+                    animation-delay: 0s;
+                }
+
+                .glow-orb.orb-2 {
+                    width: 400px;
+                    height: 400px;
+                    background: radial-gradient(circle, rgba(168, 85, 247, 0.5) 0%, transparent 70%);
+                    bottom: 10%;
+                    right: 10%;
+                    animation-delay: 5s;
+                }
+
+                .glow-orb.orb-3 {
+                    width: 250px;
+                    height: 250px;
+                    background: radial-gradient(circle, rgba(236, 72, 153, 0.4) 0%, transparent 70%);
+                    top: 50%;
+                    left: 50%;
+                    animation-delay: 10s;
+                }
+
+                @keyframes orbFloat {
+                    0%, 100% { transform: translate(0, 0) scale(1); }
+                    25% { transform: translate(30px, -30px) scale(1.1); }
+                    50% { transform: translate(-20px, 20px) scale(0.9); }
+                    75% { transform: translate(20px, 30px) scale(1.05); }
+                }
+
+                /* Shimmer effect */
+                .shimmer {
+                    position: absolute;
+                    inset: 0;
+                    background: linear-gradient(
+                        90deg,
+                        transparent 0%,
+                        rgba(255, 255, 255, 0.03) 50%,
+                        transparent 100%
+                    );
+                    animation: shimmerMove 10s ease-in-out infinite;
+                }
+
+                @keyframes shimmerMove {
+                    0% { transform: translateX(-100%); }
+                    100% { transform: translateX(100%); }
                 }
 
                 /* Floating particles */
                 .particle {
                     position: absolute;
-                    width: 4px;
-                    height: 4px;
-                    background: rgba(99, 102, 241, 0.3);
+                    background: rgba(99, 102, 241, 0.4);
                     border-radius: 50%;
+                    pointer-events: none;
+                }
+
+                /* Small particles */
+                .particle.small {
+                    width: 3px;
+                    height: 3px;
+                    animation: float 25s infinite;
+                }
+
+                /* Medium particles */
+                .particle.medium {
+                    width: 5px;
+                    height: 5px;
                     animation: float 20s infinite;
                 }
+
+                /* Large particles */
+                .particle.large {
+                    width: 8px;
+                    height: 8px;
+                    animation: float 30s infinite;
+                }
+
+                /* Different colors */
+                .particle.purple { background: rgba(168, 85, 247, 0.4); }
+                .particle.blue { background: rgba(59, 130, 246, 0.4); }
+                .particle.pink { background: rgba(236, 72, 153, 0.4); }
+                .particle.cyan { background: rgba(34, 211, 238, 0.4); }
 
                 .particle:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; }
                 .particle:nth-child(2) { left: 80%; top: 60%; animation-delay: 2s; }
                 .particle:nth-child(3) { left: 50%; top: 80%; animation-delay: 4s; }
                 .particle:nth-child(4) { left: 90%; top: 30%; animation-delay: 6s; }
                 .particle:nth-child(5) { left: 30%; top: 70%; animation-delay: 8s; }
+                .particle:nth-child(6) { left: 15%; top: 50%; animation-delay: 3s; }
+                .particle:nth-child(7) { left: 70%; top: 15%; animation-delay: 5s; }
+                .particle:nth-child(8) { left: 40%; top: 90%; animation-delay: 7s; }
+                .particle:nth-child(9) { left: 85%; top: 45%; animation-delay: 1s; }
+                .particle:nth-child(10) { left: 25%; top: 35%; animation-delay: 9s; }
+                .particle:nth-child(11) { left: 60%; top: 25%; animation-delay: 4.5s; }
+                .particle:nth-child(12) { left: 5%; top: 85%; animation-delay: 6.5s; }
+                .particle:nth-child(13) { left: 95%; top: 10%; animation-delay: 2.5s; }
+                .particle:nth-child(14) { left: 45%; top: 55%; animation-delay: 8.5s; }
+                .particle:nth-child(15) { left: 75%; top: 75%; animation-delay: 3.5s; }
 
                 @keyframes float {
-                    0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+                    0%, 100% { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
                     10% { opacity: 1; }
+                    50% { transform: translateY(-50vh) translateX(30px) scale(1.2); opacity: 0.8; }
                     90% { opacity: 1; }
-                    100% { transform: translateY(-100vh) translateX(50px); opacity: 0; }
+                    100% { transform: translateY(-100vh) translateX(60px) scale(0.8); opacity: 0; }
                 }
 
                 .hero-content {
                     position: relative;
                     z-index: 10;
                     width: 100%;
-                    max-width: 1400px;
+                    max-width: 100%;
                     padding: 0 1rem;
                     height: 100%;
                     display: flex;
@@ -128,7 +224,7 @@ $me = Developer::createMe();`;
 
                 .hero-header {
                     text-align: center;
-                    margin-bottom: 2rem;
+                    margin-bottom: 0.5rem;
                     animation: fadeInDown 1s ease-out;
                     flex-shrink: 0;
                 }
@@ -145,22 +241,22 @@ $me = Developer::createMe();`;
                 }
 
                 .hero-title {
-                    font-size: clamp(2.5rem, 5vw, 4rem);
+                    font-size: clamp(2rem, 4vw, 3.5rem);
                     font-weight: 800;
                     background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #ec4899 100%);
                     -webkit-background-clip: text;
                     -webkit-text-fill-color: transparent;
                     background-clip: text;
-                    margin-bottom: 1rem;
-                    line-height: 1.2;
+                    margin: 0 0 0.5rem 0;
+                    line-height: 1.1;
                 }
 
                 .hero-subtitle {
-                    font-size: clamp(1.1rem, 2vw, 1.5rem);
+                    font-size: clamp(1rem, 1.8vw, 1.3rem);
                     color: #94a3b8;
                     font-weight: 300;
                     max-width: 600px;
-                    margin: 0 auto;
+                    margin: 0 auto 0.5rem auto;
                 }
 
                 .code-window {
@@ -173,12 +269,12 @@ $me = Developer::createMe();`;
                         0 0 100px rgba(99, 102, 241, 0.2);
                     animation: fadeInUp 1s ease-out 0.3s both;
                     transition: transform 0.3s ease, box-shadow 0.3s ease;
-                    max-width: 100%;
                     width: 100%;
                     display: flex;
                     flex-direction: column;
                     flex: 1;
                     min-height: 0;
+                    margin: 0;
                 }
 
                 .code-window:hover {
@@ -202,7 +298,7 @@ $me = Developer::createMe();`;
 
                 .window-header {
                     background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-                    padding: 1rem 1.5rem;
+                    padding: 0.75rem 1.25rem;
                     display: flex;
                     align-items: center;
                     gap: 0.5rem;
@@ -234,10 +330,10 @@ $me = Developer::createMe();`;
 
                 .code-container {
                     background: #0f172a;
-                    padding: 1.5rem;
+                    padding: 1.25rem;
                     font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
-                    font-size: clamp(0.7rem, 1.2vw, 0.85rem);
-                    line-height: 1.6;
+                    font-size: clamp(0.65rem, 1.1vw, 0.8rem);
+                    line-height: 1.5;
                     color: #e5e7eb;
                     overflow: auto;
                     flex: 1;
@@ -246,7 +342,7 @@ $me = Developer::createMe();`;
 
                 .line {
                     display: flex;
-                    min-height: 1.8em;
+                    min-height: 1.5em;
                     opacity: 0;
                     animation: lineAppear 0.3s ease forwards;
                 }
@@ -258,8 +354,8 @@ $me = Developer::createMe();`;
                 .line-number {
                     color: #475569;
                     text-align: right;
-                    padding-right: 1.5rem;
-                    min-width: 50px;
+                    padding-right: 1.25rem;
+                    min-width: 45px;
                     user-select: none;
                     font-weight: 500;
                 }
@@ -317,7 +413,7 @@ $me = Developer::createMe();`;
 
                 .cta-section {
                     text-align: center;
-                    margin-top: 2rem;
+                    margin-top: 1rem;
                     animation: fadeIn 1s ease-out 0.6s both;
                     flex-shrink: 0;
                 }
@@ -329,21 +425,21 @@ $me = Developer::createMe();`;
 
                 .cta-button {
                     display: inline-block;
-                    padding: 1rem 2.5rem;
+                    padding: 0.75rem 2rem;
                     background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
                     color: white;
                     text-decoration: none;
-                    border-radius: 12px;
+                    border-radius: 10px;
                     font-weight: 600;
-                    font-size: 1.1rem;
+                    font-size: 1rem;
                     transition: all 0.3s ease;
-                    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
-                    margin: 0 0.5rem;
+                    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+                    margin: 0 0.4rem;
                 }
 
                 .cta-button:hover {
                     transform: translateY(-2px);
-                    box-shadow: 0 15px 40px rgba(99, 102, 241, 0.4);
+                    box-shadow: 0 12px 35px rgba(99, 102, 241, 0.4);
                 }
 
                 .cta-button.secondary {
@@ -355,54 +451,89 @@ $me = Developer::createMe();`;
 
                 .cta-button.secondary:hover {
                     background: rgba(99, 102, 241, 0.1);
-                    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.2);
+                    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.2);
                 }
 
                 @media (max-width: 768px) {
                     .hero-header {
-                        margin-bottom: 1rem;
+                        margin-bottom: 0.5rem;
                     }
 
                     .hero-wrapper {
                         height: 100vh;
-                        padding: 0.5rem;
+                        padding: 4.5rem 0 0.5rem 0;
+                    }
+
+                    .hero-content {
+                        padding: 0 0.5rem;
                     }
 
                     .code-container {
-                        padding: 1rem;
-                        font-size: 0.7rem;
-                        line-height: 1.5;
+                        padding: 0.75rem;
+                        font-size: 0.65rem;
+                        line-height: 1.4;
                     }
 
                     .cta-section {
-                        margin-top: 1rem;
+                        margin-top: 0.75rem;
                     }
 
                     .cta-button {
                         display: block;
-                        margin: 0.5rem auto;
-                        max-width: 250px;
-                        padding: 0.8rem 2rem;
-                        font-size: 1rem;
+                        margin: 0.4rem auto;
+                        max-width: 220px;
+                        padding: 0.7rem 1.8rem;
+                        font-size: 0.95rem;
                     }
 
                     .hero-title {
-                        font-size: 2.5rem;
+                        font-size: 2rem;
+                        margin-bottom: 0.25rem;
                     }
 
                     .hero-subtitle {
-                        font-size: 1rem;
+                        font-size: 0.95rem;
+                        margin-bottom: 0.25rem;
+                    }
+
+                    .window-header {
+                        padding: 0.6rem 1rem;
                     }
                 }
             </style>
 
             <div class="hero-wrapper">
                 <div class="hero-bg"></div>
-                <div class="particle"></div>
-                <div class="particle"></div>
-                <div class="particle"></div>
-                <div class="particle"></div>
-                <div class="particle"></div>
+                
+                <!-- Glowing orbs -->
+                <div class="glow-orb orb-1"></div>
+                <div class="glow-orb orb-2"></div>
+                <div class="glow-orb orb-3"></div>
+                
+                <!-- Light beams -->
+                <div class="light-beam"></div>
+                <div class="light-beam"></div>
+                <div class="light-beam"></div>
+                
+                <!-- Shimmer effect -->
+                <div class="shimmer"></div>
+                
+                <!-- Particles -->
+                <div class="particle small blue"></div>
+                <div class="particle medium purple"></div>
+                <div class="particle large"></div>
+                <div class="particle small pink"></div>
+                <div class="particle medium cyan"></div>
+                <div class="particle small purple"></div>
+                <div class="particle large blue"></div>
+                <div class="particle medium pink"></div>
+                <div class="particle small"></div>
+                <div class="particle large purple"></div>
+                <div class="particle medium cyan"></div>
+                <div class="particle small blue"></div>
+                <div class="particle large pink"></div>
+                <div class="particle medium"></div>
+                <div class="particle small cyan"></div>
 
                 <div class="hero-content">
                     <div class="hero-header">
@@ -441,7 +572,7 @@ $me = Developer::createMe();`;
         const self = this;
         let lineIndex = 0;
         let charIndex = 0;
-        const speed = 15;
+        const speed = 5;
 
         const type = () => {
             // If we've gone through all lines, stop
