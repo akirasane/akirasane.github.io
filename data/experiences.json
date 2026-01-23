@@ -9,13 +9,18 @@
       "description": "Analyzing business requirements and designing technical solutions. Leading system architecture decisions and ensuring alignment with business objectives.",
       "projects": [
         {
-          "title": "Enterprise System Integration",
-          "description": "Designed and implemented integration solutions connecting multiple enterprise systems. Conducted requirements analysis and created comprehensive system documentation.",
+          "title": "Report Website analysis and development",
+          "description": "Analyzed and developed a report website to streamline data reporting processes. Implemented user-friendly interfaces and optimized performance for large datasets.",
           "tags": [
-            { "text": "System Design", "color": "indigo" },
-            { "text": "UML", "color": "indigo" },
-            { "text": "REST API", "color": "indigo" },
-            { "text": "Microservices", "color": "indigo" }
+            { "text": "HTML5", "color": "indigo" },
+            { "text": "CSS3", "color": "indigo" },
+            { "text": "JavaScript", "color": "indigo" },
+            { "text": "PHP", "color": "indigo" },
+            { "text": "MySQL", "color": "indigo" },
+            { "text": "REST API", "color": "gray" },
+            { "text": "System Analysis", "color": "blue" },
+            { "text": "System Design", "color": "blue" },
+            { "text": "Technical Leadership", "color": "blue" }
           ]
         }
       ]
