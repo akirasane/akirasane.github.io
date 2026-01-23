@@ -32,22 +32,78 @@
           "title": "Real-Time Analytics Dashboard",
           "description": "Built a real-time analytics dashboard for monitoring business metrics. Implemented WebSocket connections for live data updates and created interactive visualizations.",
           "tags": [
-            { "text": "Vue.js", "color": "emerald" },
-            { "text": "Python", "color": "emerald" },
-            { "text": "MongoDB", "color": "emerald" },
-            { "text": "Redis", "color": "emerald" }
+            { "text": "HTML5", "color": "indigo" },
+            { "text": "CSS3", "color": "indigo" },
+            { "text": "JavaScript", "color": "indigo" },
+            { "text": "PHP", "color": "indigo" },
+            { "text": "MySQL", "color": "indigo" },
+            { "text": "FilamentPHP", "color": "indigo" },
+            { "text": "REST API", "color": "gray" }
           ]
         },
         {
           "title": "E-Commerce Platform",
-          "description": "Developed a full-stack e-commerce platform handling thousands of daily transactions. Implemented secure payment integration and scalable architecture.",
+          "description": "Developed a custom e-commerce platform with features such as product management, shopping cart, and payment integration. Ensured scalability and security of the application.",
           "tags": [
-            { "text": "React", "color": "emerald" },
-            { "text": "Node.js", "color": "emerald" },
-            { "text": "PostgreSQL", "color": "emerald" },
-            { "text": "Docker", "color": "emerald" }
+            { "text": "Shopify", "color": "gray" },
+            { "text": "REST API", "color": "gray" }
           ]
-        }
+        },
+        {
+          "title": "E-Commerce Admin Dashboard",
+          "description": "Developed an admin dashboard for managing products, orders, and customers. Implemented role-based access control and reporting features.",
+          "tags": [
+            { "text": "HTML5", "color": "indigo" },
+            { "text": "CSS3", "color": "indigo" },
+            { "text": "JavaScript", "color": "indigo" },
+            { "text": "PHP", "color": "indigo" },
+            { "text": "MySQL", "color": "indigo" },
+            { "text": "FilamentPHP", "color": "indigo" },
+            { "text": "REST API", "color": "gray" }
+          ]
+        },
+        {
+          "title": "Roster Management System",
+          "description": "Developed a roster management system to streamline employee scheduling. Implemented features for shift assignments, availability tracking, and notifications.",
+          "tags": [
+            { "text": "HTML5", "color": "indigo" },
+            { "text": "Blade", "color": "indigo" },
+            { "text": "CSS3", "color": "indigo" },
+            { "text": "JavaScript", "color": "indigo" },
+            { "text": "PHP", "color": "indigo" },
+            { "text": "MySQL", "color": "indigo" },
+            { "text": "FilamentPHP", "color": "indigo" },
+            { "text": "REST API", "color": "gray" }
+          ]
+        },
+        {
+          "title": "Time attendance System",
+          "description": "Developed a time attendance system to track employee working hours. Implemented features for clock-in/clock-out, overtime tracking, and reporting.",
+          "tags": [
+            { "text": "HTML5", "color": "indigo" },
+            { "text": "Blade", "color": "indigo" },
+            { "text": "CSS3", "color": "indigo" },
+            { "text": "JavaScript", "color": "indigo" },
+            { "text": "PHP", "color": "indigo" },
+            { "text": "MySQL", "color": "indigo" },
+            { "text": "FilamentPHP", "color": "indigo" },
+            { "text": "REST API", "color": "gray" }
+          ]
+        },
+        {
+          "title": "Overtime Request and Management System",
+          "description": "Developed an overtime request and management system to facilitate employee overtime submissions and approvals. Implemented notification features and reporting capabilities.",
+          "tags": [
+            { "text": "HTML5", "color": "indigo" },
+            { "text": "Blade", "color": "indigo" },
+            { "text": "CSS3", "color": "indigo" },
+            { "text": "JavaScript", "color": "indigo" },
+            { "text": "PHP", "color": "indigo" },
+            { "text": "MySQL", "color": "indigo" },
+            { "text": "FilamentPHP", "color": "indigo" },
+            { "text": "REST API", "color": "gray" }
+          ]
+        },
       ]
     },
     {
@@ -59,12 +115,38 @@
       "description": "Provided technical support and developed custom solutions for manufacturing operations. Maintained and enhanced existing systems.",
       "projects": [
         {
-          "title": "ERP System Development",
-          "description": "Led development of ERP modules for inventory, HR, and finance management. Conducted system analysis and designed database architecture.",
+          "title": "ERP System Improvement",
+          "description": "Led improvement of ERP modules for inventory, HR, and finance management. Conducted system analysis and designed database architecture.",
           "tags": [
-            { "text": "Angular", "color": "gray" },
-            { "text": "Django", "color": "gray" },
-            { "text": "PostgreSQL", "color": "gray" },
+            { "text": "HTML5", "color": "indigo" },
+            { "text": "CSS3", "color": "indigo" },
+            { "text": "JavaScript", "color": "indigo" },
+            { "text": "PHP", "color": "indigo" },
+            { "text": "MySQL", "color": "indigo" },
+            { "text": "REST API", "color": "gray" }
+          ]
+        },
+        {
+          "title": "Pick & Put System",
+          "description": "Developed a Pick & Put system to optimize warehouse operations. Implemented user-friendly interfaces and integrated with existing inventory systems.",
+          "tags": [
+            { "text": "HTML5", "color": "indigo" },
+            { "text": "CSS3", "color": "indigo" },
+            { "text": "JavaScript", "color": "indigo" },
+            { "text": "PHP", "color": "indigo" },
+            { "text": "MySQL", "color": "indigo" },
+            { "text": "REST API", "color": "gray" }
+          ]
+        },
+        {
+          "title": "Form Submission System",
+          "description": "Developed a web-based form submission system to streamline data collection processes. Implemented validation and reporting features.",
+          "tags": [
+            { "text": "HTML5", "color": "indigo" },
+            { "text": "CSS3", "color": "indigo" },
+            { "text": "JavaScript", "color": "indigo" },
+            { "text": "PHP", "color": "indigo" },
+            { "text": "MySQL", "color": "indigo" },
             { "text": "REST API", "color": "gray" }
           ]
         }
