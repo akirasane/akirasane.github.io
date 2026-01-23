@@ -5,29 +5,29 @@
       "color": "indigo",
       "items": [
         {
-          "name": "React",
+          "name": "HTML5/CSS3",
           "proficiency": 90,
-          "years": 5
-        },
-        {
-          "name": "Vue.js",
-          "proficiency": 85,
-          "years": 4
-        },
-        {
-          "name": "TypeScript",
-          "proficiency": 88,
-          "years": 4
+          "years": 6
         },
         {
           "name": "Tailwind CSS",
-          "proficiency": 92,
+          "proficiency": 88,
           "years": 3
         },
         {
-          "name": "HTML5/CSS3",
-          "proficiency": 95,
+          "name": "JavaScript",
+          "proficiency": 82,
           "years": 5
+        },
+        {
+          "name": "React",
+          "proficiency": 70,
+          "years": 2
+        },
+        {
+          "name": "Vue.js",
+          "proficiency": 68,
+          "years": 2
         }
       ]
     },
@@ -36,9 +36,14 @@
       "color": "emerald",
       "items": [
         {
-          "name": "Node.js",
-          "proficiency": 87,
-          "years": 4
+          "name": "PHP",
+          "proficiency": 92,
+          "years": 6
+        },
+        {
+          "name": "Laravel",
+          "proficiency": 95,
+          "years": 6
         },
         {
           "name": "REST API",
@@ -46,28 +51,13 @@
           "years": 5
         },
         {
-          "name": "C#",
-          "proficiency": 82,
-          "years": 3
-        },
-        {
-          "name": ".NET MVC",
-          "proficiency": 80,
-          "years": 3
-        },
-        {
-          "name": "PHP",
-          "proficiency": 85,
-          "years": 4
-        },
-        {
-          "name": "Laravel",
-          "proficiency": 88,
-          "years": 4
-        },
-        {
           "name": "FilamentPHP",
-          "proficiency": 75,
+          "proficiency": 80,
+          "years": 2
+        },
+        {
+          "name": "Node.js",
+          "proficiency": 72,
           "years": 2
         }
       ]
@@ -77,24 +67,19 @@
       "color": "gray",
       "items": [
         {
-          "name": "PostgreSQL",
-          "proficiency": 85,
-          "years": 4
+          "name": "MySQL",
+          "proficiency": 92,
+          "years": 6
         },
         {
-          "name": "MongoDB",
-          "proficiency": 80,
-          "years": 3
+          "name": "MariaDB",
+          "proficiency": 90,
+          "years": 5
         },
         {
           "name": "Redis",
-          "proficiency": 78,
+          "proficiency": 82,
           "years": 3
-        },
-        {
-          "name": "MySQL",
-          "proficiency": 90,
-          "years": 5
         }
       ]
     },
@@ -104,27 +89,27 @@
       "items": [
         {
           "name": "Docker",
-          "proficiency": 83,
+          "proficiency": 85,
           "years": 3
-        },
-        {
-          "name": "Git",
-          "proficiency": 92,
-          "years": 5
-        },
-        {
-          "name": "CI/CD",
-          "proficiency": 80,
-          "years": 3
-        },
-        {
-          "name": "AWS",
-          "proficiency": 75,
-          "years": 2
         },
         {
           "name": "Linux",
-          "proficiency": 85,
+          "proficiency": 88,
+          "years": 5
+        },
+        {
+          "name": "Git",
+          "proficiency": 90,
+          "years": 6
+        },
+        {
+          "name": "AWS (EC2)",
+          "proficiency": 78,
+          "years": 3
+        },
+        {
+          "name": "Nginx",
+          "proficiency": 82,
           "years": 4
         }
       ]
@@ -134,22 +119,27 @@
       "color": "emerald",
       "items": [
         {
-          "name": "UML",
-          "proficiency": 88,
-          "years": 4
+          "name": "Requirements Analysis",
+          "proficiency": 95,
+          "years": 6
         },
         {
-          "name": "Requirements Analysis",
+          "name": "System Design",
+          "proficiency": 92,
+          "years": 5
+        },
+        {
+          "name": "UML / Flow Diagram",
           "proficiency": 90,
           "years": 5
         },
         {
-          "name": "System Design",
-          "proficiency": 87,
-          "years": 4
+          "name": "Business Process Analysis",
+          "proficiency": 88,
+          "years": 5
         },
         {
-          "name": "Agile/Scrum",
+          "name": "Agile / Scrum",
           "proficiency": 85,
           "years": 4
         }
@@ -161,21 +151,21 @@
       "items": [
         {
           "name": "Problem Solving",
-          "proficiency": 92,
-          "years": 5
+          "proficiency": 95,
+          "years": 6
         },
         {
-          "name": "Team Leadership",
-          "proficiency": 85,
-          "years": 4
-        },
-        {
-          "name": "Communication",
-          "proficiency": 88,
+          "name": "Stakeholder Communication",
+          "proficiency": 90,
           "years": 5
         },
         {
           "name": "Critical Thinking",
+          "proficiency": 92,
+          "years": 6
+        },
+        {
+          "name": "Documentation & TOR Writing",
           "proficiency": 90,
           "years": 5
         }
