@@ -1,0 +1,79 @@
+'use client'
+
+import Aurora from '@/components/reactbits/Aurora'
+import SplitText from '@/components/reactbits/SplitText'
+import BlurText from '@/components/reactbits/BlurText'
+import Magnet from '@/components/reactbits/Magnet'
+import { LandingContent } from '@/lib/types'
+
+const DEFAULT_TAGLINE = 'Building elegant solutions to complex problems.'
+
+interface HeroSectionProps {
+  landing: LandingContent
+}
+
+export default function HeroSection({ landing }: HeroSectionProps) {
+  const tagline = landing.tagline || DEFAULT_TAGLINE
+
+  const scrollTo = (target: string) => {
+    document.getElementById(target)?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  return (
+    <section
+      id="hero"
+      className="snap-section relative flex flex-col items-center justify-center overflow-hidden"
+      style={{ background: 'var(--bg-primary)' }}
+    >
+      {/* Animated background */}
+      <Aurora />
+
+      {/* Content */}
+      <div className="relative z-10 flex flex-col items-center gap-6 px-6 text-center">
+        <h1
+          className="text-5xl font-bold md:text-7xl"
+          style={{ color: 'var(--text-primary)' }}
+        >
+          <SplitText text={landing.displayName || 'Your Name'} />
+        </h1>
+
+        <p
+          className="max-w-xl text-lg md:text-2xl"
+          style={{ color: 'var(--text-secondary)' }}
+        >
+          <BlurText text={tagline} delay={0.3} />
+        </p>
+
+        {landing.ctaLinks.length > 0 && (
+          <div className="flex flex-wrap items-center justify-center gap-4 mt-4">
+            {landing.ctaLinks.map((cta, i) => (
+              <Magnet key={i}>
+                <button
+                  onClick={() => scrollTo(cta.target)}
+                  className={
+                    i === 0
+                      ? 'rounded-full px-8 py-3 font-semibold transition-opacity hover:opacity-90'
+                      : 'rounded-full border px-8 py-3 font-semibold transition-opacity hover:opacity-80'
+                  }
+                  style={
+                    i === 0
+                      ? {
+                          background: 'var(--accent-primary)',
+                          color: '#fff',
+                        }
+                      : {
+                          borderColor: 'var(--accent-primary)',
+                          color: 'var(--accent-primary)',
+                        }
+                  }
+                >
+                  {cta.label}
+                </button>
+              </Magnet>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  )
+}

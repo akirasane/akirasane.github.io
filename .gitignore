@@ -44,3 +44,5 @@ next-env.d.ts
 example
 
 .kiro/
+
+__tests__/
