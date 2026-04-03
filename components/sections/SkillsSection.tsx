@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react'
 import ScrollReveal from '@/components/reactbits/ScrollReveal'
 import BorderGlow from '@/components/reactbits/BorderGlow'
+import SoftAurora from '@/components/reactbits/SoftAurora'
 import type { SkillCategory, SkillItem } from '@/lib/types'
 
 interface SkillsSectionProps {
@@ -101,10 +102,29 @@ export default function SkillsSection({ skills }: SkillsSectionProps) {
   return (
     <section
       id="skills"
-      className="snap-section flex flex-col items-center justify-center px-6 py-16 overflow-y-auto"
+      className="snap-section relative flex flex-col items-center justify-center px-6 py-16 overflow-hidden"
       style={{ background: 'var(--bg-primary)' }}
-    >
-      <div className="w-full max-w-4xl flex flex-col gap-10">
+    >      
+    <div className="absolute inset-0 w-full h-full">
+
+      <SoftAurora
+        speed={0.6}
+        scale={1.5}
+        brightness={1}
+        color1="#f7f7f7"
+        color2="#e100ff"
+        noiseFrequency={2.5}
+        noiseAmplitude={1}
+        bandHeight={0.5}
+        bandSpread={1}
+        octaveDecay={0.1}
+        layerOffset={0}
+        colorSpeed={1}
+        enableMouseInteraction={false}
+        mouseInfluence={0.25}
+      />
+      </div>
+      <div className="w-full max-w-4xl flex flex-col gap-10 relative z-10">
         <h2
           className="text-3xl font-bold text-center md:text-4xl"
           style={{ color: 'var(--text-primary)' }}
