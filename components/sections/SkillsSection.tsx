@@ -105,7 +105,7 @@ export default function SkillsSection({ skills }: SkillsSectionProps) {
       className="snap-section relative flex flex-col items-center justify-center px-6 py-20 md:py-20 overflow-hidden"
       style={{ background: 'var(--bg-primary)' }}
     >
-      <div className="absolute inset-0 w-full h-full">
+      {/* <div className="absolute inset-0 w-full h-full">
 
         <SoftAurora
           speed={0.6}
@@ -123,7 +123,7 @@ export default function SkillsSection({ skills }: SkillsSectionProps) {
           enableMouseInteraction={false}
           mouseInfluence={0.25}
         />
-      </div>
+      </div> */}
       <div className="w-full max-w-4xl flex flex-col gap-10 relative z-10">
         <h2
           className="text-3xl font-bold text-center md:text-4xl"

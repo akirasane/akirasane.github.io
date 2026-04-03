@@ -100,7 +100,7 @@ main {
   .snap-section {
     min-height: auto;
     /* Allow sections to be their natural height on mobile */
-    padding-top: 5rem;
+    padding-top: 8rem;
     /* Add padding to prevent navbar overlap */
     padding-bottom: 2rem;
   }

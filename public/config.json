@@ -6,11 +6,11 @@
     "avatarUrl": "",
     "resumeUrl": "",
     "social": {
-      "github": "",
-      "linkedin": "",
-      "email": "",
+      "github": "https://github.com/akirasane",
+      "linkedin": "https://www.linkedin.com/in/chatkawin-t/",
+      "email": "contact.chatkawin@gmail.com",
       "twitter": "",
-      "website": ""
+      "website": "https://akirasane.github.io"
     }
   },
   "landing": {
@@ -46,6 +46,15 @@
       "company": "Club 21 (Thailand) Co. Ltd.",
       "startDate": "2021-03-01",
       "endDate": "2022-06-30",
+      "color": "gray",
+      "description": "Provided technical support and developed custom solutions for manufacturing operations. Maintained and enhanced existing systems."
+    },
+    {
+      "id": "exp-4",
+      "title": "Website Developer",
+      "company": "Jowit Global Co.,LTD",
+      "startDate": "2020-01-01",
+      "endDate": "2021-03-01",
       "color": "gray",
       "description": "Provided technical support and developed custom solutions for manufacturing operations. Maintained and enhanced existing systems."
     }
@@ -92,13 +101,13 @@
   ],
   "contact": {
     "email": "your.email@example.com",
-    "phone": "",
-    "location": "",
+    "phone": "+6694xxxx515",
+    "location": "Bangkok, Thailand",
     "social": {
-      "github": "",
-      "linkedin": "",
+      "github": "https://github.com/akirasane",
+      "linkedin": "https://www.linkedin.com/in/chatkawin-t/",
       "twitter": "",
-      "website": ""
+      "website": "https://akirasane.github.io"
     },
     "formEndpoint": ""
   }

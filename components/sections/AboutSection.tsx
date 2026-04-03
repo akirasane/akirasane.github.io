@@ -61,21 +61,17 @@ export default function AboutSection({ profile }: AboutSectionProps) {
       style={{ background: 'var(--bg-primary)' }}
     >
       {/* Animated background */}
-      <div className="absolute inset-0 w-full h-full">
-        {/* <div style={{ width: '100%', height: 'fu', position: 'relative' }}> */}
+      {/* <div className="absolute inset-0 w-full h-full">
         <FloatingLines
           enabledWaves={["top", "middle", "bottom"]}
-          // Array - specify line count per wave; Number - same count for all waves
           lineCount={5}
-          // Array - specify line distance per wave; Number - same distance for all waves
           lineDistance={5}
           bendRadius={5}
           bendStrength={-0.5}
           interactive={true}
           parallax={true}
         />
-        {/* </div> */}
-      </div>
+      </div> */}
 
       <FadeContent className="w-full max-w-4xl relative z-10">
 

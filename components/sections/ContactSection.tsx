@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import FadeContent from '@/components/reactbits/FadeContent'
+import BorderGlow from '@/components/reactbits/BorderGlow'
 import type { ContactInfo } from '@/lib/types'
 
 interface ContactSectionProps {
@@ -108,9 +109,20 @@ export default function ContactSection({ contact }: ContactSectionProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           {/* Contact form */}
           <FadeContent>
-            <div
+            {/* <div
               className="rounded-xl p-6 flex flex-col gap-5"
               style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)' }}
+            > */}
+            <BorderGlow className="rounded-xl p-6 flex flex-col gap-5"
+              edgeSensitivity={30}
+              glowColor="40 80 80"
+              backgroundColor="#060010"
+              borderRadius={28}
+              glowRadius={40}
+              glowIntensity={1}
+              coneSpread={25}
+              animated={false}
+              colors={['#c084fc', '#f472b6', '#38bdf8']}
             >
               {form.status === 'success' ? (
                 <div className="flex flex-col items-center gap-3 py-8 text-center">
@@ -189,7 +201,8 @@ export default function ContactSection({ contact }: ContactSectionProps) {
                   </button>
                 </form>
               )}
-            </div>
+              {/* </div> */}
+            </BorderGlow>
           </FadeContent>
 
           {/* Contact info */}
