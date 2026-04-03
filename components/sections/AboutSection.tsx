@@ -68,7 +68,7 @@ export default function AboutSection({ profile }: AboutSectionProps) {
           </div>
 
           {/* Info */}
-          <div className="flex flex-col gap-6 text-center md:text-left w-full md:w-auto">
+          <div className="hidden md:flex flex-col gap-6 text-center md:text-left w-full md:w-auto">{/* Hidden on mobile, visible on md and up */}
             {/* Bio */}
             {profile.bio && (
                 <p

@@ -1,13 +1,12 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { PortfolioData } from './types'
-import { DEFAULT_DATA, STORAGE_KEY } from './defaults'
+import { DEFAULT_DATA } from './defaults'
 
 interface PortfolioStore {
   data: PortfolioData
   loading: boolean
-  save: (patch: Partial<PortfolioData>) => void
 }
 
 export function usePortfolioStore(): PortfolioStore {
@@ -15,30 +14,25 @@ export function usePortfolioStore(): PortfolioStore {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY)
-      if (raw) {
-        const parsed: PortfolioData = JSON.parse(raw)
-        setData(parsed)
-      }
-    } catch {
-      // corrupt JSON or localStorage unavailable — fall back to DEFAULT_DATA
-    } finally {
-      setLoading(false)
-    }
-  }, [])
-
-  const save = useCallback((patch: Partial<PortfolioData>) => {
-    setData(current => {
-      const next = { ...current, ...patch }
+    const loadConfig = async () => {
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
-      } catch {
-        // quota exceeded or storage unavailable — keep in-memory state only
+        const response = await fetch('/config.json')
+        if (response.ok) {
+          const config = await response.json()
+          setData(config)
+        } else {
+          console.warn('Failed to load config.json, using defaults')
+        }
+      } catch (error) {
+        console.error('Error loading config.json:', error)
+        // Falls back to DEFAULT_DATA
+      } finally {
+        setLoading(false)
       }
-      return next
-    })
+    }
+
+    loadConfig()
   }, [])
 
-  return { data, loading, save }
+  return { data, loading }
 }
