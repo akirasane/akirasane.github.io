@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
+import { cn } from "@/lib/utils";
+
+const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,10 +20,6 @@ export const metadata: Metadata = {
   description: "Personal portfolio and profile website",
 };
 
-// Inline script runs before hydration to apply the persisted theme,
-// preventing a flash of the wrong theme on load.
-const themeInitScript = `(function(){try{var d=JSON.parse(localStorage.getItem('portfolio_data')||'{}');document.documentElement.setAttribute('data-theme',d.theme||'dark');}catch(e){}})();`;
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -29,11 +28,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      data-theme="dark"
+      className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", inter.variable)}
     >
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-      </head>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

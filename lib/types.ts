@@ -6,7 +6,6 @@ export interface PortfolioData {
   skills:      SkillCategory[]
   projects:    Project[]
   contact:     ContactInfo
-  theme:       'dark' | 'light'
 }
 
 export interface Profile {

@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { usePathname } from 'next/navigation'
-import { usePortfolioStore } from '@/lib/store'
+import GlassSurface from '@/components/reactbits/GlassSurface'
 
 interface NavbarProps {
   sections: Array<{ id: string; label: string }>
@@ -10,22 +10,7 @@ interface NavbarProps {
 
 export default function Navbar({ sections }: NavbarProps) {
   const pathname = usePathname()
-  const store = usePortfolioStore()
   const [menuOpen, setMenuOpen] = useState(false)
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark')
-
-  // Sync theme state from DOM on mount
-  useEffect(() => {
-    const current = document.documentElement.getAttribute('data-theme')
-    setTheme(current === 'light' ? 'light' : 'dark')
-  }, [])
-
-  const toggleTheme = () => {
-    const newTheme = theme === 'dark' ? 'light' : 'dark'
-    document.documentElement.setAttribute('data-theme', newTheme)
-    setTheme(newTheme)
-    store.save({ theme: newTheme })
-  }
 
   const scrollToSection = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
@@ -33,79 +18,93 @@ export default function Navbar({ sections }: NavbarProps) {
   }
 
   return (
-    <nav
-      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4"
-      style={{ background: 'var(--bg-secondary)', borderBottom: '1px solid var(--card-border)' }}
-    >
-      {/* Logo / brand */}
-      <span className="font-semibold text-lg" style={{ color: 'var(--accent-primary)' }}>
-        Portfolio
-      </span>
+    <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 max-w-4xl w-[90%]">
+      <GlassSurface
+        width="100%"
+        height="auto"
+        borderRadius={50}
+        brightness={10}
+        opacity={0.7}
+        blur={15}
+        backgroundOpacity={0.3}
+        saturation={1.2}
+        className="px-6 py-3"
+      >
+        <nav className="flex items-center justify-between w-full">
+          {/* Logo / brand */}
+          <span className="font-semibold text-base" style={{ color: 'var(--accent-primary)' }}>
+            Portfolio
+          </span>
 
-      {/* Desktop nav links */}
-      <ul className="hidden md:flex gap-6 list-none m-0 p-0">
-        {sections.map((s) => (
-          <li key={s.id}>
+          {/* Desktop nav links */}
+          <ul className="hidden md:flex gap-8 list-none m-0 p-0">
+            {sections.map((s) => (
+              <li key={s.id}>
+                <button
+                  onClick={() => scrollToSection(s.id)}
+                  className="text-sm font-medium transition-all hover:scale-105"
+                  style={{
+                    color: pathname === `/#${s.id}` ? 'var(--accent-primary)' : 'var(--text-primary)',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {s.label}
+                </button>
+              </li>
+            ))}
+          </ul>
+
+          {/* Right controls */}
+          <div className="flex items-center gap-3">
+            {/* Mobile hamburger */}
             <button
-              onClick={() => scrollToSection(s.id)}
-              className="text-sm transition-colors hover:opacity-80"
-              style={{
-                color: pathname === `/#${s.id}` ? 'var(--accent-primary)' : 'var(--text-secondary)',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
+              aria-label="Toggle menu"
+              className="md:hidden w-8 h-8 flex flex-col items-center justify-center gap-1 rounded-full transition-all hover:scale-110"
+              style={{ 
+                background: 'rgba(99, 102, 241, 0.1)', 
+                border: '1px solid rgba(99, 102, 241, 0.3)', 
+                cursor: 'pointer' 
               }}
+              onClick={() => setMenuOpen((o) => !o)}
             >
-              {s.label}
+              <span style={{ display: 'block', width: 16, height: 2, background: 'var(--text-primary)', borderRadius: 2 }} />
+              <span style={{ display: 'block', width: 16, height: 2, background: 'var(--text-primary)', borderRadius: 2 }} />
+              <span style={{ display: 'block', width: 16, height: 2, background: 'var(--text-primary)', borderRadius: 2 }} />
             </button>
-          </li>
-        ))}
-      </ul>
-
-      {/* Right controls */}
-      <div className="flex items-center gap-3">
-        {/* Theme toggle */}
-        <button
-          aria-label="Toggle theme"
-          onClick={toggleTheme}
-          className="w-9 h-9 flex items-center justify-center rounded-full transition-colors"
-          style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', cursor: 'pointer', color: 'var(--text-primary)' }}
-        >
-          {theme === 'dark' ? '☀️' : '🌙'}
-        </button>
-
-        {/* Mobile hamburger */}
-        <button
-          aria-label="Toggle menu"
-          className="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-1 rounded"
-          style={{ background: 'none', border: 'none', cursor: 'pointer' }}
-          onClick={() => setMenuOpen((o) => !o)}
-        >
-          <span style={{ display: 'block', width: 20, height: 2, background: 'var(--text-primary)' }} />
-          <span style={{ display: 'block', width: 20, height: 2, background: 'var(--text-primary)' }} />
-          <span style={{ display: 'block', width: 20, height: 2, background: 'var(--text-primary)' }} />
-        </button>
-      </div>
+          </div>
+        </nav>
+      </GlassSurface>
 
       {/* Mobile dropdown */}
       {menuOpen && (
-        <ul
-          className="absolute top-full left-0 right-0 flex flex-col md:hidden list-none m-0 p-4 gap-3"
-          style={{ background: 'var(--bg-secondary)', borderBottom: '1px solid var(--card-border)' }}
+        <GlassSurface
+          width="100%"
+          height="auto"
+          borderRadius={24}
+          brightness={10}
+          opacity={0.7}
+          blur={15}
+          backgroundOpacity={0.3}
+          saturation={1.2}
+          className="mt-2"
         >
-          {sections.map((s) => (
-            <li key={s.id}>
-              <button
-                onClick={() => scrollToSection(s.id)}
-                className="w-full text-left text-sm"
-                style={{ color: 'var(--text-primary)', background: 'none', border: 'none', cursor: 'pointer' }}
-              >
-                {s.label}
-              </button>
-            </li>
-          ))}
-        </ul>
+          <ul className="flex flex-col md:hidden list-none m-0 p-4 gap-3 w-full">
+            {sections.map((s) => (
+              <li key={s.id}>
+                <button
+                  onClick={() => scrollToSection(s.id)}
+                  className="w-full text-left text-sm font-medium transition-all hover:translate-x-1"
+                  style={{ color: 'var(--text-primary)', background: 'none', border: 'none', cursor: 'pointer' }}
+                >
+                  {s.label}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </GlassSurface>
       )}
-    </nav>
+    </div>
   )
 }

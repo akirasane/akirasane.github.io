@@ -116,6 +116,4 @@ export const DEFAULT_DATA: PortfolioData = {
     },
     formEndpoint: "",
   },
-
-  theme: "dark",
 };

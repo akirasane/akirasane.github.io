@@ -1,6 +1,7 @@
 'use client'
 
 import FadeContent from '@/components/reactbits/FadeContent'
+import BorderGlow from '@/components/reactbits/BorderGlow'
 import type { Experience } from '@/lib/types'
 
 interface ExperienceSectionProps {
@@ -55,13 +56,24 @@ export default function ExperienceSection({ experiences }: ExperienceSectionProp
                   }}
                 />
 
-                <div
+                <BorderGlow className="rounded-xl p-5 flex flex-col gap-2"
+                  edgeSensitivity={30}
+                  glowColor="40 80 80"
+                  backgroundColor="#060010"
+                  borderRadius={28}
+                  glowRadius={40}
+                  glowIntensity={1}
+                  coneSpread={25}
+                  animated={false}
+                  colors={['#c084fc', '#f472b6', '#38bdf8']}
+                >
+                  {/* <div
                   className="rounded-xl p-5 flex flex-col gap-2"
                   style={{
                     background: 'var(--card-bg)',
                     border: '1px solid var(--card-border)',
                   }}
-                >
+                > */}
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
                     <span
                       className="font-semibold text-base"
@@ -92,7 +104,8 @@ export default function ExperienceSection({ experiences }: ExperienceSectionProp
                       {exp.description}
                     </p>
                   )}
-                </div>
+                  {/* </div> */}
+                </BorderGlow>
               </FadeContent>
             ))}
           </div>

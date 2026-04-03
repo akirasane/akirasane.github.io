@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import ScrollReveal from '@/components/reactbits/ScrollReveal'
+import BorderGlow from '@/components/reactbits/BorderGlow'
 import type { SkillCategory, SkillItem } from '@/lib/types'
 
 interface SkillsSectionProps {
@@ -27,56 +28,72 @@ function SkillCard({ item }: SkillCardProps) {
   }, [item.proficiency])
 
   return (
-    <div
-      className="rounded-xl p-4 flex flex-col gap-2"
-      style={{
-        background: 'var(--card-bg)',
-        border: '1px solid var(--card-border)',
-      }}
+
+    // <div
+    //   className="rounded-xl p-4 flex flex-col gap-2"
+    //   style={{
+    //     background: 'var(--card-bg)',
+    //     border: '1px solid var(--card-border)',
+    //   }}
+    // >
+    <BorderGlow
+      edgeSensitivity={30}
+      glowColor="40 80 80"
+      backgroundColor="#060010"
+      borderRadius={28}
+      glowRadius={40}
+      glowIntensity={1}
+      coneSpread={25}
+      animated={false}
+      colors={['#c084fc', '#f472b6', '#38bdf8']}
     >
-      <div className="flex items-center justify-between">
-        <span
-          className="font-medium text-sm"
-          style={{ color: 'var(--text-primary)' }}
-        >
-          {item.name}
-        </span>
-        <span
-          className="text-xs font-semibold"
-          style={{ color: 'var(--accent-primary)' }}
-        >
-          {item.proficiency}%
-        </span>
-      </div>
+      <div style={{ padding: '2em' }}>
 
-      {/* Progress bar */}
-      <div
-        className="h-1.5 rounded-full overflow-hidden"
-        style={{ background: 'var(--bg-primary)' }}
-        role="progressbar"
-        aria-valuenow={item.proficiency}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-label={`${item.name} proficiency`}
-      >
+        <div className="flex items-center justify-between">
+          <span
+            className="font-medium text-sm"
+            style={{ color: 'var(--text-primary)' }}
+          >
+            {item.name}
+          </span>
+          <span
+            className="text-xs font-semibold"
+            style={{ color: 'var(--accent-primary)' }}
+          >
+            {item.proficiency}%
+          </span>
+        </div>
+
+        {/* Progress bar */}
         <div
-          ref={barRef}
-          className="h-full rounded-full"
-          style={{
-            width: `${item.proficiency}%`,
-            background: 'var(--accent-primary)',
-            transition: 'width 0.8s ease-out',
-          }}
-        />
-      </div>
+          className="h-1.5 rounded-full overflow-hidden"
+          style={{ background: 'var(--bg-primary)' }}
+          role="progressbar"
+          aria-valuenow={item.proficiency}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label={`${item.name} proficiency`}
+        >
+          <div
+            ref={barRef}
+            className="h-full rounded-full"
+            style={{
+              width: `${item.proficiency}%`,
+              background: 'var(--accent-primary)',
+              transition: 'width 0.8s ease-out',
+            }}
+          />
+        </div>
 
-      <span
-        className="text-xs"
-        style={{ color: 'var(--text-secondary)' }}
-      >
-        {item.years} {item.years === 1 ? 'year' : 'years'} experience
-      </span>
-    </div>
+        <span
+          className="text-xs"
+          style={{ color: 'var(--text-secondary)' }}
+        >
+          {item.years} {item.years === 1 ? 'year' : 'years'} experience
+        </span>
+      </div>
+    </BorderGlow>
+    // </div>
   )
 }
 

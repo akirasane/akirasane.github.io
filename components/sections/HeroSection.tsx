@@ -1,6 +1,6 @@
 'use client'
 
-import Aurora from '@/components/reactbits/Aurora'
+import MagicRings from '@/components/reactbits/MagicRings'
 import SplitText from '@/components/reactbits/SplitText'
 import BlurText from '@/components/reactbits/BlurText'
 import Magnet from '@/components/reactbits/Magnet'
@@ -26,7 +26,34 @@ export default function HeroSection({ landing }: HeroSectionProps) {
       style={{ background: 'var(--bg-primary)' }}
     >
       {/* Animated background */}
-      <Aurora />
+
+      {/* className="absolute inset-0 w-full h-full" */}
+      {/* <div style={{ width: '600px', height: '400px', position: 'relative' }}> */}
+      <div className="absolute inset-0 w-full h-full">
+        <MagicRings
+          color="#fc42ff"
+          colorTwo="#42fcff"
+          ringCount={6}
+          speed={1}
+          attenuation={10}
+          lineThickness={2}
+          baseRadius={0.35}
+          radiusStep={0.1}
+          scaleRate={0.1}
+          opacity={1}
+          blur={0}
+          noiseAmount={0.1}
+          rotation={0}
+          ringGap={1.5}
+          fadeIn={0.7}
+          fadeOut={0.5}
+          followMouse={false}
+          mouseInfluence={0}
+          hoverScale={1.2}
+          parallax={0}
+          clickBurst={true}
+        />
+      </div>
 
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center gap-6 px-6 text-center">
@@ -58,13 +85,13 @@ export default function HeroSection({ landing }: HeroSectionProps) {
                   style={
                     i === 0
                       ? {
-                          background: 'var(--accent-primary)',
-                          color: '#fff',
-                        }
+                        background: 'var(--accent-primary)',
+                        color: '#fff',
+                      }
                       : {
-                          borderColor: 'var(--accent-primary)',
-                          color: 'var(--accent-primary)',
-                        }
+                        borderColor: 'var(--accent-primary)',
+                        color: 'var(--accent-primary)',
+                      }
                   }
                 >
                   {cta.label}
