@@ -10,14 +10,14 @@
 
 /* Dark theme (default) */
 :root {
-  --bg-primary:       rgb(6,0,16);
-  --bg-secondary:     rgb(6,0,16);
-  --text-primary:     #f3f4f6;
-  --text-secondary:   #9ca3af;
-  --accent-primary:   #6366f1;
+  --bg-primary: rgb(6, 0, 16);
+  --bg-secondary: rgb(6, 0, 16);
+  --text-primary: #f3f4f6;
+  --text-secondary: #9ca3af;
+  --accent-primary: #6366f1;
   --accent-secondary: #a78bfa;
-  --card-bg:          rgba(31, 41, 55, 0.5);
-  --card-border:      rgba(99, 102, 241, 0.2);
+  --card-bg: rgba(31, 41, 55, 0.5);
+  --card-border: rgba(99, 102, 241, 0.2);
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -57,14 +57,14 @@
 
 /* Light theme overrides */
 [data-theme="light"] {
-  --bg-primary:       #ffffff;
-  --bg-secondary:     #f3f4f6;
-  --text-primary:     #111827;
-  --text-secondary:   #6b7280;
-  --accent-primary:   #4f46e5;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f3f4f6;
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+  --accent-primary: #4f46e5;
   --accent-secondary: #7c3aed;
-  --card-bg:          rgba(255, 255, 255, 0.8);
-  --card-border:      rgba(79, 70, 229, 0.3);
+  --card-bg: rgba(255, 255, 255, 0.8);
+  --card-border: rgba(79, 70, 229, 0.3);
 }
 
 body {
@@ -73,30 +73,35 @@ body {
 }
 
 /* Scroll-snap container */
-html {
-  scroll-snap-type: y proximity; /* Changed from mandatory to proximity for better mobile experience */
+html,
+body {
+  scroll-snap-type: y mandatory;
+  overflow-y: auto;
+  height: 100%;
 }
 
 .snap-section {
   scroll-snap-align: start;
   min-height: 100vh;
-  min-height: 100dvh; /* Use dynamic viewport height for mobile */
+  min-height: 100dvh;
+  /* Use dynamic viewport height for mobile */
 }
 
 /* Prevent content from going under navbar */
 main {
-  padding-top: 0; /* Sections handle their own spacing */
+  padding-top: 0;
+  /* Sections handle their own spacing */
 }
 
 /* Mobile-specific fixes */
 @media (max-width: 768px) {
-  html {
-    scroll-snap-type: none; /* Disable snap scroll on mobile for smoother experience */
-  }
-  
+
+
   .snap-section {
-    min-height: auto; /* Allow sections to be their natural height on mobile */
-    padding-top: 5rem; /* Add padding to prevent navbar overlap */
+    min-height: auto;
+    /* Allow sections to be their natural height on mobile */
+    padding-top: 5rem;
+    /* Add padding to prevent navbar overlap */
     padding-bottom: 2rem;
   }
 }
@@ -182,9 +187,11 @@ main {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+
   html {
     @apply font-sans;
   }
