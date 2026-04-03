@@ -22,7 +22,7 @@ export default function ExperienceSection({ experiences }: ExperienceSectionProp
   return (
     <section
       id="experience"
-      className="snap-section flex flex-col items-center justify-center px-6 py-16 overflow-y-auto"
+      className="snap-section flex flex-col items-center justify-center px-6 py-16 md:py-16 md:overflow-y-auto"
       style={{ background: 'var(--bg-secondary)' }}
     >
       <div className="w-full max-w-3xl flex flex-col gap-8">

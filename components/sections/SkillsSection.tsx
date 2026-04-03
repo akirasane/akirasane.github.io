@@ -102,7 +102,7 @@ export default function SkillsSection({ skills }: SkillsSectionProps) {
   return (
     <section
       id="skills"
-      className="snap-section relative flex flex-col items-center justify-center px-6 py-16 overflow-hidden"
+      className="snap-section relative flex flex-col items-center justify-center px-6 py-16 md:py-16 overflow-hidden"
       style={{ background: 'var(--bg-primary)' }}
     >      
     <div className="absolute inset-0 w-full h-full">

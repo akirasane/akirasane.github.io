@@ -94,7 +94,7 @@ export default function ContactSection({ contact }: ContactSectionProps) {
   return (
     <section
       id="contact"
-      className="snap-section flex flex-col items-center justify-center px-6 py-16 overflow-y-auto"
+      className="snap-section flex flex-col items-center justify-center px-6 py-16 md:py-16 md:overflow-y-auto"
       style={{ background: 'var(--bg-secondary)' }}
     >
       <div className="w-full max-w-5xl flex flex-col gap-10">

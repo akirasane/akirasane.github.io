@@ -74,12 +74,31 @@ body {
 
 /* Scroll-snap container */
 html {
-  scroll-snap-type: y mandatory;
+  scroll-snap-type: y proximity; /* Changed from mandatory to proximity for better mobile experience */
 }
 
 .snap-section {
   scroll-snap-align: start;
-  height: 100vh;
+  min-height: 100vh;
+  min-height: 100dvh; /* Use dynamic viewport height for mobile */
+}
+
+/* Prevent content from going under navbar */
+main {
+  padding-top: 0; /* Sections handle their own spacing */
+}
+
+/* Mobile-specific fixes */
+@media (max-width: 768px) {
+  html {
+    scroll-snap-type: none; /* Disable snap scroll on mobile for smoother experience */
+  }
+  
+  .snap-section {
+    min-height: auto; /* Allow sections to be their natural height on mobile */
+    padding-top: 5rem; /* Add padding to prevent navbar overlap */
+    padding-bottom: 2rem;
+  }
 }
 
 @theme inline {
