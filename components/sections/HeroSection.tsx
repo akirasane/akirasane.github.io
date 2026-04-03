@@ -22,7 +22,7 @@ export default function HeroSection({ landing }: HeroSectionProps) {
   return (
     <section
       id="hero"
-      className="snap-section relative flex flex-col items-center justify-center px-6 overflow-hidden"
+      className="h-screen snap-section relative flex flex-col items-center justify-center px-6 overflow-hidden"
       style={{ background: 'var(--bg-primary)' }}
     >
       {/* Animated background */}

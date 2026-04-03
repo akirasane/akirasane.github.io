@@ -102,27 +102,27 @@ export default function SkillsSection({ skills }: SkillsSectionProps) {
   return (
     <section
       id="skills"
-      className="snap-section relative flex flex-col items-center justify-center px-6 py-16 md:py-16 overflow-hidden"
+      className="snap-section relative flex flex-col items-center justify-center px-6 py-20 md:py-20 overflow-hidden"
       style={{ background: 'var(--bg-primary)' }}
-    >      
-    <div className="absolute inset-0 w-full h-full">
+    >
+      <div className="absolute inset-0 w-full h-full">
 
-      <SoftAurora
-        speed={0.6}
-        scale={1.5}
-        brightness={1}
-        color1="#f7f7f7"
-        color2="#e100ff"
-        noiseFrequency={2.5}
-        noiseAmplitude={1}
-        bandHeight={0.5}
-        bandSpread={1}
-        octaveDecay={0.1}
-        layerOffset={0}
-        colorSpeed={1}
-        enableMouseInteraction={false}
-        mouseInfluence={0.25}
-      />
+        <SoftAurora
+          speed={0.6}
+          scale={1.5}
+          brightness={1}
+          color1="#f7f7f7"
+          color2="#e100ff"
+          noiseFrequency={2.5}
+          noiseAmplitude={1}
+          bandHeight={0.5}
+          bandSpread={1}
+          octaveDecay={0.1}
+          layerOffset={0}
+          colorSpeed={1}
+          enableMouseInteraction={false}
+          mouseInfluence={0.25}
+        />
       </div>
       <div className="w-full max-w-4xl flex flex-col gap-10 relative z-10">
         <h2

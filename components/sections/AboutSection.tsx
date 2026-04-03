@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import FadeContent from '@/components/reactbits/FadeContent'
 import Magnet from '@/components/reactbits/Magnet'
 import ProfileCard from '@/components/reactbits/ProfileCard'
@@ -34,31 +34,46 @@ export default function AboutSection({ profile }: AboutSectionProps) {
   }
 
   const handleContactClick = () => {
-    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+    handleDownloadResume()
   }
+
+  const useIsMobile = () => {
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+      const checkSize = () => setIsMobile(window.innerWidth < 768);
+      checkSize(); // Initial check
+      window.addEventListener('resize', checkSize);
+      return () => window.removeEventListener('resize', checkSize);
+    }, []);
+
+    return isMobile;
+  };
+
+  const isMobile = useIsMobile();
 
   const { social } = profile
 
   return (
     <section
       id="about"
-      className="snap-section relative flex items-center justify-center px-6 py-16 md:py-16 overflow-hidden"
+      className="h-screen snap-section relative flex items-center justify-center px-6 py-16 md:py-16 overflow-hidden"
       style={{ background: 'var(--bg-primary)' }}
     >
       {/* Animated background */}
       <div className="absolute inset-0 w-full h-full">
         {/* <div style={{ width: '100%', height: 'fu', position: 'relative' }}> */}
-          <FloatingLines
-            enabledWaves={["top", "middle", "bottom"]}
-            // Array - specify line count per wave; Number - same count for all waves
-            lineCount={5}
-            // Array - specify line distance per wave; Number - same distance for all waves
-            lineDistance={5}
-            bendRadius={5}
-            bendStrength={-0.5}
-            interactive={true}
-            parallax={true}
-          />
+        <FloatingLines
+          enabledWaves={["top", "middle", "bottom"]}
+          // Array - specify line count per wave; Number - same count for all waves
+          lineCount={5}
+          // Array - specify line distance per wave; Number - same distance for all waves
+          lineDistance={5}
+          bendRadius={5}
+          bendStrength={-0.5}
+          interactive={true}
+          parallax={true}
+        />
         {/* </div> */}
       </div>
 
@@ -70,11 +85,11 @@ export default function AboutSection({ profile }: AboutSectionProps) {
             <ProfileCard className="object-cover"
               name={profile.name}
               title={profile.title}
-              handle="javicodes"
+              handle="akirasane"
               status="Online"
               contactText="Download Resume"
               avatarUrl="/img/avatar.jpg"
-              showUserInfo={false}
+              showUserInfo={isMobile}
               enableTilt={true}
               enableMobileTilt={false}
               onContactClick={handleContactClick}
