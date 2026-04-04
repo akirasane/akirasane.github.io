@@ -96,6 +96,13 @@ main {
 /* Mobile-specific fixes */
 @media (max-width: 768px) {
 
+  .snap-sectionfirst {
+    min-height: auto;
+    /* Allow sections to be their natural height on mobile */
+    padding-top: 5rem;
+    /* Add padding to prevent navbar overlap */
+    padding-bottom: 2rem;
+  }
 
   .snap-section {
     min-height: auto;

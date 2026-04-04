@@ -57,7 +57,7 @@ export default function AboutSection({ profile }: AboutSectionProps) {
   return (
     <section
       id="about"
-      className="h-screen snap-section relative flex items-center justify-center px-6 py-16 md:py-16 overflow-hidden"
+      className="h-screen snap-sectionfirst relative flex items-center justify-center px-6 py-16 md:py-16 overflow-hidden"
       style={{ background: 'var(--bg-primary)' }}
     >
       {/* Animated background */}
