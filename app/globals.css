@@ -72,14 +72,21 @@ body {
   color: var(--text-primary);
 }
 
-/* Scroll-snap container */
+/* Root sizing */
 html,
 body {
-  scroll-snap-type: y mandatory;
+  height: 100%;
+  overflow: hidden;
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* Scroll-snap container lives on main — direct parent of sections */
+main {
+  height: 100dvh;
   overflow-y: auto;
   overflow-x: hidden;
-  height: 100%;
-  max-width: 100%;
+  scroll-snap-type: y mandatory;
 }
 
 .snap-section,
@@ -88,12 +95,6 @@ body {
   min-height: 100vh;
   min-height: 100dvh;
   /* Use dynamic viewport height for mobile */
-}
-
-/* Prevent content from going under navbar */
-main {
-  padding-top: 0;
-  /* Sections handle their own spacing */
 }
 
 /* Mobile-specific fixes */

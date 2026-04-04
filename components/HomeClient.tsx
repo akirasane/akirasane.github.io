@@ -35,7 +35,7 @@ export default function HomeClient() {
   return (
     <>
       <Navbar sections={SECTIONS} />
-      <main>
+      <main className="flex-1 w-full">
         <HeroSection       landing={data.landing} />
         <AboutSection      profile={data.profile} />
         <SkillsSection     skills={data.skills} />

@@ -31,7 +31,7 @@ export default function RootLayout({
       data-theme="dark"
       className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", inter.variable)}
     >
-      <body className="h-full flex flex-col overflow-y-auto">{children}</body>
+      <body className="h-full flex flex-col overflow-hidden">{children}</body>
     </html>
   );
 }
