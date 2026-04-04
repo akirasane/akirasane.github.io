@@ -224,22 +224,21 @@ const BorderGlow: React.FC<BorderGlowProps> = ({
         } as React.CSSProperties}
       />
 
-      {/* outer glow */}
+      {/* outer glow — clipped so it doesn't bleed horizontally on mobile */}
       <span
-        className="absolute pointer-events-none z-[1] rounded-[inherit]"
+        className="absolute inset-0 pointer-events-none z-[1] rounded-[inherit] overflow-hidden"
         style={{
-          inset: `${-glowRadius}px`,
-          maskImage: `conic-gradient(from ${angleDeg} at center, black 2.5%, transparent 10%, transparent 90%, black 97.5%)`,
-          WebkitMaskImage: `conic-gradient(from ${angleDeg} at center, black 2.5%, transparent 10%, transparent 90%, black 97.5%)`,
           opacity: glowOpacity,
-          mixBlendMode: 'plus-lighter',
           transition: isVisible ? 'opacity 0.25s ease-out' : 'opacity 0.75s ease-in-out',
         } as React.CSSProperties}
       >
         <span
           className="absolute rounded-[inherit]"
           style={{
-            inset: `${glowRadius}px`,
+            inset: `${-glowRadius}px`,
+            maskImage: `conic-gradient(from ${angleDeg} at center, black 2.5%, transparent 10%, transparent 90%, black 97.5%)`,
+            WebkitMaskImage: `conic-gradient(from ${angleDeg} at center, black 2.5%, transparent 10%, transparent 90%, black 97.5%)`,
+            mixBlendMode: 'plus-lighter',
             boxShadow: buildBoxShadow(glowColor, glowIntensity),
           }}
         />
