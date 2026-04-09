@@ -207,3 +207,95 @@ main {
     @apply font-sans;
   }
 }
+
+/* ─── Glitch Intro Overlay ─────────────────────────────────────────── */
+
+.glitch-intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  overflow: hidden;
+  transition: opacity 1.5s ease-out;
+}
+
+/* LetterGlitch fills the whole overlay */
+.glitch-intro-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ─── Sweep panels ─────────────────────────────────────────────────── */
+/*
+  Each panel starts fully HIDDEN (clip-path width 0) and sweeps inward
+  to cover its half when the --sweep class is added.
+  Left panel: clips from left edge → centre
+  Right panel: clips from right edge → centre
+*/
+
+.glitch-intro-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background: rgb(6, 0, 16); /* matches --bg-primary */
+  transition: transform 1.2s cubic-bezier(0.77, 0, 0.18, 1);
+  will-change: transform;
+}
+
+/* Starts off-screen to the LEFT of viewport */
+.glitch-intro-panel-left {
+  left: 0;
+  transform: translateX(-100%);
+}
+
+/* Starts off-screen to the RIGHT of viewport */
+.glitch-intro-panel-right {
+  right: 0;
+  transform: translateX(100%);
+}
+
+/* Sweep in to cover their half */
+.glitch-intro-panel-left.glitch-intro-panel--sweep {
+  transform: translateX(0%);
+}
+
+.glitch-intro-panel-right.glitch-intro-panel--sweep {
+  transform: translateX(0%);
+}
+
+/* ─── Welcome text ─────────────────────────────────────────────────── */
+
+.glitch-intro-welcome {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.92);
+  transition:
+    opacity 0.6s ease-out,
+    transform 0.6s ease-out;
+}
+
+.glitch-intro-welcome--visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.glitch-intro-welcome-text {
+  font-family: var(--font-geist-sans), sans-serif;
+  font-size: clamp(3rem, 10vw, 8rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  /* Subtle glitch-style glow */
+  text-shadow:
+    0 0 30px rgba(99, 102, 241, 0.8),
+    0 0 60px rgba(167, 139, 250, 0.4),
+    0 0 120px rgba(99, 102, 241, 0.2);
+}
