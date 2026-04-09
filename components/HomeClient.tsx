@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { usePortfolioStore } from '@/lib/store'
 import Navbar from '@/components/layout/Navbar'
 import HeroSection from '@/components/sections/HeroSection'
@@ -8,18 +9,20 @@ import SkillsSection from '@/components/sections/SkillsSection'
 import ExperienceSection from '@/components/sections/ExperienceSection'
 import ProjectsSection from '@/components/sections/ProjectsSection'
 import ContactSection from '@/components/sections/ContactSection'
+import GlitchIntroSection from '@/components/sections/GlitchIntroSection'
 
 const SECTIONS = [
-  { id: 'hero',       label: 'Home' },
-  { id: 'about',      label: 'About' },
-  { id: 'skills',     label: 'Skills' },
+  { id: 'hero', label: 'Home' },
+  { id: 'about', label: 'About' },
+  { id: 'skills', label: 'Skills' },
   { id: 'experience', label: 'Experience' },
-  { id: 'projects',   label: 'Projects' },
-  { id: 'contact',    label: 'Contact' },
+  { id: 'projects', label: 'Projects' },
+  { id: 'contact', label: 'Contact' },
 ]
 
 export default function HomeClient() {
   const { data, loading } = usePortfolioStore()
+  // const [showIntro, setShowIntro] = useState(true)
 
   if (loading) {
     return (
@@ -34,15 +37,22 @@ export default function HomeClient() {
 
   return (
     <>
+      {/* {showIntro && (
+        <GlitchIntroSection
+          welcomeText={data.landing.displayName || 'WELCOME'}
+          onComplete={() => setShowIntro(false)}
+        />
+      )} */}
       <Navbar sections={SECTIONS} />
       <main className="flex-1 w-full">
-        <HeroSection       landing={data.landing} />
-        <AboutSection      profile={data.profile} />
-        <SkillsSection     skills={data.skills} />
+        <HeroSection landing={data.landing} />
+        <AboutSection profile={data.profile} />
+        <SkillsSection skills={data.skills} />
         <ExperienceSection experiences={data.experiences} />
-        <ProjectsSection   projects={data.projects} />
-        <ContactSection    contact={data.contact} />
+        <ProjectsSection projects={data.projects} />
+        <ContactSection contact={data.contact} />
       </main>
     </>
   )
 }
+

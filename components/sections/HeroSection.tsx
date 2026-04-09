@@ -1,9 +1,9 @@
 'use client'
 
-import MagicRings from '@/components/reactbits/MagicRings'
-import SplitText from '@/components/reactbits/SplitText'
+import { useState } from 'react'
 import BlurText from '@/components/reactbits/BlurText'
 import Magnet from '@/components/reactbits/Magnet'
+import LetterGlitchIntro from '@/components/reactbits/LetterGlitchIntro'
 import { LandingContent } from '@/lib/types'
 
 const DEFAULT_TAGLINE = 'Building elegant solutions to complex problems.'
@@ -14,6 +14,8 @@ interface HeroSectionProps {
 
 export default function HeroSection({ landing }: HeroSectionProps) {
   const tagline = landing.tagline || DEFAULT_TAGLINE
+  // 0: Glitching phase, 1: Glitch finished, show rest of content
+  const [glitchDone, setGlitchDone] = useState(false)
 
   const scrollTo = (target: string) => {
     document.getElementById(target)?.scrollIntoView({ behavior: 'smooth' })
@@ -22,56 +24,34 @@ export default function HeroSection({ landing }: HeroSectionProps) {
   return (
     <section
       id="hero"
-      className="h-screen snap-sectionfirst relative flex flex-col items-center justify-center px-6 overflow-hidden"
-      style={{ background: 'var(--bg-primary)' }}
+      className="h-screen snap-sectionfirst w-full relative flex flex-col items-center justify-center overflow-hidden bg-black"
     >
-      {/* Animated background */}
-
-      {/* className="absolute inset-0 w-full h-full" */}
-      {/* <div style={{ width: '600px', height: '400px', position: 'relative' }}> */}
-      <div className="absolute inset-0 w-full h-full">
-        <MagicRings
-          color="#fc42ff"
-          colorTwo="#42fcff"
-          ringCount={6}
-          speed={1}
-          attenuation={10}
-          lineThickness={2}
-          baseRadius={0.35}
-          radiusStep={0.1}
-          scaleRate={0.1}
-          opacity={1}
-          blur={0}
-          noiseAmount={0.1}
-          rotation={0}
-          ringGap={1.5}
-          fadeIn={0.7}
-          fadeOut={0.5}
-          followMouse={false}
-          mouseInfluence={0}
-          hoverScale={1.2}
-          parallax={0}
-          clickBurst={true}
+      {/* 1. Glitch Canvas Wallpaper */}
+      <div className="absolute inset-0 w-full h-full z-0">
+        <LetterGlitchIntro
+          targetWord={landing.displayName?.toUpperCase() || 'WELCOME'}
+          glitchColors={['#6366f1', '#a78bfa', '#c4b5fd', '#818cf8']}
+          glitchSpeed={40}
+          smooth={true}
+          onComplete={() => setGlitchDone(true)}
         />
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 flex flex-col items-center gap-6 px-6 text-center">
-        <h1
-          className="text-5xl font-bold md:text-7xl"
-          style={{ color: 'var(--text-primary)' }}
-        >
-          <SplitText text={landing.displayName || 'Your Name'} />
-        </h1>
-
+      {/* 2. Content that fades in AFTER the glitch resolves the name */}
+      {/* We position it slightly below the vertical center so it sits under the canvas text */}
+      <div
+        className={`absolute top-[58%] z-10 flex flex-col items-center gap-6 px-6 text-center transition-opacity duration-1000 ${
+          glitchDone ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+      >
         <p
           className="max-w-xl text-lg md:text-2xl"
           style={{ color: 'var(--text-secondary)' }}
         >
-          <BlurText text={tagline} delay={0.3} />
+          {glitchDone && <BlurText text={tagline} delay={0.1} />}
         </p>
 
-        {landing.ctaLinks.length > 0 && (
+        {landing.ctaLinks && landing.ctaLinks.length > 0 && (
           <div className="flex flex-wrap items-center justify-center gap-4 mt-4">
             {landing.ctaLinks.map((cta, i) => (
               <Magnet key={i}>
@@ -85,13 +65,13 @@ export default function HeroSection({ landing }: HeroSectionProps) {
                   style={
                     i === 0
                       ? {
-                        background: 'var(--accent-primary)',
-                        color: '#fff',
-                      }
+                          background: 'var(--accent-primary)',
+                          color: '#fff',
+                        }
                       : {
-                        borderColor: 'var(--accent-primary)',
-                        color: 'var(--accent-primary)',
-                      }
+                          borderColor: 'var(--accent-primary)',
+                          color: 'var(--accent-primary)',
+                        }
                   }
                 >
                   {cta.label}
@@ -104,3 +84,4 @@ export default function HeroSection({ landing }: HeroSectionProps) {
     </section>
   )
 }
+
