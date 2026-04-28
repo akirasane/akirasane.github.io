@@ -36,7 +36,7 @@ export default function RootLayout({
       <head>
         <link 
           rel="stylesheet" 
-          href="https://mfpgzht7cp.sharedwithexpose.com/css/cookie-consent-sdk.css" 
+          href="https://ai3pji7eov.sharedwithexpose.com/css/cookie-consent-sdk.css" 
         />
       </head>
       
@@ -45,7 +45,7 @@ export default function RootLayout({
         
         {/* Load the SDK */}
         <Script
-          src="https://mfpgzht7cp.sharedwithexpose.com/js/cookie-consent-sdk.min.js"
+          src="https://ai3pji7eov.sharedwithexpose.com/js/cookie-consent-sdk.min.js"
           strategy="afterInteractive"
         />
         
