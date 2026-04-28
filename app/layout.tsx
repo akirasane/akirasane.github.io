@@ -32,6 +32,14 @@ export default function RootLayout({
       data-theme="dark"
       className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", inter.variable)}
     >
+      {/* ADD THE HEAD SECTION HERE */}
+      <head>
+        <link 
+          rel="stylesheet" 
+          href="https://mfpgzht7cp.sharedwithexpose.com/css/cookie-consent-sdk.css" 
+        />
+      </head>
+      
       <body className="h-full flex flex-col overflow-hidden">
         {children}
         
@@ -45,7 +53,6 @@ export default function RootLayout({
         <Script id="cookie-consent-init" strategy="afterInteractive">
           {`
             function initCookieConsent() {
-              // Check if the SDK script has finished loading
               if (typeof CookieConsentSDK !== 'undefined') {
                 const cookieConsent = new CookieConsentSDK({
                   appKey: 'Qd3nsekwCtyhygW0aCpm8Y8CSekfOCO2VQfDH13r0JsP7lP9iWJvLYDqpInQ0l8N',
@@ -57,12 +64,10 @@ export default function RootLayout({
                 });
                 cookieConsent.init();
               } else {
-                // If not loaded yet, wait 50ms and try again
                 setTimeout(initCookieConsent, 50);
               }
             }
             
-            // Start the initialization check
             initCookieConsent();
           `}
         </Script>
