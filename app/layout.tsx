@@ -56,7 +56,7 @@ export default function RootLayout({
               if (typeof CookieConsentSDK !== 'undefined') {
                 const cookieConsent = new CookieConsentSDK({
                   appKey: 'Qd3nsekwCtyhygW0aCpm8Y8CSekfOCO2VQfDH13r0JsP7lP9iWJvLYDqpInQ0l8N',
-                  apiBaseUrl: 'https://mfpgzht7cp.sharedwithexpose.com',
+                  apiBaseUrl: 'https://ai3pji7eov.sharedwithexpose.com',
                   locale: document.documentElement.lang || 'en',
                   onConsentChange: function(consent) {
                     console.log('Consent updated:', consent);
