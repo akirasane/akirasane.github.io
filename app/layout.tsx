@@ -34,43 +34,33 @@ export default function RootLayout({
     >
       {/* ADD THE HEAD SECTION HERE */}
       <head>
-        <link 
-          rel="stylesheet" 
-          href="https://ai3pji7eov.sharedwithexpose.com/css/cookie-consent-sdk.css" 
+        <link
+          rel="stylesheet"
+          href="https://ezcookie.free.laravel.cloud/css/cookie-consent-sdk.css"
         />
       </head>
-      
+
       <body className="h-full flex flex-col overflow-hidden">
         {children}
-        
+
         {/* Load the SDK */}
-        <Script
-          src="https://ai3pji7eov.sharedwithexpose.com/js/cookie-consent-sdk.min.js"
-          strategy="afterInteractive"
-        />
-        
-        {/* Initialize the SDK */}
-        <Script id="cookie-consent-init" strategy="afterInteractive">
-          {`
-            function initCookieConsent() {
-              if (typeof CookieConsentSDK !== 'undefined') {
-                const cookieConsent = new CookieConsentSDK({
-                  appKey: 'Qd3nsekwCtyhygW0aCpm8Y8CSekfOCO2VQfDH13r0JsP7lP9iWJvLYDqpInQ0l8N',
-                  apiBaseUrl: 'https://ai3pji7eov.sharedwithexpose.com',
-                  locale: document.documentElement.lang || 'en',
-                  onConsentChange: function(consent) {
-                    console.log('Consent updated:', consent);
-                  }
-                });
-                cookieConsent.init();
-              } else {
-                setTimeout(initCookieConsent, 50);
-              }
-            }
-            
-            initCookieConsent();
-          `}
-        </Script>
+        <script src="https://ezcookie.free.laravel.cloud/js/cookie-consent-sdk.min.js" defer></script>
+        <script>
+          window.addEventListener('DOMContentLoaded', function() {
+        if (typeof CookieConsentSDK !== 'undefined') {
+            const cookieConsent = new CookieConsentSDK({
+            appKey: 'Qht7ygBr3HiHjzRR83n7lDJBO6qE11y2dUgk79R9havleYTF8Su8OlM1N8byuh2b',
+          apiBaseUrl: 'https://ezcookie.free.laravel.cloud',
+          domain: window.location.hostname,
+          locale: document.documentElement.lang || 'en',
+          onConsentChange: function(consent) {
+            console.log('Consent updated:', consent);
+                }
+            });
+          cookieConsent.init();
+        }
+    });
+        </script>
       </body>
     </html>
   );
