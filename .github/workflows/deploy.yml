@@ -67,12 +67,20 @@ jobs:
         with:
           path: ./out
 
+  approve:
+    runs-on: ubuntu-latest
+    needs: build
+    environment: production
+    steps:
+      - name: Deployment approved
+        run: echo "Approved by ${{ github.actor }}"
+
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build
+    needs: approve
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
