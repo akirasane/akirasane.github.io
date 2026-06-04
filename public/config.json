@@ -10,7 +10,7 @@
       "linkedin": "https://www.linkedin.com/in/chatkawin-t/",
       "email": "contact.chatkawin@gmail.com",
       "twitter": "",
-      "website": "https://akirasane.github.io"
+      "website": "https://omelettesalmon.com"
     }
   },
   "landing": {
@@ -86,8 +86,26 @@
         {
           "id": "skill-1-3",
           "name": "React",
-          "proficiency": 70,
-          "years": 2
+          "proficiency": 30,
+          "years": 1
+        },
+        {
+          "id": "skill-1-4",
+          "name": "Tailwind CSS",
+          "proficiency": 85,
+          "years": 4
+        },
+        {
+          "id": "skill-1-5",
+          "name": "Shopify",
+          "proficiency": 80,
+          "years": 3
+        },
+        {
+          "id": "skill-1-6",
+          "name": "Next.js",
+          "proficiency": 25,
+          "years": 1
         }
       ]
     },
@@ -113,6 +131,24 @@
           "name": "REST API",
           "proficiency": 90,
           "years": 5
+        },
+        {
+          "id": "skill-2-4",
+          "name": "MySQL",
+          "proficiency": 88,
+          "years": 6
+        },
+        {
+          "id": "skill-2-5",
+          "name": "Node.js",
+          "proficiency": 30,
+          "years": 1
+        },
+        {
+          "id": "skill-2-6",
+          "name": ".NET Core MVC",
+          "proficiency": 25,
+          "years": 1
         }
       ]
     }
@@ -120,12 +156,13 @@
   "projects": [
     {
       "id": "proj-1",
-      "title": "Real-Time Analytics Dashboard",
-      "description": "Built a real-time analytics dashboard for monitoring business metrics. Implemented WebSocket connections for live data updates.",
+      "title": "[Internal]Instant Redemption Portal",
+      "description": "Developed an internal portal for employees to redeem customer points for rewards. Integrated with existing CRM and loyalty systems.",
       "tags": [
-        "JavaScript",
-        "PHP",
+        "Laravel",
+        "Tailwind CSS",
         "MySQL",
+        "PHP",
         "REST API"
       ],
       "link": "",
@@ -134,11 +171,80 @@
     {
       "id": "proj-2",
       "title": "E-Commerce Platform",
-      "description": "Developed a custom e-commerce platform with product management, shopping cart, and payment integration.",
+      "description": "Developed a custom e-commerce platform with product management with real-time stock updates, shopping cart, and payment integration.",
       "tags": [
         "Shopify",
-        "REST API",
-        "PHP"
+        "REST API"
+      ],
+      "link": "https://th.club21.com/",
+      "imageUrl": ""
+    },
+    {
+      "id": "proj-3",
+      "title": "[Internal]Order Management System for E-Commerce Operations",
+      "description": "Designed and implemented an order management system to streamline e-commerce operations. Integrated with inventory and shipping systems for real-time updates.",
+      "tags": [
+        "Laravel",
+        "Tailwind CSS",
+        "MySQL",
+        "PHP",
+        "REST API"
+      ],
+      "link": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "proj-4",
+      "title": "[Internal]Recruitment Skill testing assessment system",
+      "description": "Developed a recruitment skill testing assessment system to evaluate candidates' technical skills. Integrated with HR systems for seamless candidate management.",
+      "tags": [
+        "Laravel",
+        "Tailwind CSS",
+        "MySQL",
+        "PHP",
+        "REST API"
+      ],
+      "link": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "proj-5",
+      "title": "[Internal]Time Attendance System",
+      "description": "Designed and implemented a time attendance system to track employee working hours and attendance.",
+      "tags": [
+        "Laravel",
+        "Tailwind CSS",
+        "MySQL",
+        "PHP",
+        "REST API"
+      ],
+      "link": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "proj-6",
+      "title": "[Internal]Warehouse Management System",
+      "description": "Developed a warehouse management system to optimize inventory tracking and order fulfillment processes. Integrated with barcode scanning for efficient operations.",
+      "tags": [
+        "Laravel",
+        "Tailwind CSS",
+        "MySQL",
+        "PHP",
+        "REST API"
+      ],
+      "link": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "proj-7",
+      "title": "[Internal]Employee Overtime Management System",
+      "description": "Designed and implemented an employee overtime management system to track and manage overtime hours automatically from time attendance data. Integrated with payroll systems for accurate compensation.",
+      "tags": [
+        "Laravel",
+        "Tailwind CSS",
+        "MySQL",
+        "PHP",
+        "REST API"
       ],
       "link": "",
       "imageUrl": ""
@@ -152,7 +258,7 @@
       "github": "https://github.com/akirasane",
       "linkedin": "https://www.linkedin.com/in/chatkawin-t/",
       "twitter": "",
-      "website": "https://akirasane.github.io"
+      "website": "https://omelettesalmon.com"
     },
     "formEndpoint": ""
   }
