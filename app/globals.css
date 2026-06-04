@@ -6,6 +6,7 @@
 
 @theme {
   --color-accent: var(--accent-primary);
+  --font-mono: var(--font-jetbrains-mono);
 }
 
 /* Dark theme (default) */
@@ -18,9 +19,10 @@
   --accent-secondary: #a78bfa;
   --card-bg: rgba(31, 41, 55, 0.5);
   --card-border: rgba(99, 102, 241, 0.2);
+  --terminal-shadow: 0 0 25px rgba(99, 102, 241, 0.25);
 
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-mono: var(--font-jetbrains-mono);
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -299,3 +301,114 @@ main {
     0 0 60px rgba(167, 139, 250, 0.4),
     0 0 120px rgba(99, 102, 241, 0.2);
 }
+
+/* ==========================================
+   TERMINAL SPECIFIC THEMES & STYLES
+   ========================================== */
+
+/* Locked to unified premium global theme. No overrides needed. */
+
+/* Cursor Blink Animation */
+.cursor-blink {
+  animation: cursor-blink-anim 1s step-end infinite;
+}
+
+@keyframes cursor-blink-anim {
+  from, to { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* CRT Screen Scanlines */
+.crt-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.crt-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.15) 50%
+  );
+  background-size: 100% 4px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Scoped Font Scaling for Terminal Window */
+.terminal-window pre {
+  font-size: var(--text-sm) !important;
+}
+
+.crt-overlay::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: radial-gradient(
+    circle, 
+    transparent 60%, 
+    rgba(0, 0, 0, 0.3) 100%
+  );
+  z-index: 11;
+  pointer-events: none;
+}
+
+/* CRT Screen Flicker */
+.crt-flicker {
+  animation: crt-flicker-anim 0.15s infinite;
+}
+
+@keyframes crt-flicker-anim {
+  0% { opacity: 0.99; }
+  50% { opacity: 1; }
+  100% { opacity: 0.985; }
+}
+
+/* Terminal Glassmorphism */
+.terminal-window {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--terminal-shadow), inset 0 0 20px rgba(0, 0, 0, 0.6);
+  background: var(--card-bg);
+}
+
+/* Screen Shatter and Glitch Transitions */
+.mode-glitch-transition {
+  animation: glitch-anim 0.4s ease-out;
+}
+
+@keyframes glitch-anim {
+  0% {
+    filter: hue-rotate(0deg) contrast(1);
+    transform: scale(1);
+  }
+  20% {
+    filter: hue-rotate(90deg) contrast(1.5) skewX(2deg);
+    transform: scale(0.98);
+  }
+  40% {
+    filter: hue-rotate(180deg) contrast(2) skewX(-2deg);
+    transform: scale(1.02);
+  }
+  60% {
+    filter: hue-rotate(270deg) contrast(1.2) skewY(1deg);
+    transform: scale(0.99);
+  }
+  80% {
+    filter: hue-rotate(360deg) contrast(1.5) skewX(1deg);
+    transform: scale(1.01);
+  }
+  100% {
+    filter: hue-rotate(0deg) contrast(1);
+    transform: scale(1);
+  }
+}

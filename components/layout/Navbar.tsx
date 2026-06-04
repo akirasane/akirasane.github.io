@@ -6,9 +6,11 @@ import GlassSurface from '@/components/reactbits/GlassSurface'
 
 interface NavbarProps {
   sections: Array<{ id: string; label: string }>
+  currentMode: 'terminal' | 'gui'
+  setMode: (mode: 'terminal' | 'gui') => void
 }
 
-export default function Navbar({ sections }: NavbarProps) {
+export default function Navbar({ sections, currentMode, setMode }: NavbarProps) {
   const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
 
@@ -58,6 +60,14 @@ export default function Navbar({ sections }: NavbarProps) {
 
           {/* Right controls */}
           <div className="flex items-center gap-3">
+            {/* Terminal Mode Toggle Button */}
+            <button
+              onClick={() => setMode('terminal')}
+              className="px-3 py-1 bg-[var(--accent-primary)] text-black rounded-full text-xs font-bold font-mono tracking-wide cursor-pointer transition-all hover:scale-105"
+            >
+              {"[>_] CLI Mode"}
+            </button>
+
             {/* Mobile hamburger */}
             <button
               aria-label="Toggle menu"
@@ -102,6 +112,17 @@ export default function Navbar({ sections }: NavbarProps) {
                 </button>
               </li>
             ))}
+            <li className="pt-2 border-t border-[var(--card-border)]">
+              <button
+                onClick={() => {
+                  setMode('terminal')
+                  setMenuOpen(false)
+                }}
+                className="w-full text-center py-2 bg-[var(--accent-primary)] text-black rounded-lg text-xs font-bold font-mono tracking-wide cursor-pointer"
+              >
+                {"[>_] CLI Mode"}
+              </button>
+            </li>
           </ul>
         </GlassSurface>
       )}
