@@ -110,8 +110,7 @@ ${diff}
     },
     {
       model: modelName,
-      messages: [{ role: 'user', content: prompt }],
-      temperature: 0.2
+      input: prompt
     }
   );
 

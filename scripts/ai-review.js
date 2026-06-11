@@ -75,10 +75,7 @@ Review Report (Keep it concise, in Markdown format):`;
     const url = 'https://llmapi.omelettesalmon.com/api/v1/chat';
     const payload = {
         model: modelName,
-        messages: [
-            { role: 'user', content: prompt }
-        ],
-        temperature: 0.2
+        input: prompt
     };
 
     try {
@@ -117,9 +114,8 @@ Review Report (Keep it concise, in Markdown format):`;
 
     } catch (error) {
         console.error('AI Review failed with error:', error.message);
-        // Proceed with the build even if AI review fails due to API issues to avoid blocking CI/CD completely
-        console.log('Proceeding with deployment despite review failure...');
-        process.exit(0);
+        // Fail the workflow if the review or API call fails
+        process.exit(1);
     }
 }
 
