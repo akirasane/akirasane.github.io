@@ -1,4 +1,16 @@
+const fs = require('fs');
 const { execSync } = require('child_process');
+
+function writeToSummary(content) {
+    const summaryFile = process.env.GITHUB_STEP_SUMMARY;
+    if (summaryFile) {
+        try {
+            fs.appendFileSync(summaryFile, content);
+        } catch (err) {
+            console.error('Failed to write to GITHUB_STEP_SUMMARY:', err.message);
+        }
+    }
+}
 
 async function runReview() {
     const apiKey = process.env.LOCAL_AI_API_KEY;
@@ -74,7 +86,6 @@ async function runReview() {
     // Read optional custom rules from ai-review-rules.md
     let customRules = '';
     try {
-        const fs = require('fs');
         if (fs.existsSync('ai-review-rules.md')) {
             customRules = fs.readFileSync('ai-review-rules.md', 'utf8').trim();
             console.log('Loaded custom review rules from ai-review-rules.md');
@@ -154,17 +165,12 @@ Review Report (Keep it concise, in Markdown format):`;
         console.log(feedback);
         console.log('-----------------------------------------\n');
 
-        const isBlocker = feedback.includes('[BLOCKER]');
+        const isBlocker = /^\[BLOCKER\]/m.test(feedback);
         
-        // Write to GITHUB_STEP_SUMMARY if available
-        const summaryFile = process.env.GITHUB_STEP_SUMMARY;
-        if (summaryFile) {
-            try {
-                const fs = require('fs');
-                let statusEmoji = isBlocker ? '❌ BLOCKED' : '✅ PASSED';
-                let statusColor = isBlocker ? 'red' : 'green';
-                let summaryContent = `## 🤖 AI Code Review (Local LLM)
-                
+        let statusEmoji = isBlocker ? '❌ BLOCKED' : '✅ PASSED';
+        let statusColor = isBlocker ? 'red' : 'green';
+        let summaryContent = `## 🤖 AI Code Review (Local LLM)
+        
 ### Status: <span style="color: ${statusColor}; font-weight: bold;">${statusEmoji}</span>
 
 ### 👤 Deployment Details
@@ -182,11 +188,7 @@ ${feedback}
 ${diff}
 \`\`\`
 `;
-                fs.appendFileSync(summaryFile, summaryContent);
-            } catch (err) {
-                console.error('Failed to write to GITHUB_STEP_SUMMARY:', err.message);
-            }
-        }
+        writeToSummary(summaryContent);
 
         if (isBlocker) {
             console.error('❌ Deployment stopped: AI detected CRITICAL blockers.');
@@ -199,13 +201,8 @@ ${diff}
     } catch (error) {
         console.error('AI Review failed with error:', error.message);
         
-        // Write error to GITHUB_STEP_SUMMARY if available
-        const summaryFile = process.env.GITHUB_STEP_SUMMARY;
-        if (summaryFile) {
-            try {
-                const fs = require('fs');
-                let summaryContent = `## 🤖 AI Code Review (Local LLM)
-                
+        let summaryContent = `## 🤖 AI Code Review (Local LLM)
+        
 ### Status: <span style="color: red; font-weight: bold;">⚠️ ERROR</span>
 
 **The AI review failed with the following error:**
@@ -221,11 +218,7 @@ ${commitMessage}
 
 *Please check the workflow logs or refer to the failover runbook to bypass if needed.*
 `;
-                fs.appendFileSync(summaryFile, summaryContent);
-            } catch (err) {
-                console.error('Failed to write error to GITHUB_STEP_SUMMARY:', err.message);
-            }
-        }
+        writeToSummary(summaryContent);
         
         // Fail the workflow if the review or API call fails
         process.exit(1);

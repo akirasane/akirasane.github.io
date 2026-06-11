@@ -5,6 +5,17 @@ const fs = require('fs');
 
 const MAX_DIFF_CHARS = 30000;
 
+function writeToSummary(content) {
+  const summaryFile = process.env.GITHUB_STEP_SUMMARY;
+  if (summaryFile) {
+    try {
+      fs.appendFileSync(summaryFile, content);
+    } catch (err) {
+      console.error('Failed to write to GITHUB_STEP_SUMMARY:', err.message);
+    }
+  }
+}
+
 function post(hostname, path, headers, body, port = 443) {
   return new Promise((resolve, reject) => {
     const data = JSON.stringify(body);
@@ -165,11 +176,8 @@ ${diff}
   if (!reviewText) throw new Error('Unexpected LM Studio response shape: ' + JSON.stringify(lmRes.body));
 
   // Write to GITHUB_STEP_SUMMARY if available
-  const summaryFile = process.env.GITHUB_STEP_SUMMARY;
-  if (summaryFile) {
-    try {
-      let summaryContent = `## 🤖 AI Code Review (Local PR Review)
-      
+  let summaryContent = `## 🤖 AI Code Review (Local PR Review)
+  
 ### 📝 AI Feedback
 ${reviewText}
 
@@ -178,11 +186,7 @@ ${reviewText}
 ${diff}
 \`\`\`
 `;
-      fs.appendFileSync(summaryFile, summaryContent);
-    } catch (err) {
-      console.error('Failed to write to GITHUB_STEP_SUMMARY:', err.message);
-    }
-  }
+  writeToSummary(summaryContent);
 
   // 5. Post PR comment
   const commentBody = `## 🤖 AI Code Review (Local LLM)\n\n${reviewText}\n\n---\n*Generated automatically — treat as a suggestion, not a verdict.*`;
@@ -210,21 +214,13 @@ ${diff}
 
 main().catch((err) => {
   console.error(err.message);
-  // Write error to GITHUB_STEP_SUMMARY if available
-  const summaryFile = process.env.GITHUB_STEP_SUMMARY;
-  if (summaryFile) {
-    try {
-      let summaryContent = `## 🤖 AI Code Review (Local PR Review)
-      
+  let summaryContent = `## 🤖 AI Code Review (Local PR Review)
+  
 ### Status: <span style="color: red; font-weight: bold;">⚠️ ERROR</span>
 
 **The AI review failed with the following error:**
 > ${err.message}
 `;
-      fs.appendFileSync(summaryFile, summaryContent);
-    } catch (e) {
-      console.error('Failed to write error to GITHUB_STEP_SUMMARY:', e.message);
-    }
-  }
+  writeToSummary(summaryContent);
   process.exit(1);
 });
