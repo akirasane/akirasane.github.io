@@ -71,15 +71,31 @@ async function runReview() {
         console.log(`Failed to query models endpoint (${err.message}). Using fallback model name: ${modelName}`);
     }
 
+    // Read optional custom rules from ai-review-rules.md
+    let customRules = '';
+    try {
+        const fs = require('fs');
+        if (fs.existsSync('ai-review-rules.md')) {
+            customRules = fs.readFileSync('ai-review-rules.md', 'utf8').trim();
+            console.log('Loaded custom review rules from ai-review-rules.md');
+        }
+    } catch (err) {
+        console.log(`Failed to read optional ai-review-rules.md file: ${err.message}`);
+    }
+
     console.log('Sending changes to LM Studio API for code review...');
-    const prompt = `You are a professional AI Code Reviewer. Review the following code changes for a Next.js web application.
+    let prompt = `You are a professional AI Code Reviewer. Review the following code changes for a Next.js web application.
 Analyze it for:
 1. Critical bugs or syntax errors (e.g. unclosed tags, broken JS scripts, React hydration errors, incorrect hook dependencies).
 2. Security issues (e.g. XSS risks, insecure dependencies, exposed secrets).
 3. SEO improvements (missing meta tags, alt tags, heading hierarchy, semantic HTML).
-4. Styling defects or non-responsive layout issues (Tailwind CSS classes, layout shifts).
+4. Styling defects or non-responsive layout issues (Tailwind CSS classes, layout shifts).`;
 
-If you find any CRITICAL blockers that should STOP the deployment, you must explicitly start the feedback line with '[BLOCKER]'.
+    if (customRules) {
+        prompt += `\n\nAdditionally, you MUST strictly enforce the following project-specific coding conventions and rules:\n${customRules}`;
+    }
+
+    prompt += `\n\nIf you find any CRITICAL blockers that should STOP the deployment, you must explicitly start the feedback line with '[BLOCKER]'.
 Otherwise, write constructive recommendations.
 
 Code Changes to Review:

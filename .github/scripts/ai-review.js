@@ -62,15 +62,30 @@ async function main() {
     diff = diff.substring(0, MAX_DIFF_CHARS) + '\n\n...(diff truncated — too large)';
   }
 
+  // Read optional custom rules from ai-review-rules.md
+  let customRules = '';
+  try {
+    if (fs.existsSync('ai-review-rules.md')) {
+      customRules = fs.readFileSync('ai-review-rules.md', 'utf8').trim();
+      console.log('Loaded custom review rules from ai-review-rules.md');
+    }
+  } catch (err) {
+    console.log(`Failed to read optional ai-review-rules.md file: ${err.message}`);
+  }
+
   // 2. Build prompt
-  const prompt = `You are a senior software engineer doing a thorough code review. Analyze the following git diff and give structured feedback covering:
+  let prompt = `You are a senior software engineer doing a thorough code review. Analyze the following git diff and give structured feedback covering:
 
 1. **🔒 Security** — XSS, injection, exposed secrets, unsafe deps
 2. **🧹 Code Quality** — TypeScript types, dead code, naming, complexity
 3. **⚡ Performance** — unnecessary re-renders, bundle size, lazy loading
-4. **🧪 Tests** — missing tests, inadequate coverage, risky untested paths
+4. **🧪 Tests** — missing tests, inadequate coverage, risky untested paths`;
 
-Rules:
+  if (customRules) {
+    prompt += `\n\nAdditionally, you MUST strictly enforce the following project-specific coding conventions and rules:\n${customRules}`;
+  }
+
+  prompt += `\n\nRules:
 - Write in markdown. Be concise but specific — reference file names and line context when possible.
 - For each category: if nothing notable, write a single line "✅ No issues found."
 - End with a short **Summary** paragraph of the most important findings (or "✅ Looks good" if clean).
