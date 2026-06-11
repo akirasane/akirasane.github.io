@@ -47,13 +47,13 @@ async function main() {
   const { LOCAL_AI_API_KEY, GITHUB_TOKEN, PR_NUMBER, REPO } = process.env;
 
   if (!LOCAL_AI_API_KEY) throw new Error('LOCAL_AI_API_KEY is not set');
-  if (!GITHUB_TOKEN)   throw new Error('GITHUB_TOKEN is not set');
-  if (!PR_NUMBER)      throw new Error('PR_NUMBER is not set');
-  if (!REPO)           throw new Error('REPO is not set');
+  if (!GITHUB_TOKEN) throw new Error('GITHUB_TOKEN is not set');
+  if (!PR_NUMBER) throw new Error('PR_NUMBER is not set');
+  if (!REPO) throw new Error('REPO is not set');
 
   // 1. Read diff
   let diff = '';
-  try { diff = fs.readFileSync('pr_diff.txt', 'utf8').trim(); } catch {}
+  try { diff = fs.readFileSync('pr_diff.txt', 'utf8').trim(); } catch { }
   if (!diff) {
     console.log('No diff found — skipping review.');
     return;
@@ -80,7 +80,7 @@ ${diff}
 \`\`\``;
 
   // 3. Detect model loaded in LM Studio
-  let modelName = 'local-model';
+  let modelName = 'google/gemma-4-12b-qat';
   try {
     console.log('Detecting loaded model from LM Studio...');
     const modelsRes = await get(
