@@ -93,8 +93,20 @@ ${diff}
     );
     if (modelsRes.status === 200) {
       console.log('Available models from LM Studio:', JSON.stringify(modelsRes.body));
-      if (modelsRes.body?.data?.length > 0) {
-        modelName = modelsRes.body.data[0].id;
+      const list = modelsRes.body?.models || modelsRes.body?.data || [];
+      let foundModel = null;
+      for (const m of list) {
+        if (m.loaded_instances && m.loaded_instances.length > 0) {
+          foundModel = m.loaded_instances[0].id;
+          break;
+        }
+        if (m.id && !m.loaded_instances) {
+          foundModel = m.id;
+          break;
+        }
+      }
+      if (foundModel) {
+        modelName = foundModel;
         console.log(`Detected loaded model: ${modelName}`);
       } else {
         console.log('No loaded models found in LM Studio. Using default fallback:', modelName);
@@ -125,7 +137,16 @@ ${diff}
     throw new Error(`LM Studio API error ${lmRes.status}: ${JSON.stringify(lmRes.body)}`);
   }
 
-  const reviewText = lmRes.body?.choices?.[0]?.message?.content;
+  let reviewText = '';
+  if (lmRes.body?.choices?.[0]?.message?.content) {
+    reviewText = lmRes.body.choices[0].message.content;
+  } else if (lmRes.body?.output && Array.isArray(lmRes.body.output)) {
+    const msgObj = lmRes.body.output.find(item => item.type === 'message');
+    if (msgObj) {
+      reviewText = msgObj.content;
+    }
+  }
+
   if (!reviewText) throw new Error('Unexpected LM Studio response shape: ' + JSON.stringify(lmRes.body));
 
   // 5. Post PR comment

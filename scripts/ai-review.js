@@ -46,8 +46,20 @@ async function runReview() {
         if (modelsResponse.ok) {
             const modelsData = await modelsResponse.json();
             console.log('Available models from LM Studio:', JSON.stringify(modelsData));
-            if (modelsData && modelsData.data && modelsData.data.length > 0) {
-                modelName = modelsData.data[0].id;
+            const list = modelsData.models || modelsData.data || [];
+            let foundModel = null;
+            for (const m of list) {
+                if (m.loaded_instances && m.loaded_instances.length > 0) {
+                    foundModel = m.loaded_instances[0].id;
+                    break;
+                }
+                if (m.id && !m.loaded_instances) {
+                    foundModel = m.id;
+                    break;
+                }
+            }
+            if (foundModel) {
+                modelName = foundModel;
                 console.log(`Detected loaded model: ${modelName}`);
             } else {
                 console.log('No loaded models found in LM Studio. Using default fallback:', modelName);
@@ -99,10 +111,18 @@ Review Report (Keep it concise, in Markdown format):`;
         }
 
         const data = await response.json();
-        const feedback = data.choices?.[0]?.message?.content;
+        let feedback = '';
+        if (data.choices?.[0]?.message?.content) {
+            feedback = data.choices[0].message.content;
+        } else if (data.output && Array.isArray(data.output)) {
+            const msgObj = data.output.find(item => item.type === 'message');
+            if (msgObj) {
+                feedback = msgObj.content;
+            }
+        }
 
         if (!feedback) {
-            throw new Error('Empty response from LM Studio API.');
+            throw new Error('Empty response from LM Studio API. Received body: ' + JSON.stringify(data));
         }
 
         console.log('\n--- AI CODE REVIEW REPORT (LM Studio) ---');
