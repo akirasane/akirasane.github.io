@@ -91,12 +91,19 @@ ${diff}
         'Accept': 'application/json'
       }
     );
-    if (modelsRes.status === 200 && modelsRes.body?.data?.length > 0) {
-      modelName = modelsRes.body.data[0].id;
-      console.log(`Detected loaded model: ${modelName}`);
+    if (modelsRes.status === 200) {
+      console.log('Available models from LM Studio:', JSON.stringify(modelsRes.body));
+      if (modelsRes.body?.data?.length > 0) {
+        modelName = modelsRes.body.data[0].id;
+        console.log(`Detected loaded model: ${modelName}`);
+      } else {
+        console.log('No loaded models found in LM Studio. Using default fallback:', modelName);
+      }
+    } else {
+      console.log(`Failed to query models endpoint: HTTP ${modelsRes.status}. Using default fallback: ${modelName}`);
     }
   } catch (err) {
-    console.log(`Failed to query models endpoint (${err.message}). Using fallback model name.`);
+    console.log(`Failed to query models endpoint (${err.message}). Using fallback model name: ${modelName}`);
   }
 
   // 4. Call LM Studio API

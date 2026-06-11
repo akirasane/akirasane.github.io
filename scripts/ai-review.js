@@ -34,7 +34,7 @@ async function runReview() {
     }
 
     // 1. Detect model loaded in LM Studio
-    let modelName = 'local-model';
+    let modelName = 'google/gemma-4-12b-qat';
     try {
         console.log('Detecting loaded model from LM Studio...');
         const modelsResponse = await fetch('https://llmapi.omelettesalmon.com/api/v1/models', {
@@ -44,14 +44,19 @@ async function runReview() {
             }
         });
         if (modelsResponse.ok) {
-            const modelsData = await modelsResponse.ok ? await modelsResponse.json() : null;
+            const modelsData = await modelsResponse.json();
+            console.log('Available models from LM Studio:', JSON.stringify(modelsData));
             if (modelsData && modelsData.data && modelsData.data.length > 0) {
                 modelName = modelsData.data[0].id;
                 console.log(`Detected loaded model: ${modelName}`);
+            } else {
+                console.log('No loaded models found in LM Studio. Using default fallback:', modelName);
             }
+        } else {
+            console.log(`Failed to query models endpoint: HTTP ${modelsResponse.status}. Using default fallback: ${modelName}`);
         }
     } catch (err) {
-        console.log(`Failed to query models endpoint (${err.message}). Using fallback model name.`);
+        console.log(`Failed to query models endpoint (${err.message}). Using fallback model name: ${modelName}`);
     }
 
     console.log('Sending changes to LM Studio API for code review...');
