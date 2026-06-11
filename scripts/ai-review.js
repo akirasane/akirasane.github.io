@@ -105,6 +105,15 @@ ${diff}
 
 Review Report (Keep it concise, in Markdown format):`;
 
+    let commitMessage = 'N/A';
+    let commitAuthor = 'N/A';
+    try {
+        commitMessage = execSync("git log -1 --pretty=%B").toString().trim();
+        commitAuthor = execSync("git log -1 --pretty=%an <%ae>").toString().trim();
+    } catch (e) {
+        console.log('Could not retrieve commit log details:', e.message);
+    }
+
     const url = 'https://llmapi.omelettesalmon.com/api/v1/chat';
     const payload = {
         model: modelName,
@@ -145,7 +154,41 @@ Review Report (Keep it concise, in Markdown format):`;
         console.log(feedback);
         console.log('-----------------------------------------\n');
 
-        if (feedback.includes('[BLOCKER]')) {
+        const isBlocker = feedback.includes('[BLOCKER]');
+        
+        // Write to GITHUB_STEP_SUMMARY if available
+        const summaryFile = process.env.GITHUB_STEP_SUMMARY;
+        if (summaryFile) {
+            try {
+                const fs = require('fs');
+                let statusEmoji = isBlocker ? '❌ BLOCKED' : '✅ PASSED';
+                let statusColor = isBlocker ? 'red' : 'green';
+                let summaryContent = `## 🤖 AI Code Review (Local LLM)
+                
+### Status: <span style="color: ${statusColor}; font-weight: bold;">${statusEmoji}</span>
+
+### 👤 Deployment Details
+* **Author**: ${commitAuthor}
+* **Commit Message**:
+\`\`\`
+${commitMessage}
+\`\`\`
+
+### 📝 AI Feedback
+${feedback}
+
+### 🔍 Code Changes Reviewed
+\`\`\`diff
+${diff}
+\`\`\`
+`;
+                fs.appendFileSync(summaryFile, summaryContent);
+            } catch (err) {
+                console.error('Failed to write to GITHUB_STEP_SUMMARY:', err.message);
+            }
+        }
+
+        if (isBlocker) {
             console.error('❌ Deployment stopped: AI detected CRITICAL blockers.');
             process.exit(1);
         } else {
@@ -155,6 +198,35 @@ Review Report (Keep it concise, in Markdown format):`;
 
     } catch (error) {
         console.error('AI Review failed with error:', error.message);
+        
+        // Write error to GITHUB_STEP_SUMMARY if available
+        const summaryFile = process.env.GITHUB_STEP_SUMMARY;
+        if (summaryFile) {
+            try {
+                const fs = require('fs');
+                let summaryContent = `## 🤖 AI Code Review (Local LLM)
+                
+### Status: <span style="color: red; font-weight: bold;">⚠️ ERROR</span>
+
+**The AI review failed with the following error:**
+> ${error.message}
+
+---
+### 👤 Deployment Details
+* **Author**: ${commitAuthor}
+* **Commit Message**:
+\`\`\`
+${commitMessage}
+\`\`\`
+
+*Please check the workflow logs or refer to the failover runbook to bypass if needed.*
+`;
+                fs.appendFileSync(summaryFile, summaryContent);
+            } catch (err) {
+                console.error('Failed to write error to GITHUB_STEP_SUMMARY:', err.message);
+            }
+        }
+        
         // Fail the workflow if the review or API call fails
         process.exit(1);
     }

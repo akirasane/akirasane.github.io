@@ -164,6 +164,26 @@ ${diff}
 
   if (!reviewText) throw new Error('Unexpected LM Studio response shape: ' + JSON.stringify(lmRes.body));
 
+  // Write to GITHUB_STEP_SUMMARY if available
+  const summaryFile = process.env.GITHUB_STEP_SUMMARY;
+  if (summaryFile) {
+    try {
+      let summaryContent = `## 🤖 AI Code Review (Local PR Review)
+      
+### 📝 AI Feedback
+${reviewText}
+
+### 🔍 Code Changes Reviewed
+\`\`\`diff
+${diff}
+\`\`\`
+`;
+      fs.appendFileSync(summaryFile, summaryContent);
+    } catch (err) {
+      console.error('Failed to write to GITHUB_STEP_SUMMARY:', err.message);
+    }
+  }
+
   // 5. Post PR comment
   const commentBody = `## 🤖 AI Code Review (Local LLM)\n\n${reviewText}\n\n---\n*Generated automatically — treat as a suggestion, not a verdict.*`;
   const [owner, repoName] = REPO.split('/');
@@ -188,4 +208,23 @@ ${diff}
   console.log('Review posted successfully:', ghRes.body.html_url);
 }
 
-main().catch((err) => { console.error(err.message); process.exit(1); });
+main().catch((err) => {
+  console.error(err.message);
+  // Write error to GITHUB_STEP_SUMMARY if available
+  const summaryFile = process.env.GITHUB_STEP_SUMMARY;
+  if (summaryFile) {
+    try {
+      let summaryContent = `## 🤖 AI Code Review (Local PR Review)
+      
+### Status: <span style="color: red; font-weight: bold;">⚠️ ERROR</span>
+
+**The AI review failed with the following error:**
+> ${err.message}
+`;
+      fs.appendFileSync(summaryFile, summaryContent);
+    } catch (e) {
+      console.error('Failed to write error to GITHUB_STEP_SUMMARY:', e.message);
+    }
+  }
+  process.exit(1);
+});
