@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
       
       - name: Detect package manager
         id: detect-package-manager
@@ -44,6 +46,11 @@ jobs:
         with:
           node-version: "20"
           cache: ${{ steps.detect-package-manager.outputs.manager }}
+          
+      - name: AI Code Review
+        env:
+          LOCAL_AI_API_KEY: ${{ secrets.LOCAL_AI_API_KEY }}
+        run: node scripts/ai-review.js
           
       - name: Restore cache
         uses: actions/cache@v4

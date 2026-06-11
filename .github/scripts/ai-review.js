@@ -1,15 +1,15 @@
-// Calls Gemini API with the PR diff and posts the review as a GitHub PR comment.
-// Requires env: GEMINI_API_KEY, GITHUB_TOKEN, PR_NUMBER, REPO
+// Calls LM Studio API with the PR diff and posts the review as a GitHub PR comment.
+// Requires env: LOCAL_AI_API_KEY, GITHUB_TOKEN, PR_NUMBER, REPO
 const https = require('https');
 const fs = require('fs');
 
 const MAX_DIFF_CHARS = 30000;
 
-function post(hostname, path, headers, body) {
+function post(hostname, path, headers, body, port = 443) {
   return new Promise((resolve, reject) => {
     const data = JSON.stringify(body);
     const req = https.request(
-      { hostname, path, method: 'POST', headers: { ...headers, 'Content-Length': Buffer.byteLength(data) } },
+      { hostname, path, method: 'POST', port, headers: { ...headers, 'Content-Length': Buffer.byteLength(data) } },
       (res) => {
         let raw = '';
         res.on('data', (chunk) => { raw += chunk; });
@@ -25,10 +25,28 @@ function post(hostname, path, headers, body) {
   });
 }
 
-async function main() {
-  const { GEMINI_API_KEY, GITHUB_TOKEN, PR_NUMBER, REPO } = process.env;
+function get(hostname, path, headers, port = 443) {
+  return new Promise((resolve, reject) => {
+    const req = https.request(
+      { hostname, path, method: 'GET', port, headers },
+      (res) => {
+        let raw = '';
+        res.on('data', (chunk) => { raw += chunk; });
+        res.on('end', () => {
+          try { resolve({ status: res.statusCode, body: JSON.parse(raw) }); }
+          catch { resolve({ status: res.statusCode, body: raw }); }
+        });
+      }
+    );
+    req.on('error', reject);
+    req.end();
+  });
+}
 
-  if (!GEMINI_API_KEY) throw new Error('GEMINI_API_KEY is not set');
+async function main() {
+  const { LOCAL_AI_API_KEY, GITHUB_TOKEN, PR_NUMBER, REPO } = process.env;
+
+  if (!LOCAL_AI_API_KEY) throw new Error('LOCAL_AI_API_KEY is not set');
   if (!GITHUB_TOKEN)   throw new Error('GITHUB_TOKEN is not set');
   if (!PR_NUMBER)      throw new Error('PR_NUMBER is not set');
   if (!REPO)           throw new Error('REPO is not set');
@@ -61,24 +79,51 @@ Rules:
 ${diff}
 \`\`\``;
 
-  // 3. Call Gemini API
-  console.log('Calling Gemini API...');
-  const geminiRes = await post(
-    'generativelanguage.googleapis.com',
-    `/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
-    { 'Content-Type': 'application/json' },
-    { contents: [{ parts: [{ text: prompt }] }] }
-  );
-
-  if (geminiRes.status !== 200) {
-    throw new Error(`Gemini API error ${geminiRes.status}: ${JSON.stringify(geminiRes.body)}`);
+  // 3. Detect model loaded in LM Studio
+  let modelName = 'local-model';
+  try {
+    console.log('Detecting loaded model from LM Studio...');
+    const modelsRes = await get(
+      'llmapi.omelettesalmon.com',
+      '/api/v1/models',
+      {
+        'Authorization': `Bearer ${LOCAL_AI_API_KEY}`,
+        'Accept': 'application/json'
+      }
+    );
+    if (modelsRes.status === 200 && modelsRes.body?.data?.length > 0) {
+      modelName = modelsRes.body.data[0].id;
+      console.log(`Detected loaded model: ${modelName}`);
+    }
+  } catch (err) {
+    console.log(`Failed to query models endpoint (${err.message}). Using fallback model name.`);
   }
 
-  const reviewText = geminiRes.body?.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!reviewText) throw new Error('Unexpected Gemini response shape: ' + JSON.stringify(geminiRes.body));
+  // 4. Call LM Studio API
+  console.log('Calling LM Studio API...');
+  const lmRes = await post(
+    'llmapi.omelettesalmon.com',
+    '/api/v1/chat',
+    {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${LOCAL_AI_API_KEY}`
+    },
+    {
+      model: modelName,
+      messages: [{ role: 'user', content: prompt }],
+      temperature: 0.2
+    }
+  );
 
-  // 4. Post PR comment
-  const commentBody = `## 🤖 AI Code Review (Gemini)\n\n${reviewText}\n\n---\n*Generated automatically — treat as a suggestion, not a verdict.*`;
+  if (lmRes.status !== 200) {
+    throw new Error(`LM Studio API error ${lmRes.status}: ${JSON.stringify(lmRes.body)}`);
+  }
+
+  const reviewText = lmRes.body?.choices?.[0]?.message?.content;
+  if (!reviewText) throw new Error('Unexpected LM Studio response shape: ' + JSON.stringify(lmRes.body));
+
+  // 5. Post PR comment
+  const commentBody = `## 🤖 AI Code Review (Local LLM)\n\n${reviewText}\n\n---\n*Generated automatically — treat as a suggestion, not a verdict.*`;
   const [owner, repoName] = REPO.split('/');
 
   console.log(`Posting comment to PR #${PR_NUMBER}...`);
