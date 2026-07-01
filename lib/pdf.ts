@@ -27,6 +27,19 @@ const getCircularAvatarData = (img: HTMLImageElement): string => {
   return canvas.toDataURL('image/png')
 }
 
+const fetchFontAsBase64 = async (url: string): Promise<string> => {
+  const response = await fetch(url)
+  const arrayBuffer = await response.arrayBuffer()
+  
+  let binary = ''
+  const bytes = new Uint8Array(arrayBuffer)
+  const len = bytes.byteLength
+  for (let i = 0; i < len; i++) {
+    binary += String.fromCharCode(bytes[i])
+  }
+  return window.btoa(binary)
+}
+
 /**
  * Generates a PDF resume from the given portfolio data and triggers a browser download.
  * Incorporates a premium two-column split layout with skill badges, work timelines, and liquid glass card styling.
@@ -44,13 +57,32 @@ export async function generateResumePDF(data: PortfolioData): Promise<void> {
 
   const { profile, experiences, skills, projects } = data
 
-  // Load avatar asynchronously before PDF generation starts
+  // Load avatar and custom Kanit font asynchronously before PDF generation starts
   let circularAvatarBase64: string | null = null
+  let fontFamily = 'helvetica'
+  
   try {
-    const avatarImg = await loadImage('/img/avatar.jpg')
-    circularAvatarBase64 = getCircularAvatarData(avatarImg)
+    const [avatarImg, regBase64, boldBase64] = await Promise.all([
+      loadImage('/img/avatar.jpg').catch(() => null),
+      fetchFontAsBase64('https://raw.githubusercontent.com/google/fonts/main/ofl/kanit/Kanit-Regular.ttf').catch(() => null),
+      fetchFontAsBase64('https://raw.githubusercontent.com/google/fonts/main/ofl/kanit/Kanit-Bold.ttf').catch(() => null)
+    ])
+
+    if (avatarImg) {
+      circularAvatarBase64 = getCircularAvatarData(avatarImg)
+    }
+
+    if (regBase64 && boldBase64) {
+      doc.addFileToVFS('Kanit-Regular.ttf', regBase64)
+      doc.addFont('Kanit-Regular.ttf', 'Kanit', 'normal')
+
+      doc.addFileToVFS('Kanit-Bold.ttf', boldBase64)
+      doc.addFont('Kanit-Bold.ttf', 'Kanit', 'bold')
+
+      fontFamily = 'Kanit'
+    }
   } catch (err) {
-    console.warn('Failed to load avatar image, using initials badge', err)
+    console.warn('Failed to load dynamic assets, falling back to system defaults', err)
   }
 
   // ── Helper Drawings ───────────────────────────────────────────────────────
@@ -122,14 +154,14 @@ export async function generateResumePDF(data: PortfolioData): Promise<void> {
     doc.setLineWidth(0.4)
     doc.circle(x, yVal, 10, 'D')
 
-    doc.setFont('helvetica', 'bold')
+    doc.setFont(fontFamily, 'bold')
     doc.setFontSize(10)
     doc.setTextColor('#FFFFFF')
     doc.text(initials, x - 2.8, yVal + 1.2)
   }
 
   const addLeftHeader = (title: string, yVal: number) => {
-    doc.setFont('helvetica', 'bold')
+    doc.setFont(fontFamily, 'bold')
     doc.setFontSize(9)
     doc.setTextColor('#6366F1')
     doc.text(title.toUpperCase(), 15, yVal)
@@ -141,12 +173,12 @@ export async function generateResumePDF(data: PortfolioData): Promise<void> {
   }
 
   const addContactItem = (label: string, value: string, yVal: number) => {
-    doc.setFont('helvetica', 'bold')
+    doc.setFont(fontFamily, 'bold')
     doc.setFontSize(6.5)
     doc.setTextColor('#94A3B8')
     doc.text(label.toUpperCase(), 15, yVal)
     
-    doc.setFont('helvetica', 'normal')
+    doc.setFont(fontFamily, 'normal')
     doc.setFontSize(8)
     doc.setTextColor('#FFFFFF')
     
@@ -157,7 +189,7 @@ export async function generateResumePDF(data: PortfolioData): Promise<void> {
   }
 
   const drawSkillPill = (text: string, x: number, yVal: number) => {
-    doc.setFont('helvetica', 'normal')
+    doc.setFont(fontFamily, 'normal')
     doc.setFontSize(7.5)
     const textWidth = doc.getTextWidth(text)
     const pillWidth = textWidth + 4.5
@@ -180,7 +212,7 @@ export async function generateResumePDF(data: PortfolioData): Promise<void> {
   }
 
   const addLeftSkills = (categoryName: string, items: typeof skills[0]['items'], yVal: number) => {
-    doc.setFont('helvetica', 'bold')
+    doc.setFont(fontFamily, 'bold')
     doc.setFontSize(8)
     doc.setTextColor('#E2E8F0')
     doc.text(categoryName, 15, yVal)
@@ -207,8 +239,8 @@ export async function generateResumePDF(data: PortfolioData): Promise<void> {
   }
 
   const drawLeftSidebar = () => {
-    const avatarWidth = 49.5 // 90% of 55mm column card width
-    const avatarX = 37.5 - avatarWidth / 2 // Centered (card center is 37.5)
+    const avatarWidth = 49.5 
+    const avatarX = 37.5 - avatarWidth / 2 
     const avatarY = 19
     const centerAvatarX = 37.5
     const centerAvatarY = avatarY + avatarWidth / 2
@@ -239,13 +271,12 @@ export async function generateResumePDF(data: PortfolioData): Promise<void> {
         .join('')
         .toUpperCase()
 
-      doc.setFont('helvetica', 'bold')
+      doc.setFont(fontFamily, 'bold')
       doc.setFontSize(22)
       doc.setTextColor('#FFFFFF')
       doc.text(initials, centerAvatarX - 6.5, centerAvatarY + 2.8)
     }
     
-    // Shifted down starting y to accommodate 49.5mm avatar height
     let yL = 76
     
     // Contact Section
@@ -285,7 +316,7 @@ export async function generateResumePDF(data: PortfolioData): Promise<void> {
   }
 
   const addRightHeader = (title: string) => {
-    doc.setFont('helvetica', 'bold')
+    doc.setFont(fontFamily, 'bold')
     doc.setFontSize(11.5)
     doc.setTextColor('#0F172A')
     doc.text(title.toUpperCase(), 75, yRight)
@@ -303,13 +334,13 @@ export async function generateResumePDF(data: PortfolioData): Promise<void> {
 
   // Header Details (Name & Title)
   yRight = 25
-  doc.setFont('helvetica', 'bold')
+  doc.setFont(fontFamily, 'bold')
   doc.setFontSize(22)
   doc.setTextColor('#0F172A')
   doc.text((profile.name || 'Chatkawin Taola').toUpperCase(), 75, yRight)
   
   yRight += 5.5
-  doc.setFont('helvetica', 'bold')
+  doc.setFont(fontFamily, 'bold')
   doc.setFontSize(10)
   doc.setTextColor('#4F46E5')
   doc.text((profile.title || 'Full Stack Developer').toUpperCase(), 75, yRight)
@@ -322,7 +353,7 @@ export async function generateResumePDF(data: PortfolioData): Promise<void> {
   // Professional Summary
   yRight += 6.5
   if (profile.bio) {
-    doc.setFont('helvetica', 'normal')
+    doc.setFont(fontFamily, 'normal')
     doc.setFontSize(9)
     doc.setTextColor('#475569')
     const bioLines = doc.splitTextToSize(profile.bio, 118) as string[]
@@ -336,12 +367,12 @@ export async function generateResumePDF(data: PortfolioData): Promise<void> {
     yRight += 1.5
 
     for (const exp of experiences) {
-      doc.setFont('helvetica', 'bold')
+      doc.setFont(fontFamily, 'bold')
       doc.setFontSize(9.5)
       const companyTitle = `${exp.company} — ${exp.title}`
       const companyLines = doc.splitTextToSize(companyTitle, 113) as string[]
 
-      doc.setFont('helvetica', 'normal')
+      doc.setFont(fontFamily, 'normal')
       doc.setFontSize(8.5)
       const descLines = exp.description ? (doc.splitTextToSize(exp.description, 113) as string[]) : []
 
@@ -358,7 +389,7 @@ export async function generateResumePDF(data: PortfolioData): Promise<void> {
       doc.circle(77, startY + 1.2, 0.6, 'F')
 
       // Company and Title Info
-      doc.setFont('helvetica', 'bold')
+      doc.setFont(fontFamily, 'bold')
       doc.setFontSize(9.5)
       doc.setTextColor('#0F172A')
       doc.text(companyLines, 82, yRight + 2)
@@ -366,7 +397,7 @@ export async function generateResumePDF(data: PortfolioData): Promise<void> {
 
       // Date stamp
       const endLabel = exp.endDate ? exp.endDate : 'Present'
-      doc.setFont('helvetica', 'bold')
+      doc.setFont(fontFamily, 'bold')
       doc.setFontSize(8)
       doc.setTextColor('#6366F1')
       doc.text(`${exp.startDate} – ${endLabel}`, 82, yRight + 1.5)
@@ -374,7 +405,7 @@ export async function generateResumePDF(data: PortfolioData): Promise<void> {
 
       // Description list
       if (exp.description) {
-        doc.setFont('helvetica', 'normal')
+        doc.setFont(fontFamily, 'normal')
         doc.setFontSize(8.5)
         doc.setTextColor('#334155')
         doc.text(descLines, 82, yRight + 1)
@@ -400,32 +431,32 @@ export async function generateResumePDF(data: PortfolioData): Promise<void> {
     const topProjects = projects.slice(0, 3)
 
     for (const proj of topProjects) {
-      doc.setFont('helvetica', 'bold')
+      doc.setFont(fontFamily, 'bold')
       doc.setFontSize(9.5)
       const projTitle = proj.title
       const titleLines = doc.splitTextToSize(projTitle, 113) as string[]
 
-      doc.setFont('helvetica', 'normal')
+      doc.setFont(fontFamily, 'normal')
       doc.setFontSize(8.5)
       const descLines = proj.description ? (doc.splitTextToSize(proj.description, 113) as string[]) : []
 
       const tagsText = `Tech Stack: ${proj.tags.join(', ')}`
-      doc.setFont('helvetica', 'italic')
+      doc.setFont(fontFamily, 'normal')
       doc.setFontSize(7.5)
-      const tagLines = doc.splitTextToSize(tagsText, 113) as string[]
+      const tagLines = doc.splitTextToSize(tagsText, 113) as string[] // wait! tagsText is a string, tagLines is computed below
 
       const neededHeight = titleLines.length * 4 + tagLines.length * 3.5 + descLines.length * 3.8 + 6
       checkPageBreakRight(neededHeight)
 
       // Project Title
-      doc.setFont('helvetica', 'bold')
+      doc.setFont(fontFamily, 'bold')
       doc.setFontSize(9.5)
       doc.setTextColor('#0F172A')
       doc.text(titleLines, 82, yRight + 2)
       yRight += titleLines.length * 4 + 0.5
 
       // Tech Stack Tags
-      doc.setFont('helvetica', 'italic')
+      doc.setFont(fontFamily, 'normal')
       doc.setFontSize(7.5)
       doc.setTextColor('#6366F1')
       doc.text(tagLines, 82, yRight + 1.5)
@@ -433,7 +464,7 @@ export async function generateResumePDF(data: PortfolioData): Promise<void> {
 
       // Description
       if (proj.description) {
-        doc.setFont('helvetica', 'normal')
+        doc.setFont(fontFamily, 'normal')
         doc.setFontSize(8)
         doc.setTextColor('#475569')
         doc.text(descLines, 82, yRight + 1)
@@ -446,5 +477,3 @@ export async function generateResumePDF(data: PortfolioData): Promise<void> {
 
   doc.save('resume.pdf')
 }
-
-
