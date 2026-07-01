@@ -15,6 +15,7 @@ const PLACEHOLDER_AVATAR = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2
 
 export default function AboutSection({ profile }: AboutSectionProps) {
   const [pdfLoading, setPdfLoading] = useState(false)
+  const [htmlLoading, setHtmlLoading] = useState(false)
   const [pdfError, setPdfError] = useState<string | null>(null)
 
   const handleDownloadResume = async () => {
@@ -30,6 +31,22 @@ export default function AboutSection({ profile }: AboutSectionProps) {
       setPdfError(err instanceof Error ? err.message : 'Failed to generate PDF')
     } finally {
       setPdfLoading(false)
+    }
+  }
+
+  const handleOpenHtmlResume = async () => {
+    setHtmlLoading(true)
+    setPdfError(null)
+    try {
+      const { generateResumeHTML } = await import('@/lib/pdf')
+      const raw = typeof window !== 'undefined' ? localStorage.getItem('portfolio_data') : null
+      const data = raw ? JSON.parse(raw) : null
+      if (!data) throw new Error('No portfolio data found')
+      await generateResumeHTML(data)
+    } catch (err) {
+      setPdfError(err instanceof Error ? err.message : 'Failed to open HTML resume')
+    } finally {
+      setHtmlLoading(false)
     }
   }
 
@@ -170,18 +187,30 @@ export default function AboutSection({ profile }: AboutSectionProps) {
               )}
             </div>
 
-            {/* Download Resume */}
-            <div className="flex flex-col items-center gap-2 md:items-start">
-              <Magnet>
-                <button
-                  onClick={handleDownloadResume}
-                  disabled={pdfLoading}
-                  className="rounded-full px-8 py-3 font-semibold transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
-                  style={{ background: 'var(--accent-primary)', color: '#fff' }}
-                >
-                  {pdfLoading ? 'Generating…' : 'Download Resume'}
-                </button>
-              </Magnet>
+            {/* Download Resume Options */}
+            <div className="flex flex-col items-center gap-4 md:items-start">
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Magnet>
+                  <button
+                    onClick={handleDownloadResume}
+                    disabled={pdfLoading || htmlLoading}
+                    className="rounded-full px-8 py-3 font-semibold transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+                    style={{ background: 'var(--accent-primary)', color: '#fff' }}
+                  >
+                    {pdfLoading ? 'Generating…' : 'Download PDF'}
+                  </button>
+                </Magnet>
+                <Magnet>
+                  <button
+                    onClick={handleOpenHtmlResume}
+                    disabled={pdfLoading || htmlLoading}
+                    className="rounded-full px-8 py-3 font-semibold transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+                    style={{ background: 'var(--card-bg)', color: 'var(--text-primary)', border: '1px solid var(--accent-primary)' }}
+                  >
+                    {htmlLoading ? 'Opening…' : 'HTML / Print Resume'}
+                  </button>
+                </Magnet>
+              </div>
               {pdfError && (
                 <p className="text-sm" style={{ color: '#f87171' }}>
                   {pdfError}

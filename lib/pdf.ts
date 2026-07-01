@@ -477,3 +477,619 @@ export async function generateResumePDF(data: PortfolioData): Promise<void> {
 
   doc.save('resume.pdf')
 }
+
+/**
+ * Generates an interactive, premium HTML layout of the resume in a new tab.
+ * Recruiter can preview the true glassmorphism theme and click to open the live site or print to vector PDF.
+ */
+export async function generateResumeHTML(data: PortfolioData): Promise<void> {
+  const { profile, experiences, skills, projects } = data
+  const currentOrigin = typeof window !== 'undefined' ? window.location.origin : 'https://akirasane.github.io'
+
+  const emailHtml = profile.social.email ? `
+    <div class="contact-item">
+      <span class="contact-label">Email</span>
+      <span class="contact-val"><a href="mailto:${profile.social.email}">${profile.social.email}</a></span>
+    </div>
+  ` : ''
+
+  const github = profile.social.github || ''
+  const linkedin = profile.social.linkedin || ''
+  const website = profile.social.website || ''
+
+  const formatUrlLabel = (url: string) => {
+    return url.replace('https://', '').replace('www.', '')
+  }
+
+  // Create Skill Categories HTML
+  const skillsHtml = skills.map(cat => {
+    const itemsHtml = cat.items.map(item => `
+      <span class="skill-badge">${item.name} (${item.years}y)</span>
+    `).join('')
+    return `
+      <div class="skill-category">
+        <div class="skill-category-title">${cat.category}</div>
+        <div class="skill-items">${itemsHtml}</div>
+      </div>
+    `
+  }).join('')
+
+  // Create Experience HTML
+  const expHtml = experiences.map(exp => {
+    const endLabel = exp.endDate ? exp.endDate : 'Present'
+    const descHtml = exp.description ? `<p class="exp-desc">${exp.description}</p>` : ''
+    return `
+      <div class="timeline-item">
+        <div class="timeline-node"></div>
+        <div class="timeline-content">
+          <div class="exp-header">
+            <span class="exp-company">${exp.company}</span>
+            <span class="exp-title">${exp.title}</span>
+          </div>
+          <div class="exp-date">${exp.startDate} – ${endLabel}</div>
+          ${descHtml}
+        </div>
+      </div>
+    `
+  }).join('')
+
+  // Create Projects HTML
+  const projHtml = (projects || []).slice(0, 3).map(proj => {
+    const tagsHtml = proj.tags.map(t => `<span class="proj-tag">${t}</span>`).join('')
+    return `
+      <div class="proj-item">
+        <div class="proj-title">${proj.title}</div>
+        <div class="proj-tags">${tagsHtml}</div>
+        <p class="proj-desc">${proj.description}</p>
+      </div>
+    `
+  }).join('')
+
+  // Full HTML Document String
+  const htmlContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Resume - ${profile.name || 'Chatkawin Taola'}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #0b0f19;
+      font-family: 'Kanit', 'IBM Plex Sans', sans-serif;
+      color: #0f172a;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    /* Glowing Orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(100px);
+      z-index: -1;
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    .orb-1 {
+      top: -50px;
+      right: -50px;
+      width: 400px;
+      height: 400px;
+      background: #e0e7ff;
+    }
+    .orb-2 {
+      top: 40%;
+      left: -100px;
+      width: 450px;
+      height: 450px;
+      background: #d1fae5;
+    }
+    .orb-3 {
+      bottom: -50px;
+      right: -50px;
+      width: 400px;
+      height: 400px;
+      background: #fae8ff;
+    }
+
+    /* Top Control Bar */
+    .control-bar {
+      width: 100%;
+      max-width: 210mm;
+      margin: 20px auto 0;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      backdrop-filter: blur(12px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #ffffff;
+      z-index: 10;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    }
+    .control-title {
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+    .control-btns {
+      display: flex;
+      gap: 12px;
+    }
+    .btn {
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .btn:hover {
+      opacity: 0.9;
+    }
+    .btn-primary {
+      background: #6366f1;
+      color: #ffffff;
+    }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* A4 Container */
+    .page-container {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 25px auto 40px;
+      background: transparent;
+      display: grid;
+      grid-template-columns: 68mm 1fr;
+      gap: 10px;
+      z-index: 1;
+    }
+
+    /* Glass Cards */
+    .glass-card-left {
+      background: rgba(11, 15, 25, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 12px;
+      padding: 30px 20px;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .glass-card-right {
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.06);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 12px;
+      padding: 35px 35px;
+      color: #0f172a;
+    }
+
+    /* Sidebar Content */
+    .avatar-wrapper {
+      position: relative;
+      margin-bottom: 25px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .avatar {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #6366f1;
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+    }
+    .avatar-ring-outer {
+      position: absolute;
+      width: 152px;
+      height: 152px;
+      border-radius: 50%;
+      border: 1px dashed rgba(99, 102, 241, 0.4);
+    }
+
+    .side-section {
+      width: 100%;
+      margin-bottom: 24px;
+    }
+    .side-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: #6366f1;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      border-bottom: 1px solid #1e293b;
+      padding-bottom: 5px;
+    }
+
+    .contact-item {
+      margin-bottom: 12px;
+    }
+    .contact-label {
+      display: block;
+      font-size: 8px;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .contact-val {
+      font-size: 11px;
+      color: #ffffff;
+      word-break: break-all;
+    }
+    .contact-val a {
+      color: #ffffff;
+      text-decoration: none;
+    }
+    .contact-val a:hover {
+      text-decoration: underline;
+    }
+
+    .skill-category {
+      margin-bottom: 14px;
+    }
+    .skill-category-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin-bottom: 6px;
+    }
+    .skill-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    .skill-badge {
+      display: inline-block;
+      font-size: 10px;
+      background: #1e1b4b;
+      border: 1px solid #4f46e5;
+      color: #ffffff;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    /* Right Main Content */
+    .header-name {
+      font-size: 26px;
+      font-weight: 700;
+      color: #0f172a;
+      letter-spacing: -0.5px;
+      text-transform: uppercase;
+    }
+    .header-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #6366f1;
+      margin-top: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .divider {
+      height: 1px;
+      background: #e2e8f0;
+      margin: 15px 0;
+    }
+    .bio-text {
+      font-size: 12px;
+      line-height: 1.6;
+      color: #475569;
+      margin-bottom: 25px;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #0f172a;
+      margin-bottom: 18px;
+      position: relative;
+    }
+    .section-title::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 20px;
+      height: 2px;
+      background: #4f46e5;
+    }
+
+    .main-section {
+      margin-bottom: 30px;
+    }
+
+    /* Timeline Experience */
+    .timeline-container {
+      position: relative;
+      padding-left: 20px;
+    }
+    .timeline-container::before {
+      content: '';
+      position: absolute;
+      left: 3px;
+      top: 6px;
+      bottom: 6px;
+      width: 1px;
+      background: #e2e8f0;
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 22px;
+    }
+    .timeline-node {
+      position: absolute;
+      left: -20px;
+      top: 4px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 2px solid #6366f1;
+    }
+    .exp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .exp-company {
+      font-size: 12px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .exp-title {
+      font-size: 11px;
+      font-weight: 500;
+      color: #475569;
+    }
+    .exp-date {
+      font-size: 10px;
+      font-weight: 600;
+      color: #6366f1;
+      margin-top: 1px;
+    }
+    .exp-desc {
+      font-size: 11px;
+      line-height: 1.5;
+      color: #334155;
+      margin-top: 4px;
+    }
+
+    /* Projects styling */
+    .proj-item {
+      margin-bottom: 18px;
+    }
+    .proj-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .proj-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 3px;
+    }
+    .proj-tag {
+      font-size: 9px;
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      color: #6366f1;
+      padding: 1px 6px;
+      border-radius: 3px;
+    }
+    .proj-desc {
+      font-size: 11px;
+      line-height: 1.5;
+      color: #475569;
+      margin-top: 4px;
+    }
+
+    /* Floating Pill Badge */
+    .floating-badge {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 10px 20px;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 600;
+      z-index: 100;
+      cursor: pointer;
+      text-decoration: none;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.3s;
+    }
+    .floating-badge:hover {
+      background: rgba(99, 102, 241, 0.3);
+    }
+
+    /* Print Mode Styling */
+    @media print {
+      body {
+        background: #FAFBFD !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .orb {
+        display: none !important;
+      }
+      .page-container {
+        margin: 0 !important;
+        width: 100% !important;
+        grid-template-columns: 62mm 1fr !important;
+        gap: 6mm !important;
+        box-shadow: none !important;
+      }
+      .glass-card-left {
+        background: #0B0F19 !important;
+        color: #ffffff !important;
+        border: none !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .glass-card-right {
+        background: #FFFFFF !important;
+        color: #0f172a !important;
+        border: none !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .skill-badge {
+        background: #1e1b4b !important;
+        border: 1px solid #4f46e5 !important;
+        color: #ffffff !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .proj-tag {
+        background: rgba(99, 102, 241, 0.1) !important;
+        border: 1px solid rgba(99, 102, 241, 0.2) !important;
+        color: #6366f1 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Glowing Orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- Top Action Banner -->
+  <div class="control-bar no-print">
+    <div class="control-title">📄 Liquid Glass Resume (Print Layout)</div>
+    <div class="control-btns">
+      <button class="btn btn-primary" onclick="window.print()">Print / Save PDF</button>
+      <button class="btn btn-secondary" onclick="window.close()">Close Preview</button>
+    </div>
+  </div>
+
+  <!-- Floating side Portfolio Link -->
+  <a class="floating-badge no-print" href="${currentOrigin}" target="_blank">
+    Open Portfolio ↗
+  </a>
+
+  <!-- Document Container -->
+  <div class="page-container">
+  
+    <!-- Left Glass Panel -->
+    <div class="glass-card-left">
+      <div class="avatar-wrapper">
+        <div class="avatar-ring-outer"></div>
+        <img class="avatar" src="/img/avatar.jpg" alt="Avatar" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div style="display:none; width:140px; height:140px; border-radius:50%; background:#1a202c; color:#fff; align-items:center; justify-content:center; font-size:26px; font-weight:bold; border:2px solid #6366f1;">
+          ${(profile.name || 'Resume').split(' ').map(n=>n[0]).join('').toUpperCase()}
+        </div>
+      </div>
+      
+      <!-- Contact details -->
+      <div class="side-section">
+        <div class="side-title">Contact</div>
+        ${emailHtml}
+        <div class="contact-item">
+          <span class="contact-label">GitHub</span>
+          <span class="contact-val"><a href="${github}" target="_blank">${formatUrlLabel(github)}</a></span>
+        </div>
+        <div class="contact-item">
+          <span class="contact-label">LinkedIn</span>
+          <span class="contact-val"><a href="${linkedin}" target="_blank">${formatUrlLabel(linkedin)}</a></span>
+        </div>
+        <div class="contact-item">
+          <span class="contact-label">Website</span>
+          <span class="contact-val"><a href="${website}" target="_blank">${formatUrlLabel(website)}</a></span>
+        </div>
+      </div>
+
+      <!-- Skills categories -->
+      <div class="side-section">
+        <div class="side-title">Core Skills</div>
+        ${skillsHtml}
+      </div>
+    </div>
+
+    <!-- Right Glass Panel -->
+    <div class="glass-card-right">
+      <!-- Header -->
+      <h1 class="header-name">${profile.name || 'Chatkawin Taola'}</h1>
+      <div class="header-title">${profile.title || 'System Analyst & Full Stack Developer'}</div>
+      <div class="divider"></div>
+      
+      <!-- Bio -->
+      <p class="bio-text">${profile.bio || ''}</p>
+
+      <!-- Work Experience -->
+      <div class="main-section">
+        <div class="section-title">Work Experience</div>
+        <div class="timeline-container">
+          ${expHtml}
+        </div>
+      </div>
+
+      <!-- Key Projects -->
+      <div class="main-section">
+        <div class="section-title">Key Projects</div>
+        <div>
+          ${projHtml}
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>`;
+
+  const printWindow = window.open('', '_blank')
+  if (printWindow) {
+    printWindow.document.write(htmlContent)
+    printWindow.document.close()
+  }
+}
