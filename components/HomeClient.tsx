@@ -218,7 +218,7 @@ export default function HomeClient() {
       <Navbar sections={SECTIONS} currentMode={mode} setMode={handleModeToggle} />
       <main className={`flex-1 w-full ${isTransitioning ? 'mode-glitch-transition' : ''}`}>
         <HeroSection landing={data.landing} />
-        <AboutSection profile={data.profile} />
+        <AboutSection profile={data.profile} portfolioData={data} />
         <SkillsSection skills={data.skills} projects={data.projects} />
         <ExperienceSection experiences={data.experiences} />
         <ProjectsSection projects={data.projects} />

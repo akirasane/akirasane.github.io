@@ -5,15 +5,16 @@ import FadeContent from '@/components/reactbits/FadeContent'
 import Magnet from '@/components/reactbits/Magnet'
 import ProfileCard from '@/components/reactbits/ProfileCard'
 import FloatingLines from '@/components/reactbits/FloatingLines'
-import type { Profile } from '@/lib/types'
+import type { Profile, PortfolioData } from '@/lib/types'
 
 interface AboutSectionProps {
   profile: Profile
+  portfolioData: PortfolioData
 }
 
 const PLACEHOLDER_AVATAR = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='40' r='22' fill='%236366f1'/%3E%3Ccircle cx='50' cy='95' r='38' fill='%236366f1'/%3E%3C/svg%3E`
 
-export default function AboutSection({ profile }: AboutSectionProps) {
+export default function AboutSection({ profile, portfolioData }: AboutSectionProps) {
   const [pdfLoading, setPdfLoading] = useState(false)
   const [htmlLoading, setHtmlLoading] = useState(false)
   const [pdfError, setPdfError] = useState<string | null>(null)
@@ -23,10 +24,8 @@ export default function AboutSection({ profile }: AboutSectionProps) {
     setPdfError(null)
     try {
       const { generateResumePDF } = await import('@/lib/pdf')
-      const raw = typeof window !== 'undefined' ? localStorage.getItem('portfolio_data') : null
-      const data = raw ? JSON.parse(raw) : null
-      if (!data) throw new Error('No portfolio data found')
-      await generateResumePDF(data)
+      if (!portfolioData) throw new Error('No portfolio data found')
+      await generateResumePDF(portfolioData)
     } catch (err) {
       setPdfError(err instanceof Error ? err.message : 'Failed to generate PDF')
     } finally {
@@ -39,10 +38,8 @@ export default function AboutSection({ profile }: AboutSectionProps) {
     setPdfError(null)
     try {
       const { generateResumeHTML } = await import('@/lib/pdf')
-      const raw = typeof window !== 'undefined' ? localStorage.getItem('portfolio_data') : null
-      const data = raw ? JSON.parse(raw) : null
-      if (!data) throw new Error('No portfolio data found')
-      await generateResumeHTML(data)
+      if (!portfolioData) throw new Error('No portfolio data found')
+      await generateResumeHTML(portfolioData)
     } catch (err) {
       setPdfError(err instanceof Error ? err.message : 'Failed to open HTML resume')
     } finally {
