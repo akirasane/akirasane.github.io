@@ -66,7 +66,7 @@ export default function HeroSection({ landing }: HeroSectionProps) {
       >
         {/* Dynamic Display Name Header */}
         <h1 
-          className="text-4xl md:text-6xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300 font-sans"
+          className="text-4xl md:text-6xl font-bold tracking-tight text-white font-sans"
         >
           {glitchDone && <BlurText text={landing.displayName || 'WELCOME'} delay={0.05} />}
         </h1>
