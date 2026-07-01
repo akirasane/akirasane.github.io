@@ -142,8 +142,23 @@ const renderProjectTxt = (p: PortfolioData['projects'][0]) => (
   </div>
 )
 
-const renderSkillCategoryTxt = (c: PortfolioData['skills'][0]) => {
-  const totalBlocks = 16
+const getSkillLevelLabel = (proficiency: number) => {
+  if (proficiency >= 85) return 'Expert'
+  if (proficiency >= 70) return 'Advanced'
+  return 'Learning'
+}
+
+const countSkillProjects = (skillName: string, projects: PortfolioData['projects'] = []) => {
+  const normSkill = skillName.toLowerCase().replace(/[^a-z0-9]/g, '')
+  return projects.filter(proj => 
+    proj.tags?.some(tag => {
+      const normTag = tag.toLowerCase().replace(/[^a-z0-9]/g, '')
+      return normSkill.includes(normTag) || normTag.includes(normSkill)
+    })
+  ).length
+}
+
+const renderSkillCategoryTxt = (c: PortfolioData['skills'][0], projects: PortfolioData['projects'] = []) => {
   return (
     <div className="py-3 px-4 font-mono max-w-2xl border border-[var(--card-border)] rounded-lg bg-[var(--card-bg)] space-y-3">
       <div className="flex items-center gap-2 border-b border-[var(--card-border)] pb-2">
@@ -152,20 +167,22 @@ const renderSkillCategoryTxt = (c: PortfolioData['skills'][0]) => {
       </div>
       <div className="space-y-2.5">
         {c.items.map(item => {
-          const filled = Math.round((item.proficiency / 100) * totalBlocks)
-          const empty = totalBlocks - filled
+          const level = getSkillLevelLabel(item.proficiency)
+          const projectCount = countSkillProjects(item.name, projects)
           return (
             <div key={item.id} className="space-y-0.5">
               <div className="flex items-center justify-between text-xs">
                 <span className="text-[var(--text-primary)] font-medium">{item.name}</span>
                 <span className="text-[var(--text-secondary)] opacity-60 text-[10px]">{item.years}y exp</span>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-[var(--text-secondary)] text-xs select-none">[</span>
-                <span className="text-[var(--accent-primary)] text-xs tracking-tighter leading-none">{'█'.repeat(filled)}</span>
-                <span className="text-[var(--text-secondary)] opacity-25 text-xs tracking-tighter leading-none">{'░'.repeat(empty)}</span>
-                <span className="text-[var(--text-secondary)] text-xs select-none">]</span>
-                <span className="text-[var(--accent-primary)] text-xs font-bold ml-1">{item.proficiency}%</span>
+              <div className="flex items-center gap-2 text-xs">
+                <span className="text-[var(--text-secondary)] opacity-40">[</span>
+                <span className="text-[var(--accent-primary)] font-bold">{level}</span>
+                <span className="text-[var(--text-secondary)] opacity-30">|</span>
+                <span className="text-[var(--text-secondary)]">
+                  {projectCount > 0 ? `Used in ${projectCount} ${projectCount === 1 ? 'proj' : 'projs'}` : 'Specialized study'}
+                </span>
+                <span className="text-[var(--text-secondary)] opacity-40">]</span>
               </div>
             </div>
           )
@@ -174,6 +191,7 @@ const renderSkillCategoryTxt = (c: PortfolioData['skills'][0]) => {
     </div>
   )
 }
+
 
 const renderContactLinksTxt = (social: PortfolioData['profile']['social']) => (
   <div className="py-3 px-4 font-mono max-w-xl border border-[var(--card-border)] rounded-lg bg-[var(--card-bg)] space-y-3">
@@ -223,7 +241,7 @@ export const getVFS = (data: PortfolioData): Record<string, VFSNode> => {
     const filename = c.category.toLowerCase().replace(/[^a-z0-9]/g, '-') + '.txt'
     skillFiles[filename] = {
       type: 'file',
-      content: renderSkillCategoryTxt(c)
+      content: renderSkillCategoryTxt(c, data.projects)
     }
   })
 
@@ -850,25 +868,34 @@ export const COMMANDS: Record<string, Command> = {
 
   skills: {
     name: 'skills',
-    description: 'Renders progress bars showcasing technology proficiencies',
+    description: 'Showcases technical skills, experience, and project usage',
     execute: (args, data) => {
-      const { skills } = data
+      const { skills, projects } = data
       return (
         <div className="py-2 font-mono max-w-3xl space-y-4">
-          <div className="text-base font-bold text-[var(--accent-primary)]">PROFICIENCY SKILLS</div>
+          <div className="text-base font-bold text-[var(--accent-primary)] uppercase tracking-wider">Technology Stack & Skills</div>
           {skills.map((category) => (
             <div key={category.id} className="space-y-2 border border-[var(--card-border)] p-3 rounded bg-[var(--card-bg)]">
               <h3 className="font-bold text-[var(--accent-primary)] text-sm uppercase">{category.category}</h3>
               <div className="space-y-2">
-                {category.items.map((item) => (
-                  <div key={item.id} className="flex flex-col md:flex-row md:items-center justify-between gap-1">
-                    <span className="text-sm font-medium min-w-[120px]">{item.name}</span>
-                    <div className="flex items-center gap-2 flex-1 md:justify-end">
-                      {renderProgressBar(item.proficiency, category.color)}
-                      <span className="text-[10px] text-[var(--text-secondary)] opacity-60">({item.years}y experience)</span>
+                {category.items.map((item) => {
+                  const level = getSkillLevelLabel(item.proficiency)
+                  const projectCount = countSkillProjects(item.name, projects)
+                  return (
+                    <div key={item.id} className="flex flex-col md:flex-row md:items-center justify-between gap-1 border-b border-[var(--card-border)]/20 pb-1.5 last:border-b-0 last:pb-0">
+                      <span className="text-sm font-medium min-w-[120px] text-[var(--text-primary)]">{item.name}</span>
+                      <div className="flex items-center gap-3 text-xs md:justify-end">
+                        <span className="px-2 py-0.5 rounded bg-[var(--accent-secondary)]/15 border border-[var(--card-border)] text-[var(--accent-primary)] font-bold uppercase text-[10px]">
+                          {level}
+                        </span>
+                        <span className="text-[var(--text-secondary)] opacity-60">({item.years}y exp)</span>
+                        <span className="text-[var(--text-secondary)] opacity-60">
+                          [{projectCount > 0 ? `Used in ${projectCount} ${projectCount === 1 ? 'proj' : 'projs'}` : 'Specialized study'}]
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             </div>
           ))}

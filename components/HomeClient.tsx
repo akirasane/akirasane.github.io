@@ -219,7 +219,7 @@ export default function HomeClient() {
       <main className={`flex-1 w-full ${isTransitioning ? 'mode-glitch-transition' : ''}`}>
         <HeroSection landing={data.landing} />
         <AboutSection profile={data.profile} />
-        <SkillsSection skills={data.skills} />
+        <SkillsSection skills={data.skills} projects={data.projects} />
         <ExperienceSection experiences={data.experiences} />
         <ProjectsSection projects={data.projects} />
         <ContactSection contact={data.contact} />

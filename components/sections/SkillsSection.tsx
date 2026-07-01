@@ -1,42 +1,59 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
 import ScrollReveal from '@/components/reactbits/ScrollReveal'
 import BorderGlow from '@/components/reactbits/BorderGlow'
-import SoftAurora from '@/components/reactbits/SoftAurora'
-import type { SkillCategory, SkillItem } from '@/lib/types'
+import type { SkillCategory, SkillItem, Project } from '@/lib/types'
 
 interface SkillsSectionProps {
   skills: SkillCategory[]
+  projects?: Project[]
 }
 
 interface SkillCardProps {
   item: SkillItem
+  projects?: Project[]
 }
 
-function SkillCard({ item }: SkillCardProps) {
-  const barRef = useRef<HTMLDivElement>(null)
+function getSkillLevel(proficiency: number) {
+  if (proficiency >= 85) {
+    return {
+      label: 'Expert',
+      color: '#10b981', // emerald
+      bg: 'rgba(16, 185, 129, 0.08)',
+      border: '1px solid rgba(16, 185, 129, 0.2)',
+    }
+  } else if (proficiency >= 70) {
+    return {
+      label: 'Advanced',
+      color: '#a78bfa', // purple/indigo
+      bg: 'rgba(167, 139, 250, 0.08)',
+      border: '1px solid rgba(167, 139, 250, 0.2)',
+    }
+  } else {
+    return {
+      label: 'Learning',
+      color: '#f59e0b', // amber
+      bg: 'rgba(245, 158, 11, 0.08)',
+      border: '1px solid rgba(245, 158, 11, 0.2)',
+    }
+  }
+}
 
-  useEffect(() => {
-    const bar = barRef.current
-    if (!bar) return
-    // Start at 0, then animate to proficiency on next frame
-    bar.style.width = '0%'
-    const raf = requestAnimationFrame(() => {
-      bar.style.width = `${item.proficiency}%`
+const countSkillProjects = (skillName: string, projects: Project[] = []) => {
+  const normSkill = skillName.toLowerCase().replace(/[^a-z0-9]/g, '')
+  return projects.filter(proj => 
+    proj.tags?.some(tag => {
+      const normTag = tag.toLowerCase().replace(/[^a-z0-9]/g, '')
+      return normSkill.includes(normTag) || normTag.includes(normSkill)
     })
-    return () => cancelAnimationFrame(raf)
-  }, [item.proficiency])
+  ).length
+}
+
+function SkillCard({ item, projects }: SkillCardProps) {
+  const level = getSkillLevel(item.proficiency)
+  const projectCount = countSkillProjects(item.name, projects)
 
   return (
-
-    // <div
-    //   className="rounded-xl p-4 flex flex-col gap-2"
-    //   style={{
-    //     background: 'var(--card-bg)',
-    //     border: '1px solid var(--card-border)',
-    //   }}
-    // >
     <BorderGlow
       edgeSensitivity={30}
       glowColor="40 80 80"
@@ -48,82 +65,52 @@ function SkillCard({ item }: SkillCardProps) {
       animated={false}
       colors={['#c084fc', '#f472b6', '#38bdf8']}
     >
-      <div style={{ padding: '2em' }}>
-
-        <div className="flex items-center justify-between">
+      <div style={{ padding: '2em' }} className="flex flex-col gap-4">
+        <div className="flex items-center justify-between gap-2">
           <span
-            className="font-medium text-sm"
+            className="font-medium text-sm md:text-base tracking-wide"
             style={{ color: 'var(--text-primary)' }}
           >
             {item.name}
           </span>
           <span
-            className="text-xs font-semibold"
-            style={{ color: 'var(--accent-primary)' }}
+            className="text-[10px] md:text-xs font-semibold px-2 py-0.5 rounded-full"
+            style={{
+              color: level.color,
+              backgroundColor: level.bg,
+              border: level.border,
+            }}
           >
-            {item.proficiency}%
+            {level.label}
           </span>
         </div>
 
-        {/* Progress bar */}
-        <div
-          className="h-1.5 rounded-full overflow-hidden"
-          style={{ background: 'var(--bg-primary)' }}
-          role="progressbar"
-          aria-valuenow={item.proficiency}
-          aria-valuemin={0}
-          aria-valuemax={100}
-          aria-label={`${item.name} proficiency`}
-        >
-          <div
-            ref={barRef}
-            className="h-full rounded-full"
-            style={{
-              width: `${item.proficiency}%`,
-              background: 'var(--accent-primary)',
-              transition: 'width 0.8s ease-out',
-            }}
-          />
+        <div className="flex flex-col gap-2 text-xs" style={{ color: 'var(--text-secondary)' }}>
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--accent-primary)', opacity: 0.6 }} />
+            <span>{item.years} {item.years === 1 ? 'year' : 'years'} experience</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--accent-primary)', opacity: 0.6 }} />
+            <span>
+              {projectCount > 0 
+                ? `Used in ${projectCount} ${projectCount === 1 ? 'project' : 'projects'}` 
+                : 'Specialized study'}
+            </span>
+          </div>
         </div>
-
-        <span
-          className="text-xs"
-          style={{ color: 'var(--text-secondary)' }}
-        >
-          {item.years} {item.years === 1 ? 'year' : 'years'} experience
-        </span>
       </div>
     </BorderGlow>
-    // </div>
   )
 }
 
-export default function SkillsSection({ skills }: SkillsSectionProps) {
+export default function SkillsSection({ skills, projects }: SkillsSectionProps) {
   return (
     <section
       id="skills"
       className="snap-section relative flex flex-col items-center justify-center px-6 py-20 md:py-20 overflow-hidden"
       style={{ background: 'var(--bg-primary)' }}
     >
-      {/* <div className="absolute inset-0 w-full h-full">
-
-        <SoftAurora
-          speed={0.6}
-          scale={1.5}
-          brightness={1}
-          color1="#f7f7f7"
-          color2="#e100ff"
-          noiseFrequency={2.5}
-          noiseAmplitude={1}
-          bandHeight={0.5}
-          bandSpread={1}
-          octaveDecay={0.1}
-          layerOffset={0}
-          colorSpeed={1}
-          enableMouseInteraction={false}
-          mouseInfluence={0.25}
-        />
-      </div> */}
       <div className="w-full max-w-4xl flex flex-col gap-10 relative z-10">
         <h2
           className="text-3xl font-bold text-center md:text-4xl"
@@ -150,7 +137,7 @@ export default function SkillsSection({ skills }: SkillsSectionProps) {
               </h3>
               <ScrollReveal className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
                 {category.items.map((item) => (
-                  <SkillCard key={item.id} item={item} />
+                  <SkillCard key={item.id} item={item} projects={projects} />
                 ))}
               </ScrollReveal>
             </div>
