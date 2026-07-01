@@ -24,7 +24,7 @@ const getCircularAvatarData = (img: HTMLImageElement): string => {
   ctx.clip()
   
   ctx.drawImage(img, (img.width - size) / 2, (img.height - size) / 2, size, size, 0, 0, size, size)
-  return canvas.toDataURL('image/jpeg')
+  return canvas.toDataURL('image/png')
 }
 
 /**
@@ -216,7 +216,7 @@ export async function generateResumePDF(data: PortfolioData): Promise<void> {
 
     // Circle Photo Avatar or Initials Badge
     if (circularAvatarBase64) {
-      doc.addImage(circularAvatarBase64, 'JPEG', avatarX, avatarY, avatarWidth, avatarWidth)
+      doc.addImage(circularAvatarBase64, 'PNG', avatarX, avatarY, avatarWidth, avatarWidth)
       
       // double glowing borders
       doc.setDrawColor('#6366F1')
