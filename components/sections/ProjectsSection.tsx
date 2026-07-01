@@ -140,7 +140,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
             <div
               ref={scrollContainerRef}
               id="projects-container"
-              className="flex flex-row gap-6 overflow-x-auto snap-x snap-mandatory pb-6"
+              className="flex flex-row gap-6 overflow-x-auto pb-6"
               style={{
                 scrollbarWidth: 'none',
                 msOverflowStyle: 'none',
@@ -155,7 +155,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
               {filtered.map((project) => (
                 <FadeContent
                   key={project.id}
-                  className="snap-start shrink-0 w-[290px] sm:w-[360px] md:w-[400px] h-[300px]"
+                  className="shrink-0 w-[290px] sm:w-[360px] md:w-[400px] h-[300px]"
                 >
                   <BorderGlow
                     className="rounded-xl p-5 flex flex-col gap-3 h-full"
