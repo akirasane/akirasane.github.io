@@ -153,7 +153,7 @@ export async function generateResumePDF(data: PortfolioData): Promise<void> {
     const lines = doc.splitTextToSize(value, 38) as string[]
     doc.text(lines, 15, yVal + 3.5)
     
-    return yVal + 3.5 + lines.length * 3 + 1
+    return yVal + 3.5 + lines.length * 3 + 3.2
   }
 
   const drawSkillPill = (text: string, x: number, yVal: number) => {
@@ -187,7 +187,7 @@ export async function generateResumePDF(data: PortfolioData): Promise<void> {
     
     let currentY = yVal + 4.5
     let currentX = 15
-    const rowHeight = 6.2
+    const rowHeight = 7.5
 
     items.forEach((item) => {
       const text = `${item.name} (${item.years}y)`
@@ -203,29 +203,54 @@ export async function generateResumePDF(data: PortfolioData): Promise<void> {
       currentX += pillWidth + 1.8
     })
 
-    return currentY + 6.5
+    return currentY + 8.5
   }
 
   const drawLeftSidebar = () => {
+    const avatarWidth = 49.5 // 90% of 55mm column card width
+    const avatarX = 37.5 - avatarWidth / 2 // Centered (card center is 37.5)
+    const avatarY = 19
+    const centerAvatarX = 37.5
+    const centerAvatarY = avatarY + avatarWidth / 2
+    const avatarRadius = avatarWidth / 2
+
     // Circle Photo Avatar or Initials Badge
     if (circularAvatarBase64) {
-      doc.addImage(circularAvatarBase64, 'JPEG', 27.5, 19, 15, 15)
+      doc.addImage(circularAvatarBase64, 'JPEG', avatarX, avatarY, avatarWidth, avatarWidth)
       
       // double glowing borders
       doc.setDrawColor('#6366F1')
       doc.setLineWidth(0.4)
-      doc.circle(35, 26.5, 7.8, 'D')
+      doc.circle(centerAvatarX, centerAvatarY, avatarRadius + 0.4, 'D')
       doc.setDrawColor('#4F46E5')
       doc.setLineWidth(0.2)
-      doc.circle(35, 26.5, 8.4, 'D')
+      doc.circle(centerAvatarX, centerAvatarY, avatarRadius + 1.0, 'D')
     } else {
-      drawInitialsBadge(35, 26.5, profile.name || 'Resume')
+      // Initials badge scaled up
+      doc.setFillColor('#1A202C')
+      doc.circle(centerAvatarX, centerAvatarY, avatarRadius, 'F')
+      doc.setDrawColor('#6366F1')
+      doc.setLineWidth(0.4)
+      doc.circle(centerAvatarX, centerAvatarY, avatarRadius, 'D')
+
+      const initials = (profile.name || 'Resume')
+        .split(' ')
+        .map((n) => n.charAt(0))
+        .join('')
+        .toUpperCase()
+
+      doc.setFont('helvetica', 'bold')
+      doc.setFontSize(22)
+      doc.setTextColor('#FFFFFF')
+      doc.text(initials, centerAvatarX - 6.5, centerAvatarY + 2.8)
     }
     
-    let yL = 46
+    // Shifted down starting y to accommodate 49.5mm avatar height
+    let yL = 76
     
     // Contact Section
     yL = addLeftHeader('Contact', yL)
+    yL += 1.5
     if (profile.social.email) {
       yL = addContactItem('Email', profile.social.email, yL)
     }
@@ -240,8 +265,9 @@ export async function generateResumePDF(data: PortfolioData): Promise<void> {
     }
     
     // Skills Section
-    yL += 2.5
+    yL += 3.5
     yL = addLeftHeader('Core Skills', yL)
+    yL += 1.5
     
     for (const category of skills) {
       yL = addLeftSkills(category.category, category.items, yL)
