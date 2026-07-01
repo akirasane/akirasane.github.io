@@ -1,8 +1,7 @@
 name: AI Code Review
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
+  workflow_dispatch: # Manual trigger only (AI code review disabled on PRs)
 
 permissions:
   pull-requests: write
