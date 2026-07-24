@@ -15,7 +15,6 @@ export interface Command {
       startMatrix: () => void
       startGame: (game: 'snake' | 'typing') => void
       startContactFlow: () => void
-      toggleCrt: () => void
       historyList: string[]
       currentPath: string
       setCurrentPath: (path: string) => void
@@ -193,6 +192,37 @@ const renderSkillCategoryTxt = (c: PortfolioData['skills'][0], projects: Portfol
 }
 
 
+const renderCertificationTxt = (c: PortfolioData['certifications'][0]) => {
+  const expired = c.expiryDate && new Date(c.expiryDate).getTime() < Date.now()
+  return (
+    <div className="py-3 px-4 font-mono max-w-2xl border border-[var(--card-border)] rounded-lg bg-[var(--card-bg)] space-y-3">
+      <div className="flex items-start justify-between gap-3 border-b border-[var(--card-border)] pb-2">
+        <div>
+          <div className="text-base font-bold text-[var(--accent-primary)]">{c.name}</div>
+          <div className="text-xs text-[var(--text-secondary)] font-medium mt-0.5">{c.issuer}</div>
+        </div>
+        {c.credentialUrl && (
+          <a href={c.credentialUrl} target="_blank" rel="noopener noreferrer"
+            className="shrink-0 text-[10px] px-2.5 py-1 rounded border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 transition-colors font-bold">
+            VERIFY ↗
+          </a>
+        )}
+      </div>
+      <div className="text-xs text-[var(--text-secondary)]">
+        Issued: <span className="text-[var(--text-primary)]">{c.issueDate || 'N/A'}</span>
+        {c.expiryDate && (
+          <>
+            {' · '}
+            <span className={expired ? 'text-red-400' : 'text-[var(--text-primary)]'}>
+              {expired ? 'Expired' : 'Expires'}: {c.expiryDate}
+            </span>
+          </>
+        )}
+      </div>
+    </div>
+  )
+}
+
 const renderContactLinksTxt = (social: PortfolioData['profile']['social']) => (
   <div className="py-3 px-4 font-mono max-w-xl border border-[var(--card-border)] rounded-lg bg-[var(--card-bg)] space-y-3">
     <div className="flex items-center gap-2 border-b border-[var(--card-border)] pb-2">
@@ -245,6 +275,15 @@ export const getVFS = (data: PortfolioData): Record<string, VFSNode> => {
     }
   })
 
+  const certFiles: Record<string, VFSNode> = {}
+  data.certifications.forEach((c) => {
+    const filename = c.name.toLowerCase().replace(/[^a-z0-9]/g, '-') + '.txt'
+    certFiles[filename] = {
+      type: 'file',
+      content: renderCertificationTxt(c)
+    }
+  })
+
   return {
     'welcome.txt': {
       type: 'file',
@@ -280,6 +319,16 @@ export const getVFS = (data: PortfolioData): Record<string, VFSNode> => {
         'summary.txt': {
           type: 'file',
           content: renderReadmeTxt('skills', 'Proficiency ratings in different tech stacks. Open any .txt file to see skill bars.')
+        }
+      }
+    },
+    'certifications': {
+      type: 'dir',
+      children: {
+        ...certFiles,
+        'readme.txt': {
+          type: 'file',
+          content: renderReadmeTxt('certifications', 'Professional certifications and credentials. Use `cat <certification_name>.txt` to read details.')
         }
       }
     },
@@ -899,6 +948,52 @@ export const COMMANDS: Record<string, Command> = {
               </div>
             </div>
           ))}
+        </div>
+      )
+    }
+  },
+
+  certifications: {
+    name: 'certifications',
+    description: 'Lists professional certifications and credentials',
+    execute: (args, data) => {
+      const { certifications } = data
+
+      if (certifications.length === 0) {
+        return (
+          <div className="py-2 font-mono text-[var(--text-secondary)]">
+            No certifications added yet.
+          </div>
+        )
+      }
+
+      return (
+        <div className="py-2 font-mono space-y-4 max-w-3xl">
+          <div className="text-base font-bold text-[var(--accent-primary)] uppercase tracking-wider">Certifications & Credentials</div>
+          {certifications.map((cert) => {
+            const expired = cert.expiryDate && new Date(cert.expiryDate).getTime() < Date.now()
+            return (
+              <div key={cert.id} className="border border-[var(--card-border)] p-4 rounded bg-[var(--card-bg)]">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <h3 className="text-lg font-bold text-[var(--accent-primary)]">{cert.name}</h3>
+                    <p className="text-sm text-[var(--text-secondary)] font-medium">{cert.issuer}</p>
+                  </div>
+                  {cert.credentialUrl && (
+                    <a href={cert.credentialUrl} target="_blank" rel="noopener noreferrer" className="shrink-0 underline text-xs font-semibold text-[var(--accent-primary)]">
+                      Verify &rarr;
+                    </a>
+                  )}
+                </div>
+                <div className="text-xs text-[var(--text-secondary)] mt-2">
+                  Issued: {cert.issueDate || 'N/A'}
+                  {cert.expiryDate && (
+                    <span className={expired ? 'text-red-400' : ''}> · {expired ? 'Expired' : 'Expires'}: {cert.expiryDate}</span>
+                  )}
+                </div>
+              </div>
+            )
+          })}
         </div>
       )
     }

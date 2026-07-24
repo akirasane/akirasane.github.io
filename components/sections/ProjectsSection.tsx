@@ -25,6 +25,8 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
     const container = scrollContainerRef.current
     if (!section || !container) return
 
+    const EDGE_RELEASE_THRESHOLD = 4 // px of remaining scroll room before we hand off to vertical scroll
+
     const handleWheel = (e: WheelEvent) => {
       // Only lock/hijack if scroll is primarily vertical
       if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
@@ -32,12 +34,12 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
         const maxScrollLeft = container.scrollWidth - container.clientWidth
 
         // Lock vertically and scroll horizontally if we haven't reached the boundaries
-        if (e.deltaY > 0 && scrollLeft < maxScrollLeft - 1) {
+        if (e.deltaY > 0 && scrollLeft < maxScrollLeft - EDGE_RELEASE_THRESHOLD) {
           e.preventDefault()
-          container.scrollLeft += e.deltaY
-        } else if (e.deltaY < 0 && scrollLeft > 1) {
+          container.scrollLeft = Math.min(container.scrollLeft + e.deltaY, maxScrollLeft)
+        } else if (e.deltaY < 0 && scrollLeft > EDGE_RELEASE_THRESHOLD) {
           e.preventDefault()
-          container.scrollLeft += e.deltaY
+          container.scrollLeft = Math.max(container.scrollLeft + e.deltaY, 0)
         }
       }
     }

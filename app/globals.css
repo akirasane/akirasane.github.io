@@ -74,7 +74,13 @@ body {
   color: var(--text-primary);
 }
 
-/* Root sizing */
+/* Root sizing.
+   html/body are permanently non-scrolling by design: `main` below is the
+   sole scroll container driving the section scroll-snap behavior.
+   NOTE FOR FUTURE MODALS/DIALOGS: do not lock scroll by toggling
+   `document.body.style.overflow` — body is already hidden here, so that
+   pattern will silently no-op. Lock scrolling by toggling overflow on
+   `main` instead (e.g. a `.scroll-locked` class applied to <main>). */
 html,
 body {
   height: 100%;
@@ -91,9 +97,18 @@ main {
   scroll-snap-type: y mandatory;
 }
 
+/* main is given tabIndex={-1} in HomeClient.tsx and focused on mount so
+   Space/PageDown/Arrow keys can scroll it immediately without requiring
+   a prior click. Suppress the focus ring here (scoped to `main` only —
+   not a global outline reset) since it's a scroll host, not a control. */
+main:focus {
+  outline: none;
+}
+
 .snap-section,
 .snap-sectionfirst {
   scroll-snap-align: start;
+  scroll-snap-stop: always;
   min-height: 100vh;
   min-height: 100dvh;
   /* Use dynamic viewport height for mobile */
@@ -101,6 +116,14 @@ main {
 
 /* Mobile-specific fixes */
 @media (max-width: 768px) {
+
+  /* Soften snap on mobile: sections are auto-height here (see below), so
+     `mandatory` would keep fighting mid-section scrolls on tall content.
+     `proximity` only snaps when a scroll naturally settles near a
+     boundary, and never fights a scroll that stops mid-section. */
+  main {
+    scroll-snap-type: y proximity;
+  }
 
   .snap-sectionfirst {
     min-height: auto;
@@ -324,52 +347,9 @@ main {
   overflow: hidden;
 }
 
-.crt-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    rgba(18, 16, 16, 0) 50%, 
-    rgba(0, 0, 0, 0.15) 50%
-  );
-  background-size: 100% 4px;
-  z-index: 10;
-  pointer-events: none;
-}
-
 /* Scoped Font Scaling for Terminal Window */
 .terminal-window pre {
   font-size: var(--text-sm) !important;
-}
-
-.crt-overlay::before {
-  content: "";
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background: radial-gradient(
-    circle, 
-    transparent 60%, 
-    rgba(0, 0, 0, 0.3) 100%
-  );
-  z-index: 11;
-  pointer-events: none;
-}
-
-/* CRT Screen Flicker */
-.crt-flicker {
-  animation: crt-flicker-anim 0.15s infinite;
-}
-
-@keyframes crt-flicker-anim {
-  0% { opacity: 0.99; }
-  50% { opacity: 1; }
-  100% { opacity: 0.985; }
 }
 
 /* Terminal Glassmorphism */

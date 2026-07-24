@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { usePortfolioStore } from '@/lib/store'
 import Navbar from '@/components/layout/Navbar'
 import HeroSection from '@/components/sections/HeroSection'
@@ -8,6 +8,7 @@ import AboutSection from '@/components/sections/AboutSection'
 import SkillsSection from '@/components/sections/SkillsSection'
 import ExperienceSection from '@/components/sections/ExperienceSection'
 import ProjectsSection from '@/components/sections/ProjectsSection'
+import CertificationsSection from '@/components/sections/CertificationsSection'
 import ContactSection from '@/components/sections/ContactSection'
 import Terminal from '@/components/Terminal'
 
@@ -17,6 +18,7 @@ const SECTIONS = [
   { id: 'skills', label: 'Skills' },
   { id: 'experience', label: 'Experience' },
   { id: 'projects', label: 'Projects' },
+  { id: 'certifications', label: 'Certifications' },
   { id: 'contact', label: 'Contact' },
 ]
 
@@ -174,16 +176,27 @@ function BootScreen() {
 
 export default function HomeClient() {
   const { data, loading } = usePortfolioStore()
-  const [mode, setMode] = useState<'terminal' | 'gui'>('terminal')
+  const [mode, setMode] = useState<'terminal' | 'gui'>('gui')
   const [activeTheme, setActiveTheme] = useState<string>('matrix')
   const [isTransitioning, setIsTransitioning] = useState(false)
   // Keep boot screen visible for at least TOTAL_DURATION ms
   const [bootDone, setBootDone] = useState(false)
+  const mainRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
     const t = setTimeout(() => setBootDone(true), TOTAL_DURATION)
     return () => clearTimeout(t)
   }, [])
+
+  // Focus the scroll container once GUI mode is actually showing so
+  // Space/PageDown/Arrow keys can scroll it immediately, without a prior
+  // click (html/body are overflow:hidden, so `main` must hold focus to
+  // receive default keyboard-scroll handling).
+  useEffect(() => {
+    if (mode === 'gui' && !loading) {
+      mainRef.current?.focus({ preventScroll: true })
+    }
+  }, [mode, loading])
 
   const handleModeToggle = (newMode: 'terminal' | 'gui') => {
     setIsTransitioning(true)
@@ -193,12 +206,13 @@ export default function HomeClient() {
     }, 400)
   }
 
-  // Show boot screen until both data is loaded AND 3s have elapsed
-  if (loading || !bootDone) {
-    return <BootScreen />
-  }
-
   if (mode === 'terminal') {
+    // Terminal mode keeps the CLI boot sequence — show it until data is
+    // loaded AND at least TOTAL_DURATION ms have elapsed.
+    if (loading || !bootDone) {
+      return <BootScreen />
+    }
+
     return (
       <div
         className={`w-screen h-screen flex flex-col bg-[var(--bg-primary)] select-none overflow-hidden ${isTransitioning ? 'mode-glitch-transition' : ''}`}
@@ -213,15 +227,25 @@ export default function HomeClient() {
     )
   }
 
+  // GUI mode skips the CLI boot sequence entirely — just wait for real data.
+  if (loading) {
+    return null
+  }
+
   return (
     <>
       <Navbar sections={SECTIONS} currentMode={mode} setMode={handleModeToggle} />
-      <main className={`flex-1 w-full ${isTransitioning ? 'mode-glitch-transition' : ''}`}>
+      <main
+        ref={mainRef}
+        tabIndex={-1}
+        className={`flex-1 w-full ${isTransitioning ? 'mode-glitch-transition' : ''}`}
+      >
         <HeroSection landing={data.landing} />
         <AboutSection profile={data.profile} portfolioData={data} />
         <SkillsSection skills={data.skills} projects={data.projects} />
         <ExperienceSection experiences={data.experiences} />
         <ProjectsSection projects={data.projects} />
+        <CertificationsSection certifications={data.certifications} />
         <ContactSection contact={data.contact} />
       </main>
     </>

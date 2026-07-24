@@ -104,6 +104,18 @@ export const DEFAULT_DATA: PortfolioData = {
     },
   ],
 
+  certifications: [
+    {
+      id: "cert-1",
+      name: "AWS Certified Solutions Architect – Associate",
+      issuer: "Amazon Web Services",
+      issueDate: "2023-06-01",
+      expiryDate: "2026-06-01",
+      credentialUrl: "",
+      imageUrl: "",
+    },
+  ],
+
   contact: {
     email: "your.email@example.com",
     phone: "",

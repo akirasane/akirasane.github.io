@@ -1,11 +1,12 @@
 // Root store shape — key: "portfolio_data"
 export interface PortfolioData {
-  profile:     Profile
-  landing:     LandingContent
-  experiences: Experience[]
-  skills:      SkillCategory[]
-  projects:    Project[]
-  contact:     ContactInfo
+  profile:        Profile
+  landing:        LandingContent
+  experiences:    Experience[]
+  skills:         SkillCategory[]
+  projects:       Project[]
+  certifications: Certification[]
+  contact:        ContactInfo
 }
 
 export interface Profile {
@@ -63,6 +64,16 @@ export interface Project {
   tags:        string[]        // technology tag strings
   link:        string          // optional project URL
   imageUrl:    string          // optional preview image
+}
+
+export interface Certification {
+  id:            string        // uuid
+  name:          string        // required, e.g. "AWS Certified Solutions Architect"
+  issuer:        string        // required, e.g. "Amazon Web Services"
+  issueDate:     string        // ISO date string, required
+  expiryDate:    string        // ISO date string or "" → no expiry
+  credentialUrl: string        // optional verification link
+  imageUrl:      string        // optional badge/logo image
 }
 
 export interface ContactInfo {

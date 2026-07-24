@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
-import { usePathname } from 'next/navigation'
+import { useState, useEffect } from 'react'
 import GlassSurface from '@/components/reactbits/GlassSurface'
+import { scrollToSectionId } from '@/lib/utils'
 
 interface NavbarProps {
   sections: Array<{ id: string; label: string }>
@@ -11,11 +11,32 @@ interface NavbarProps {
 }
 
 export default function Navbar({ sections, currentMode, setMode }: NavbarProps) {
-  const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
+  const [activeId, setActiveId] = useState<string>(sections[0]?.id ?? '')
+
+  useEffect(() => {
+    const root = document.querySelector('main')
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveId(entry.target.id)
+          }
+        })
+      },
+      { root, rootMargin: '-45% 0px -45% 0px', threshold: 0 }
+    )
+
+    sections.forEach((s) => {
+      const el = document.getElementById(s.id)
+      if (el) observer.observe(el)
+    })
+
+    return () => observer.disconnect()
+  }, [sections])
 
   const scrollToSection = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+    scrollToSectionId(id)
     setMenuOpen(false)
   }
 
@@ -46,7 +67,7 @@ export default function Navbar({ sections, currentMode, setMode }: NavbarProps) 
                   onClick={() => scrollToSection(s.id)}
                   className="text-sm font-medium transition-all hover:scale-105"
                   style={{
-                    color: pathname === `/#${s.id}` ? 'var(--accent-primary)' : 'var(--text-primary)',
+                    color: activeId === s.id ? 'var(--accent-primary)' : 'var(--text-primary)',
                     background: 'none',
                     border: 'none',
                     cursor: 'pointer',
@@ -106,7 +127,7 @@ export default function Navbar({ sections, currentMode, setMode }: NavbarProps) 
                 <button
                   onClick={() => scrollToSection(s.id)}
                   className="w-full text-left text-sm font-medium transition-all hover:translate-x-1"
-                  style={{ color: 'var(--text-primary)', background: 'none', border: 'none', cursor: 'pointer' }}
+                  style={{ color: activeId === s.id ? 'var(--accent-primary)' : 'var(--text-primary)', background: 'none', border: 'none', cursor: 'pointer' }}
                 >
                   {s.label}
                 </button>

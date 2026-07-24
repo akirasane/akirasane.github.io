@@ -6,7 +6,6 @@ import { COMMANDS, getVFS, resolvePath } from '@/lib/commands'
 import MatrixRain from '@/components/MatrixRain'
 import SnakeGame from '@/components/SnakeGame'
 import TypingGame from '@/components/TypingGame'
-import LofiBackground from '@/components/LofiBackground'
 
 // Powerline chevron divider for p10k theme segments
 const Chevron = ({ fromColor, toColor }: { fromColor: string; toColor: string }) => (
@@ -56,13 +55,13 @@ export default function Terminal({ data, setMode, activeTheme, setTheme }: Termi
   // Terminal UI Modes & Expansions
   const [matrixActive, setMatrixActive] = useState(false)
   const [activeGame, setActiveGame] = useState<null | 'snake' | 'typing' | 'panic'>(null)
-  const [crtEnabled, setCrtEnabled] = useState(true)
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const [fontScale, setFontScale] = useState(1.0)
   const [expandedDirs, setExpandedDirs] = useState<Record<string, boolean>>({
     about: true,
     projects: true,
     skills: true,
+    certifications: false,
     contact: false,
     secret: false
   })
@@ -192,7 +191,6 @@ export default function Terminal({ data, setMode, activeTheme, setTheme }: Termi
         { id: `contact-prompt-email-${Date.now()}`, type: 'system', content: 'Enter your email address: ' }
       ])
     },
-    toggleCrt: () => setCrtEnabled(c => !c),
     historyList: commandHistory,
     currentPath,
     setCurrentPath: (p: string) => setCurrentPath(p)
@@ -600,7 +598,7 @@ export default function Terminal({ data, setMode, activeTheme, setTheme }: Termi
   return (
     <div 
       ref={terminalRef}
-      className={`relative w-full h-full flex flex-col overflow-hidden terminal-window crt-container ${crtEnabled ? 'crt-flicker' : ''}`}
+      className="relative w-full h-full flex flex-col overflow-hidden terminal-window crt-container"
       onClick={focusInput}
       style={{ 
         '--terminal-font-scale': fontScale,
@@ -612,12 +610,6 @@ export default function Terminal({ data, setMode, activeTheme, setTheme }: Termi
         '--text-2xl': `${1.5 * fontScale}rem`,
       } as React.CSSProperties}
     >
-      {/* Lofi ambient background animation */}
-      <LofiBackground />
-
-      {/* CRT Scanline Overlay */}
-      {crtEnabled && <div className="crt-overlay" />}
-
       {/* Terminal Window Header Bar */}
       <div 
         className="flex items-center justify-between px-4 py-3 border-b border-[var(--card-border)] bg-black/40 select-none z-30"
@@ -636,13 +628,7 @@ export default function Terminal({ data, setMode, activeTheme, setTheme }: Termi
             className="w-3 h-3 rounded-full bg-[#ff5f56] border border-[#e0443e] cursor-pointer hover:opacity-85 transition-opacity" 
             title="Exit to GUI (gui)" 
           />
-          <button 
-            id="btn-crt"
-            onClick={() => setCrtEnabled(c => !c)} 
-            className="w-3 h-3 rounded-full bg-[#ffbd2e] border border-[#dea123] cursor-pointer hover:opacity-85 transition-opacity" 
-            title="Toggle CRT Screen Scanlines" 
-          />
-          <button 
+          <button
             id="btn-matrix"
             onClick={() => setMatrixActive(true)} 
             className="w-3 h-3 rounded-full bg-[#27c93f] border border-[#1aab29] cursor-pointer hover:opacity-85 transition-opacity" 
@@ -863,7 +849,7 @@ export default function Terminal({ data, setMode, activeTheme, setTheme }: Termi
       {!isBooting && !activeGame && !contactState && (
         <div className="flex flex-wrap items-center gap-2 px-5 py-2.5 border-t border-[var(--card-border)] bg-black/35 text-xs font-mono select-none z-30">
           <span className="text-[var(--text-secondary)] font-bold">Quick Run:</span>
-          {['help', 'about', 'projects', 'skills', 'contact', 'matrix', 'clear'].map((cmd) => (
+          {['help', 'about', 'projects', 'skills', 'certifications', 'contact', 'matrix', 'clear'].map((cmd) => (
             <button
               key={cmd}
               type="button"

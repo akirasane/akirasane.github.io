@@ -6,6 +6,7 @@ import Magnet from '@/components/reactbits/Magnet'
 import LetterGlitchIntro from '@/components/reactbits/LetterGlitchIntro'
 import Aurora from '@/components/Aurora'
 import { LandingContent } from '@/lib/types'
+import { scrollToSectionId } from '@/lib/utils'
 
 const DEFAULT_TAGLINE = 'Building elegant solutions to complex problems.'
 
@@ -19,13 +20,13 @@ export default function HeroSection({ landing }: HeroSectionProps) {
   const [glitchDone, setGlitchDone] = useState(false)
 
   const scrollTo = (target: string) => {
-    document.getElementById(target)?.scrollIntoView({ behavior: 'smooth' })
+    scrollToSectionId(target)
   }
 
   return (
     <section
       id="hero"
-      className="h-screen snap-sectionfirst w-full relative flex flex-col items-center justify-center overflow-hidden bg-black"
+      className="snap-sectionfirst w-full relative flex flex-col items-center justify-center overflow-hidden bg-black"
     >
       {/* 1. Aurora Background - Fades in once the glitch resolves */}
       <div 

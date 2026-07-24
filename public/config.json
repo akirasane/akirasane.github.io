@@ -250,6 +250,26 @@
       "imageUrl": ""
     }
   ],
+  "certifications": [
+    {
+      "id": "cert-1",
+      "name": "Architecting on AWS",
+      "issuer": "AWS Partner Network (ERT Training)",
+      "issueDate": "2026-07-17",
+      "expiryDate": "",
+      "credentialUrl": "/certs/aws-architecting-on-aws.pdf",
+      "imageUrl": ""
+    },
+    {
+      "id": "cert-2",
+      "name": "Advanced AI Engineering for IT & Developer Teams",
+      "issuer": "IRIS Consulting Co., Ltd. (BOI STEM++)",
+      "issueDate": "2026-06-22",
+      "expiryDate": "",
+      "credentialUrl": "/certs/iris-advanced-ai-engineering.pdf",
+      "imageUrl": ""
+    }
+  ],
   "contact": {
     "email": "contact.chatkawin@gmail.com",
     "phone": "+6694xxxx515",
