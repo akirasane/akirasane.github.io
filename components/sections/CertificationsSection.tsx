@@ -62,6 +62,7 @@ export default function CertificationsSection({ certifications }: Certifications
                           src={cert.imageUrl}
                           alt={`${cert.issuer} badge`}
                           className="w-10 h-10 rounded object-contain shrink-0"
+                          loading="lazy"
                         />
                       ) : (
                         <div
@@ -104,7 +105,7 @@ export default function CertificationsSection({ certifications }: Certifications
                         href={cert.credentialUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs md:text-sm font-medium"
+                        className="text-xs md:text-sm font-medium py-2 inline-block"
                         style={{ color: 'var(--accent-primary)' }}
                       >
                         Verify Credential →

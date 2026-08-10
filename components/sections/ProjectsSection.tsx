@@ -86,7 +86,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
           <div className="flex items-center gap-3">
             <button
               onClick={() => scroll('left')}
-              className="w-10 h-10 rounded-full flex items-center justify-center border border-[var(--card-border)] bg-[var(--card-bg)] text-[var(--text-secondary)] hover:text-[var(--accent-primary)] hover:border-[var(--accent-primary)] transition-all active:scale-95"
+              className="w-11 h-11 rounded-full flex items-center justify-center border border-[var(--card-border)] bg-[var(--card-bg)] text-[var(--text-secondary)] hover:text-[var(--accent-primary)] hover:border-[var(--accent-primary)] transition-all active:scale-95"
               aria-label="Scroll projects left"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -95,7 +95,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
             </button>
             <button
               onClick={() => scroll('right')}
-              className="w-10 h-10 rounded-full flex items-center justify-center border border-[var(--card-border)] bg-[var(--card-bg)] text-[var(--text-secondary)] hover:text-[var(--accent-primary)] hover:border-[var(--accent-primary)] transition-all active:scale-95"
+              className="w-11 h-11 rounded-full flex items-center justify-center border border-[var(--card-border)] bg-[var(--card-bg)] text-[var(--text-secondary)] hover:text-[var(--accent-primary)] hover:border-[var(--accent-primary)] transition-all active:scale-95"
               aria-label="Scroll projects right"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -114,7 +114,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
             <div className="flex flex-wrap gap-2 justify-start">
               <button
                 onClick={() => setActiveTag(null)}
-                className="px-4 py-1.5 rounded-full text-sm font-medium transition-colors"
+                className="px-4 py-2.5 rounded-full text-sm font-medium transition-colors"
                 style={{
                   background: activeTag === null ? 'var(--accent-primary)' : 'var(--card-bg)',
                   color: activeTag === null ? '#fff' : 'var(--text-secondary)',
@@ -127,7 +127,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
                 <button
                   key={tag}
                   onClick={() => setActiveTag(tag)}
-                  className="px-4 py-1.5 rounded-full text-sm font-medium transition-colors"
+                  className="px-4 py-2.5 rounded-full text-sm font-medium transition-colors"
                   style={{
                     background: activeTag === tag ? 'var(--accent-primary)' : 'var(--card-bg)',
                     color: activeTag === tag ? '#fff' : 'var(--text-secondary)',
@@ -139,22 +139,23 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
               ))}
             </div>
 
-            <div
-              ref={scrollContainerRef}
-              id="projects-container"
-              className="grid grid-rows-2 grid-flow-col gap-4 overflow-x-auto pb-4 h-[540px]"
-              style={{
-                scrollbarWidth: 'none',
-                msOverflowStyle: 'none',
-              }}
-            >
-              <style dangerouslySetInnerHTML={{__html: `
-                #projects-container::-webkit-scrollbar {
-                  display: none;
-                }
-              `}} />
-              
-              {filtered.map((project) => (
+            <div className="relative">
+              <div
+                ref={scrollContainerRef}
+                id="projects-container"
+                className="grid grid-rows-2 grid-flow-col gap-4 overflow-x-auto pb-4 h-[540px]"
+                style={{
+                  scrollbarWidth: 'none',
+                  msOverflowStyle: 'none',
+                }}
+              >
+                <style dangerouslySetInnerHTML={{__html: `
+                  #projects-container::-webkit-scrollbar {
+                    display: none;
+                  }
+                `}} />
+
+                {filtered.map((project) => (
                 <FadeContent
                   key={project.id}
                   className="shrink-0 w-[290px] sm:w-[340px] md:w-[380px] h-[250px]"
@@ -207,7 +208,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
                         href={project.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs md:text-sm font-medium mt-auto"
+                        className="text-xs md:text-sm font-medium mt-auto py-2 inline-block"
                         style={{ color: 'var(--accent-primary)' }}
                       >
                         View Project →
@@ -216,6 +217,11 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
                   </BorderGlow>
                 </FadeContent>
               ))}
+              </div>
+              <div
+                className="pointer-events-none absolute right-0 top-0 h-[540px] w-10 sm:hidden"
+                style={{ background: 'linear-gradient(to left, var(--bg-primary), transparent)' }}
+              />
             </div>
           </>
         )}

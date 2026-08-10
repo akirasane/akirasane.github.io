@@ -84,7 +84,7 @@ export default function Navbar({ sections, currentMode, setMode }: NavbarProps) 
             {/* Terminal Mode Toggle Button */}
             <button
               onClick={() => setMode('terminal')}
-              className="px-3 py-1 bg-[var(--accent-primary)] text-black rounded-full text-xs font-bold font-mono tracking-wide cursor-pointer transition-all hover:scale-105"
+              className="px-3 py-2.5 bg-[var(--accent-primary)] text-black rounded-full text-xs font-bold font-mono tracking-wide cursor-pointer transition-all hover:scale-105 whitespace-nowrap"
             >
               {"[>_] CLI Mode"}
             </button>
@@ -92,7 +92,7 @@ export default function Navbar({ sections, currentMode, setMode }: NavbarProps) 
             {/* Mobile hamburger */}
             <button
               aria-label="Toggle menu"
-              className="md:hidden w-8 h-8 flex flex-col items-center justify-center gap-1 rounded-full transition-all hover:scale-110"
+              className="md:hidden w-11 h-11 flex flex-col items-center justify-center gap-1 rounded-full transition-all hover:scale-110"
               style={{ 
                 background: 'rgba(99, 102, 241, 0.1)', 
                 border: '1px solid rgba(99, 102, 241, 0.3)', 
@@ -115,10 +115,11 @@ export default function Navbar({ sections, currentMode, setMode }: NavbarProps) 
           height="auto"
           borderRadius={24}
           brightness={10}
-          opacity={0.7}
-          blur={15}
-          backgroundOpacity={0.3}
+          opacity={0.95}
+          blur={20}
+          backgroundOpacity={0.85}
           saturation={1.2}
+          distortionScale={-30}
           className="mt-2"
         >
           <ul className="flex flex-col md:hidden list-none m-0 p-4 gap-3 w-full">
@@ -126,7 +127,7 @@ export default function Navbar({ sections, currentMode, setMode }: NavbarProps) 
               <li key={s.id}>
                 <button
                   onClick={() => scrollToSection(s.id)}
-                  className="w-full text-left text-sm font-medium transition-all hover:translate-x-1"
+                  className="w-full text-left text-sm font-medium py-2.5 transition-all hover:translate-x-1"
                   style={{ color: activeId === s.id ? 'var(--accent-primary)' : 'var(--text-primary)', background: 'none', border: 'none', cursor: 'pointer' }}
                 >
                   {s.label}

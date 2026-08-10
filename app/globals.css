@@ -126,8 +126,11 @@ main:focus {
   }
 
   .snap-sectionfirst {
-    min-height: auto;
-    /* Allow sections to be their natural height on mobile */
+    /* Hero has fixed short content (not variable-length like other
+       sections) — keep it full-screen on mobile instead of collapsing
+       to content height. */
+    min-height: 100vh;
+    min-height: 100dvh;
     padding-top: 5rem;
     /* Add padding to prevent navbar overlap */
     padding-bottom: 2rem;
@@ -139,6 +142,13 @@ main:focus {
     padding-top: 8rem;
     /* Add padding to prevent navbar overlap */
     padding-bottom: 2rem;
+  }
+
+  /* About has fixed short content like the hero — keep it full-screen
+     on mobile instead of collapsing to content height. */
+  #about.snap-section {
+    min-height: 100vh;
+    min-height: 100dvh;
   }
 }
 

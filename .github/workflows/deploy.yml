@@ -47,11 +47,6 @@ jobs:
           node-version: "20"
           cache: ${{ steps.detect-package-manager.outputs.manager }}
           
-      - name: AI Code Review
-        env:
-          LOCAL_AI_API_KEY: ${{ secrets.LOCAL_AI_API_KEY }}
-        run: node scripts/ai-review.js
-          
       - name: Restore cache
         uses: actions/cache@v4
         with:
@@ -66,9 +61,7 @@ jobs:
         
       - name: Build with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
-        env:
-          NEXT_PUBLIC_ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
-        
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

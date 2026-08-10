@@ -1,18 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter, JetBrains_Mono } from "next/font/google";
-import Script from "next/script";
+import { Geist, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
-
 const geistSans = Geist({
   variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
@@ -21,9 +13,39 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
 });
 
+const siteUrl = "https://akirasane.github.io";
+const title = "Chatkawin Taola — Full Stack Developer & System Analyst";
+const description =
+  "Passionate developer with experience building scalable web applications and analyzing complex business requirements.";
+
 export const metadata: Metadata = {
-  title: "Portfolio",
-  description: "Personal portfolio and profile website",
+  metadataBase: new URL(siteUrl),
+  title,
+  description,
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title,
+    description,
+    url: siteUrl,
+    siteName: "Chatkawin Taola",
+    type: "website",
+    images: [
+      {
+        url: "/img/avatar.jpg",
+        width: 800,
+        height: 800,
+        alt: title,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+    images: ["/img/avatar.jpg"],
+  },
 };
 
 export default function RootLayout({
@@ -35,47 +57,10 @@ export default function RootLayout({
     <html
       lang="en"
       data-theme="dark"
-      className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, jetbrainsMono.variable, "font-sans", inter.variable)}
+      className={cn("h-full", "antialiased", geistSans.variable, jetbrainsMono.variable, "font-sans")}
     >
-      {/* ADD THE HEAD SECTION HERE */}
-      <head>
-        <link
-          rel="stylesheet"
-          href="https://ezcookie.free.laravel.cloud/css/cookie-consent-sdk.css"
-        />
-      </head>
-
       <body className="h-full flex flex-col overflow-hidden">
         {children}
-
-        {/* Load the SDK */}
-        <Script
-          src="https://ezcookie.free.laravel.cloud/js/cookie-consent-sdk.min.js"
-          strategy="afterInteractive"
-        />
-
-        {/* Initialize the SDK */}
-        <Script id="cookie-consent-init" strategy="afterInteractive">
-          {`
-            function initCookieConsent() {
-              if (typeof CookieConsentSDK !== 'undefined') {
-                const cookieConsent = new CookieConsentSDK({
-                  appKey: 'Qht7ygBr3HiHjzRR83n7lDJBO6qE11y2dUgk79R9havleYTF8Su8OlM1N8byuh2b',
-                  apiBaseUrl: 'https://ezcookie.free.laravel.cloud',
-                  locale: document.documentElement.lang || 'en',
-                  onConsentChange: function(consent) {
-                    console.log('Consent updated:', consent);
-                  }
-                });
-                cookieConsent.init();
-              } else {
-                setTimeout(initCookieConsent, 50);
-              }
-            }
-            
-            initCookieConsent();
-          `}
-        </Script>
       </body>
     </html>
   );
