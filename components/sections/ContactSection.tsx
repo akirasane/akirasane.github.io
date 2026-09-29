@@ -95,14 +95,11 @@ export default function ContactSection({ contact }: ContactSectionProps) {
   return (
     <section
       id="contact"
-      className="snap-section flex flex-col items-center px-6 py-16 md:py-16 md:h-dvh md:overflow-y-auto"
+      className="snap-section flex flex-col items-center px-6 pt-24 pb-16 md:pt-24 md:pb-16 md:h-dvh md:overflow-y-auto"
       style={{ background: 'var(--bg-secondary)' }}
     >
       <div className="w-full max-w-5xl flex flex-col gap-10 md:m-auto">
-        <h2
-          className="text-3xl font-bold text-center md:text-4xl"
-          style={{ color: 'var(--text-primary)' }}
-        >
+        <h2 className="gradient-heading text-3xl font-bold text-center md:text-4xl">
           Get In Touch
         </h2>
 
@@ -194,7 +191,7 @@ export default function ContactSection({ contact }: ContactSectionProps) {
                   <button
                     type="submit"
                     disabled={form.status === 'submitting'}
-                    className="rounded-full px-6 py-2.5 font-semibold text-sm transition-opacity hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="pulse-glow rounded-full px-6 py-2.5 font-semibold text-sm transition-opacity hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
                     style={{ background: 'var(--accent-primary)', color: '#fff' }}
                   >
                     {form.status === 'submitting' ? 'Sending…' : 'Send Message'}

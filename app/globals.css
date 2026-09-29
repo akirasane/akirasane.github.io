@@ -114,6 +114,14 @@ main:focus {
   /* Use dynamic viewport height for mobile */
 }
 
+/* Nav clearance for section headings is handled per-section via real
+   padding-top (see each section's className), not scroll-margin-top here.
+   scroll-margin/padding only shift the *snap point*, not actual layout —
+   with content taller than one viewport (several sections scroll
+   internally), the section is effectively top-anchored regardless, so an
+   offset snap point just opens a gap that exposes a sliver of whatever
+   section precedes it. Real padding-top has no such side effect. */
+
 /* Mobile-specific fixes */
 @media (max-width: 768px) {
 
@@ -149,6 +157,141 @@ main:focus {
   #about.snap-section {
     min-height: 100vh;
     min-height: 100dvh;
+  }
+}
+
+/* ---------- Dark/animated redesign accents ---------- */
+
+/* Animated gradient-fill section headings, replacing flat --text-primary */
+.gradient-heading {
+  background: linear-gradient(100deg, var(--text-primary) 35%, var(--accent-secondary) 60%, #f472b6 85%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  background-size: 220% 100%;
+  animation: gradient-shift 10s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Ambient grid + scanline, scoped to whichever positioned container hosts it
+   (e.g. the hero's aurora layer) rather than the viewport, so it never
+   leaks fixed-position artifacts over sections below. */
+.ambient-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.ambient-bg .ambient-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(99, 102, 241, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99, 102, 241, 0.05) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 20%, black 40%, transparent 90%);
+}
+.ambient-bg .ambient-scanline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 140px;
+  background: linear-gradient(to bottom, transparent, rgba(99, 102, 241, 0.06), transparent);
+  animation: ambient-scanline-move 9s linear infinite;
+}
+@keyframes ambient-scanline-move {
+  0% { top: -140px; }
+  100% { top: 100%; }
+}
+
+/* Pulsing glow ring, for the primary contact CTA */
+.pulse-glow {
+  position: relative;
+}
+.pulse-glow::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.45);
+  animation: pulse-glow-ring 2.4s ease-out infinite;
+  pointer-events: none;
+}
+@keyframes pulse-glow-ring {
+  0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.45); }
+  70% { box-shadow: 0 0 0 16px rgba(99, 102, 241, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+}
+
+/* Terminal preview widget — CSS-only typewriter, one line after another.
+   Each line's --term-w is its exact character count in `ch` (monospace,
+   so 1ch == 1 character) and its own steps() count matches, so the reveal
+   advances exactly one character per step instead of animating toward an
+   arbitrary 100% that doesn't track the actual text length. Durations are
+   a fixed 30ms/character so line length, not a shared duration, sets the
+   pace — a short line finishes quickly, a long one takes proportionally
+   longer, and the caret never sits ahead of or behind the last revealed
+   character. */
+.term-type {
+  margin: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid transparent;
+  width: 0;
+}
+/* Caret stays solid for the exact duration text is being typed (no blink —
+   the growing width already reads as active), then goes transparent the
+   instant that line finishes. step-end holds the "from" value for the
+   whole duration and only switches at 100%, so it doesn't fade early. */
+.term-l1 {
+  animation:
+    term-type-reveal 0.24s steps(8, end) 0.15s forwards,
+    term-caret-hide 0.24s step-end 0.15s forwards;
+}
+.term-l2 {
+  animation:
+    term-type-reveal 1.5s steps(50, end) 0.51s forwards,
+    term-caret-hide 1.5s step-end 0.51s forwards;
+}
+.term-l3 {
+  animation:
+    term-type-reveal 0.6s steps(20, end) 2.13s forwards,
+    term-caret-hide 0.6s step-end 2.13s forwards;
+}
+/* Last line: same solid-while-typing caret, but once done it starts
+   blinking forever instead of hiding — the "current" terminal line. */
+.term-l4 {
+  animation:
+    term-type-reveal 0.84s steps(28, end) 2.85s forwards,
+    term-caret-hide 0.84s step-end 2.85s forwards,
+    term-caret-blink 0.8s step-end 3.69s infinite;
+}
+@keyframes term-type-reveal {
+  from { width: 0; }
+  to { width: var(--term-w); }
+}
+@keyframes term-caret-hide {
+  from { border-color: #38bdf8; }
+  to { border-color: transparent; }
+}
+@keyframes term-caret-blink {
+  0%, 49% { border-color: #38bdf8; }
+  50%, 100% { border-color: transparent; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gradient-heading, .ambient-scanline, .pulse-glow::after,
+  .term-l1, .term-l2, .term-l3, .term-l4 {
+    animation: none !important;
+  }
+  .term-type {
+    width: auto;
+    border-right: none;
   }
 }
 

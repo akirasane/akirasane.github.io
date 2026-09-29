@@ -22,14 +22,11 @@ export default function CertificationsSection({ certifications }: Certifications
   return (
     <section
       id="certifications"
-      className="snap-section flex flex-col items-center px-6 py-16 md:py-16 md:h-dvh md:overflow-y-auto"
+      className="snap-section flex flex-col items-center px-6 pt-24 pb-16 md:pt-24 md:pb-16 md:h-dvh md:overflow-y-auto"
       style={{ background: 'var(--bg-primary)' }}
     >
       <div className="w-full max-w-5xl flex flex-col gap-8 md:m-auto">
-        <h2
-          className="text-3xl font-bold text-center md:text-4xl"
-          style={{ color: 'var(--text-primary)' }}
-        >
+        <h2 className="gradient-heading text-3xl font-bold text-center md:text-4xl">
           Certifications
         </h2>
 

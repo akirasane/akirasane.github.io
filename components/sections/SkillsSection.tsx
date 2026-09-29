@@ -108,14 +108,11 @@ export default function SkillsSection({ skills, projects }: SkillsSectionProps) 
   return (
     <section
       id="skills"
-      className="snap-section relative flex flex-col items-center justify-center px-6 py-20 md:py-20 overflow-hidden"
+      className="snap-section relative flex flex-col items-center justify-center px-6 pt-24 pb-20 md:pt-24 md:pb-20 overflow-hidden"
       style={{ background: 'var(--bg-primary)' }}
     >
       <div className="w-full max-w-4xl flex flex-col gap-10 relative z-10">
-        <h2
-          className="text-3xl font-bold text-center md:text-4xl"
-          style={{ color: 'var(--text-primary)' }}
-        >
+        <h2 className="gradient-heading text-3xl font-bold text-center md:text-4xl">
           Skills
         </h2>
 

@@ -71,7 +71,7 @@ export default function AboutSection({ profile, portfolioData }: AboutSectionPro
   return (
     <section
       id="about"
-      className="snap-section relative flex items-center justify-center px-6 py-16 md:py-16 overflow-hidden"
+      className="snap-section relative flex items-center justify-center px-6 pt-24 pb-16 md:pt-24 md:pb-16 overflow-hidden"
       style={{ background: 'var(--bg-primary)' }}
     >
       {/* Animated background */}

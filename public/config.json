@@ -1,6 +1,6 @@
 {
   "profile": {
-    "name": "Chatkawin taola",
+    "name": "Chatkawin Taola",
     "title": "Full Stack Developer & System Analyst",
     "bio": "Passionate developer with experience building scalable web applications and analyzing complex business requirements.",
     "avatarUrl": "",
@@ -149,6 +149,68 @@
           "name": ".NET Core MVC",
           "proficiency": 25,
           "years": 1
+        },
+        {
+          "id": "skill-2-7",
+          "name": "AWS Cloud Services",
+          "proficiency": 20,
+          "years": 1
+        }
+      ]
+    },
+    {
+      "id": "cat-3",
+      "category": "DevOps & Tools",
+      "color": "yellow",
+      "items": [
+        {
+          "id": "skill-3-1",
+          "name": "Git & GitHub",
+          "proficiency": 85,
+          "years": 5
+        },
+        {
+          "id": "skill-3-2",
+          "name": "Docker",
+          "proficiency": 30,
+          "years": 1
+        },
+        {
+          "id": "skill-3-3",
+          "name": "CI/CD Pipelines",
+          "proficiency": 25,
+          "years": 1
+        }
+      ]
+    },
+    {
+      "id": "cat-4",
+      "category": "AI Architecture & Development",
+      "color": "purple",
+      "items": [
+        {
+          "id": "skill-4-1",
+          "name": "RAG (Retrieval-Augmented Generation) Architecture",
+          "proficiency": 20,
+          "years": 1
+        },
+        {
+          "id": "skill-4-2",
+          "name": "TypeSafe System One Architecture & JEV",
+          "proficiency": 15,
+          "years": 1
+        },
+        {
+          "id": "skill-4-3",
+          "name": "Vector Database (Qdrant)",
+          "proficiency": 20,
+          "years": 1
+        },
+        {
+          "id": "skill-4-4",
+          "name": "LlamaIndex Framework",
+          "proficiency": 15,
+          "years": 1
         }
       ]
     }
@@ -170,7 +232,7 @@
     },
     {
       "id": "proj-2",
-      "title": "E-Commerce Platform",
+      "title": "E-Commerce Platform with Real-Time Stock Updates With POS Integration",
       "description": "Developed a custom e-commerce platform with product management with real-time stock updates, shopping cart, and payment integration.",
       "tags": [
         "Shopify",
@@ -245,6 +307,18 @@
         "MySQL",
         "PHP",
         "REST API"
+      ],
+      "link": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "proj-8",
+      "title": "[Internal]Sales Reporting System",
+      "description": "Developed a sales reporting system to generate real-time sales reports and analytics.",
+      "tags": [
+        "DotNet Core MVC",
+        "Tailwind CSS",
+        "SQL Server"
       ],
       "link": "",
       "imageUrl": ""
