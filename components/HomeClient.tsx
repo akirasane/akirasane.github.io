@@ -240,7 +240,7 @@ export default function HomeClient() {
         tabIndex={-1}
         className={`flex-1 w-full ${isTransitioning ? 'mode-glitch-transition' : ''}`}
       >
-        <HeroSection landing={data.landing} />
+        <HeroSection landing={data.landing} title={data.profile.title} />
         <AboutSection profile={data.profile} portfolioData={data} />
         <SkillsSection skills={data.skills} projects={data.projects} />
         <ExperienceSection experiences={data.experiences} />
