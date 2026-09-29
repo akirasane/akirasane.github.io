@@ -95,6 +95,10 @@ main {
   overflow-y: auto;
   overflow-x: hidden;
   scroll-snap-type: y mandatory;
+  /* Clears the fixed glass navbar (top-6 + its own height) so a snapped
+     section's heading never renders directly behind it, where the
+     navbar's backdrop-filter distorts the text into a smeared overlay. */
+  scroll-padding-top: 6.5rem;
 }
 
 /* main is given tabIndex={-1} in HomeClient.tsx and focused on mount so
