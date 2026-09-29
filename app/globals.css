@@ -229,20 +229,54 @@ main:focus {
   margin: 0;
   overflow: hidden;
   white-space: nowrap;
-  border-right: 2px solid #38bdf8;
+  border-right: 2px solid transparent;
   width: 0;
-  animation: term-type-in 1.6s steps(28, end) forwards, term-caret-blink 0.8s step-end infinite;
+  animation: term-type-in 1.6s steps(28, end) forwards;
 }
-.term-l1 { animation-delay: 0.2s, 0.2s; }
-.term-l2 { animation-delay: 2.1s, 2.1s; }
-.term-l3 { animation-delay: 4s, 4s; }
-.term-l4 { animation-delay: 5.6s, 5.6s; border-right-color: transparent; }
+/* Each line's caret blinks only while that line is "active" — typing, plus
+   a short hold — then goes transparent for good once the next line starts.
+   An even iteration-count is what makes the blink animation land on its
+   transparent keyframe when it stops, instead of freezing mid-blink. */
+.term-l1 {
+  animation-delay: 0.2s;
+  animation-name: term-type-in, term-caret-blink;
+  animation-duration: 1.6s, 0.8s;
+  animation-timing-function: steps(28, end), step-end;
+  animation-iteration-count: 1, 2;
+  animation-fill-mode: forwards, forwards;
+}
+.term-l2 {
+  animation-delay: 2.1s;
+  animation-name: term-type-in, term-caret-blink;
+  animation-duration: 1.6s, 0.8s;
+  animation-timing-function: steps(28, end), step-end;
+  animation-iteration-count: 1, 2;
+  animation-fill-mode: forwards, forwards;
+}
+.term-l3 {
+  animation-delay: 4s;
+  animation-name: term-type-in, term-caret-blink;
+  animation-duration: 1.6s, 0.8s;
+  animation-timing-function: steps(28, end), step-end;
+  animation-iteration-count: 1, 2;
+  animation-fill-mode: forwards, forwards;
+}
+/* Last line keeps its cursor blinking forever — the "current" terminal line. */
+.term-l4 {
+  animation-delay: 5.6s;
+  animation-name: term-type-in, term-caret-blink;
+  animation-duration: 1.6s, 0.8s;
+  animation-timing-function: steps(28, end), step-end;
+  animation-iteration-count: 1, infinite;
+  animation-fill-mode: forwards, forwards;
+}
 @keyframes term-type-in {
   from { width: 0; }
   to { width: 100%; }
 }
 @keyframes term-caret-blink {
-  50% { border-color: transparent; }
+  0%, 49% { border-color: #38bdf8; }
+  50%, 100% { border-color: transparent; }
 }
 
 @media (prefers-reduced-motion: reduce) {
