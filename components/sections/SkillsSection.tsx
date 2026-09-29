@@ -112,10 +112,7 @@ export default function SkillsSection({ skills, projects }: SkillsSectionProps) 
       style={{ background: 'var(--bg-primary)' }}
     >
       <div className="w-full max-w-4xl flex flex-col gap-10 relative z-10">
-        <h2
-          className="text-3xl font-bold text-center md:text-4xl"
-          style={{ color: 'var(--text-primary)' }}
-        >
+        <h2 className="gradient-heading text-3xl font-bold text-center md:text-4xl">
           Skills
         </h2>
 

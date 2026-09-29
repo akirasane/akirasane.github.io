@@ -156,6 +156,105 @@ main:focus {
   }
 }
 
+/* ---------- Dark/animated redesign accents ---------- */
+
+/* Animated gradient-fill section headings, replacing flat --text-primary */
+.gradient-heading {
+  background: linear-gradient(100deg, var(--text-primary) 35%, var(--accent-secondary) 60%, #f472b6 85%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  background-size: 220% 100%;
+  animation: gradient-shift 10s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Ambient grid + scanline, scoped to whichever positioned container hosts it
+   (e.g. the hero's aurora layer) rather than the viewport, so it never
+   leaks fixed-position artifacts over sections below. */
+.ambient-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.ambient-bg .ambient-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(99, 102, 241, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99, 102, 241, 0.05) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 20%, black 40%, transparent 90%);
+}
+.ambient-bg .ambient-scanline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 140px;
+  background: linear-gradient(to bottom, transparent, rgba(99, 102, 241, 0.06), transparent);
+  animation: ambient-scanline-move 9s linear infinite;
+}
+@keyframes ambient-scanline-move {
+  0% { top: -140px; }
+  100% { top: 100%; }
+}
+
+/* Pulsing glow ring, for the primary contact CTA */
+.pulse-glow {
+  position: relative;
+}
+.pulse-glow::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.45);
+  animation: pulse-glow-ring 2.4s ease-out infinite;
+  pointer-events: none;
+}
+@keyframes pulse-glow-ring {
+  0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.45); }
+  70% { box-shadow: 0 0 0 16px rgba(99, 102, 241, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+}
+
+/* Terminal preview widget — CSS-only typewriter, one line after another */
+.term-type {
+  margin: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid #38bdf8;
+  width: 0;
+  animation: term-type-in 1.6s steps(28, end) forwards, term-caret-blink 0.8s step-end infinite;
+}
+.term-l1 { animation-delay: 0.2s, 0.2s; }
+.term-l2 { animation-delay: 2.1s, 2.1s; }
+.term-l3 { animation-delay: 4s, 4s; }
+.term-l4 { animation-delay: 5.6s, 5.6s; border-right-color: transparent; }
+@keyframes term-type-in {
+  from { width: 0; }
+  to { width: 100%; }
+}
+@keyframes term-caret-blink {
+  50% { border-color: transparent; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gradient-heading, .ambient-scanline, .pulse-glow::after, .term-type {
+    animation: none !important;
+  }
+  .term-type {
+    width: auto;
+    border-right: none;
+  }
+}
+
 @theme inline {
   --font-heading: var(--font-sans);
   --font-sans: var(--font-sans);

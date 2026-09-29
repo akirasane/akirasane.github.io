@@ -26,10 +26,7 @@ export default function ExperienceSection({ experiences }: ExperienceSectionProp
       style={{ background: 'var(--bg-secondary)' }}
     >
       <div className="w-full max-w-3xl flex flex-col gap-8 md:m-auto">
-        <h2
-          className="text-3xl font-bold text-center md:text-4xl"
-          style={{ color: 'var(--text-primary)' }}
-        >
+        <h2 className="gradient-heading text-3xl font-bold text-center md:text-4xl">
           Experience
         </h2>
 
@@ -53,6 +50,7 @@ export default function ExperienceSection({ experiences }: ExperienceSectionProp
                   style={{
                     background: 'var(--accent-primary)',
                     borderColor: 'var(--bg-secondary)',
+                    boxShadow: '0 0 12px rgba(192, 132, 252, 0.6)',
                   }}
                 />
 

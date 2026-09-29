@@ -76,10 +76,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
     >
       <div className="w-full max-w-5xl flex flex-col gap-8">
         <div className="flex items-center justify-between w-full">
-          <h2
-            className="text-3xl font-bold md:text-4xl text-left"
-            style={{ color: 'var(--text-primary)' }}
-          >
+          <h2 className="gradient-heading text-3xl font-bold md:text-4xl text-left">
             Projects
           </h2>
           

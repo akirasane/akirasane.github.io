@@ -4,6 +4,7 @@ import { useState } from 'react'
 import BlurText from '@/components/reactbits/BlurText'
 import Magnet from '@/components/reactbits/Magnet'
 import LetterGlitchIntro from '@/components/reactbits/LetterGlitchIntro'
+import TerminalPreview from '@/components/reactbits/TerminalPreview'
 import Aurora from '@/components/Aurora'
 import { LandingContent } from '@/lib/types'
 import { scrollToSectionId } from '@/lib/utils'
@@ -42,6 +43,11 @@ export default function HeroSection({ landing }: HeroSectionProps) {
         />
         {/* Subtle dark overlay to keep contrast high for text */}
         <div className="absolute inset-0 bg-black/50 pointer-events-none" />
+        {/* Ambient grid + scanline, layered over the aurora for extra depth */}
+        <div className="ambient-bg">
+          <div className="ambient-grid" />
+          <div className="ambient-scanline" />
+        </div>
       </div>
 
       {/* 2. Glitch Canvas Wallpaper - Fades out when complete */}
@@ -107,6 +113,12 @@ export default function HeroSection({ landing }: HeroSectionProps) {
                 </button>
               </Magnet>
             ))}
+          </div>
+        )}
+
+        {glitchDone && (
+          <div className="mt-10">
+            <TerminalPreview />
           </div>
         )}
       </div>
