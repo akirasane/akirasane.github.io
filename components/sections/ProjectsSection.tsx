@@ -71,7 +71,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
     <section
       ref={sectionRef}
       id="projects"
-      className="snap-section flex flex-col items-center justify-center px-6 py-16 md:py-16 overflow-hidden"
+      className="snap-section flex flex-col items-center justify-center px-6 pt-24 pb-16 md:pt-24 md:pb-16 overflow-hidden"
       style={{ background: 'var(--bg-primary)' }}
     >
       <div className="w-full max-w-5xl flex flex-col gap-8">

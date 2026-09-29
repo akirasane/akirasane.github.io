@@ -95,10 +95,6 @@ main {
   overflow-y: auto;
   overflow-x: hidden;
   scroll-snap-type: y mandatory;
-  /* Clears the fixed glass navbar (top-6 + its own height) so a snapped
-     section's heading never renders directly behind it, where the
-     navbar's backdrop-filter distorts the text into a smeared overlay. */
-  scroll-padding-top: 6.5rem;
 }
 
 /* main is given tabIndex={-1} in HomeClient.tsx and focused on mount so
@@ -117,6 +113,14 @@ main:focus {
   min-height: 100dvh;
   /* Use dynamic viewport height for mobile */
 }
+
+/* Nav clearance for section headings is handled per-section via real
+   padding-top (see each section's className), not scroll-margin-top here.
+   scroll-margin/padding only shift the *snap point*, not actual layout —
+   with content taller than one viewport (several sections scroll
+   internally), the section is effectively top-anchored regardless, so an
+   offset snap point just opens a gap that exposes a sliver of whatever
+   section precedes it. Real padding-top has no such side effect. */
 
 /* Mobile-specific fixes */
 @media (max-width: 768px) {
