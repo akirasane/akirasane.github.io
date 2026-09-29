@@ -1,9 +1,7 @@
 'use client'
 
-import { useState } from 'react'
 import BlurText from '@/components/reactbits/BlurText'
 import Magnet from '@/components/reactbits/Magnet'
-import LetterGlitchIntro from '@/components/reactbits/LetterGlitchIntro'
 import TerminalPreview from '@/components/reactbits/TerminalPreview'
 import Aurora from '@/components/Aurora'
 import { LandingContent } from '@/lib/types'
@@ -17,8 +15,6 @@ interface HeroSectionProps {
 
 export default function HeroSection({ landing }: HeroSectionProps) {
   const tagline = landing.tagline || DEFAULT_TAGLINE
-  // 0: Glitching phase, 1: Glitch finished, show rest of content
-  const [glitchDone, setGlitchDone] = useState(false)
 
   const scrollTo = (target: string) => {
     scrollToSectionId(target)
@@ -29,12 +25,8 @@ export default function HeroSection({ landing }: HeroSectionProps) {
       id="hero"
       className="snap-sectionfirst w-full relative flex flex-col items-center justify-center overflow-hidden bg-black"
     >
-      {/* 1. Aurora Background - Fades in once the glitch resolves */}
-      <div 
-        className={`absolute inset-0 w-full h-full z-0 transition-opacity duration-1500 ease-out ${
-          glitchDone ? 'opacity-100' : 'opacity-0 pointer-events-none'
-        }`}
-      >
+      {/* Aurora background */}
+      <div className="absolute inset-0 w-full h-full z-0">
         <Aurora
           colorStops={['#3b82f6', '#8b5cf6', '#06b6d4']}
           amplitude={1.0}
@@ -50,32 +42,11 @@ export default function HeroSection({ landing }: HeroSectionProps) {
         </div>
       </div>
 
-      {/* 2. Glitch Canvas Wallpaper - Fades out when complete */}
-      <div 
-        className={`absolute inset-0 w-full h-full z-10 transition-opacity duration-1000 ease-out ${
-          glitchDone ? 'opacity-0 pointer-events-none' : 'opacity-100'
-        }`}
-      >
-        <LetterGlitchIntro
-          targetWord={landing.displayName?.toUpperCase() || 'WELCOME'}
-          glitchColors={['#6366f1', '#a78bfa', '#c4b5fd', '#818cf8']}
-          glitchSpeed={40}
-          smooth={true}
-          onComplete={() => setGlitchDone(true)}
-        />
-      </div>
-
-      {/* 3. Content that fades in AFTER the glitch resolves the name */}
-      <div
-        className={`relative z-20 flex flex-col items-center gap-6 px-6 text-center transition-all duration-1000 ease-out ${
-          glitchDone ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8 pointer-events-none'
-        }`}
-      >
+      {/* Content */}
+      <div className="relative z-20 flex flex-col items-center gap-6 px-6 text-center">
         {/* Dynamic Display Name Header */}
-        <h1 
-          className="text-4xl md:text-6xl font-bold tracking-tight text-white font-sans"
-        >
-          {glitchDone && <BlurText text={landing.displayName || 'WELCOME'} delay={0.05} />}
+        <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-white font-sans">
+          <BlurText text={landing.displayName || 'WELCOME'} delay={0.05} />
         </h1>
 
         {/* Tagline */}
@@ -83,7 +54,7 @@ export default function HeroSection({ landing }: HeroSectionProps) {
           className="max-w-xl text-lg md:text-xl font-medium tracking-wide"
           style={{ color: 'var(--text-secondary)' }}
         >
-          {glitchDone && <BlurText text={tagline} delay={0.2} />}
+          <BlurText text={tagline} delay={0.2} />
         </p>
 
         {landing.ctaLinks && landing.ctaLinks.length > 0 && (
@@ -116,13 +87,10 @@ export default function HeroSection({ landing }: HeroSectionProps) {
           </div>
         )}
 
-        {glitchDone && (
-          <div className="mt-10">
-            <TerminalPreview />
-          </div>
-        )}
+        <div className="mt-10">
+          <TerminalPreview />
+        </div>
       </div>
     </section>
   )
 }
-
