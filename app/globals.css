@@ -228,55 +228,56 @@ main:focus {
   100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
 }
 
-/* Terminal preview widget — CSS-only typewriter, one line after another */
+/* Terminal preview widget — CSS-only typewriter, one line after another.
+   Each line's --term-w is its exact character count in `ch` (monospace,
+   so 1ch == 1 character) and its own steps() count matches, so the reveal
+   advances exactly one character per step instead of animating toward an
+   arbitrary 100% that doesn't track the actual text length. Durations are
+   a fixed 30ms/character so line length, not a shared duration, sets the
+   pace — a short line finishes quickly, a long one takes proportionally
+   longer, and the caret never sits ahead of or behind the last revealed
+   character. */
 .term-type {
   margin: 0;
   overflow: hidden;
   white-space: nowrap;
   border-right: 2px solid transparent;
   width: 0;
-  animation: term-type-in 1.6s steps(28, end) forwards;
 }
-/* Each line's caret blinks only while that line is "active" — typing, plus
-   a short hold — then goes transparent for good once the next line starts.
-   An even iteration-count is what makes the blink animation land on its
-   transparent keyframe when it stops, instead of freezing mid-blink. */
+/* Caret stays solid for the exact duration text is being typed (no blink —
+   the growing width already reads as active), then goes transparent the
+   instant that line finishes. step-end holds the "from" value for the
+   whole duration and only switches at 100%, so it doesn't fade early. */
 .term-l1 {
-  animation-delay: 0.2s;
-  animation-name: term-type-in, term-caret-blink;
-  animation-duration: 1.6s, 0.8s;
-  animation-timing-function: steps(28, end), step-end;
-  animation-iteration-count: 1, 2;
-  animation-fill-mode: forwards, forwards;
+  animation:
+    term-type-reveal 0.24s steps(8, end) 0.15s forwards,
+    term-caret-hide 0.24s step-end 0.15s forwards;
 }
 .term-l2 {
-  animation-delay: 2.1s;
-  animation-name: term-type-in, term-caret-blink;
-  animation-duration: 1.6s, 0.8s;
-  animation-timing-function: steps(28, end), step-end;
-  animation-iteration-count: 1, 2;
-  animation-fill-mode: forwards, forwards;
+  animation:
+    term-type-reveal 1.5s steps(50, end) 0.51s forwards,
+    term-caret-hide 1.5s step-end 0.51s forwards;
 }
 .term-l3 {
-  animation-delay: 4s;
-  animation-name: term-type-in, term-caret-blink;
-  animation-duration: 1.6s, 0.8s;
-  animation-timing-function: steps(28, end), step-end;
-  animation-iteration-count: 1, 2;
-  animation-fill-mode: forwards, forwards;
+  animation:
+    term-type-reveal 0.6s steps(20, end) 2.13s forwards,
+    term-caret-hide 0.6s step-end 2.13s forwards;
 }
-/* Last line keeps its cursor blinking forever — the "current" terminal line. */
+/* Last line: same solid-while-typing caret, but once done it starts
+   blinking forever instead of hiding — the "current" terminal line. */
 .term-l4 {
-  animation-delay: 5.6s;
-  animation-name: term-type-in, term-caret-blink;
-  animation-duration: 1.6s, 0.8s;
-  animation-timing-function: steps(28, end), step-end;
-  animation-iteration-count: 1, infinite;
-  animation-fill-mode: forwards, forwards;
+  animation:
+    term-type-reveal 0.84s steps(28, end) 2.85s forwards,
+    term-caret-hide 0.84s step-end 2.85s forwards,
+    term-caret-blink 0.8s step-end 3.69s infinite;
 }
-@keyframes term-type-in {
+@keyframes term-type-reveal {
   from { width: 0; }
-  to { width: 100%; }
+  to { width: var(--term-w); }
+}
+@keyframes term-caret-hide {
+  from { border-color: #38bdf8; }
+  to { border-color: transparent; }
 }
 @keyframes term-caret-blink {
   0%, 49% { border-color: #38bdf8; }
@@ -284,7 +285,8 @@ main:focus {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .gradient-heading, .ambient-scanline, .pulse-glow::after, .term-type {
+  .gradient-heading, .ambient-scanline, .pulse-glow::after,
+  .term-l1, .term-l2, .term-l3, .term-l4 {
     animation: none !important;
   }
   .term-type {
