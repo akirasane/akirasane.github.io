@@ -24,7 +24,7 @@ export default function HeroSection({ landing, title }: HeroSectionProps) {
   return (
     <section
       id="hero"
-      className="snap-sectionfirst w-full relative flex items-center justify-center overflow-hidden bg-black"
+      className="snap-sectionfirst h-dvh w-full relative flex items-center justify-center overflow-hidden bg-black"
     >
       {/* Aurora background */}
       <div className="absolute inset-0 w-full h-full z-0">
@@ -97,7 +97,7 @@ export default function HeroSection({ landing, title }: HeroSectionProps) {
           )}
         </div>
 
-        <div className="flex justify-center md:justify-end">
+        <div className="hidden md:flex justify-end">
           <TerminalPreview />
         </div>
       </div>
