@@ -1,6 +1,6 @@
 {
   "profile": {
-    "name": "Chatkawin Taola",
+    "name": "Chatkawin taola",
     "title": "Full Stack Developer & System Analyst",
     "bio": "Passionate developer with experience building scalable web applications and analyzing complex business requirements.",
     "avatarUrl": "",
@@ -217,6 +217,24 @@
   ],
   "projects": [
     {
+      "id": "proj-0",
+      "title": "[Internal]AI-Powered Knowledge Management System",
+      "description": "Developed an internal knowledge management system leveraging AI technologies. Implemented features for document indexing, semantic search, and automated content summarization.",
+      "tags": [
+        "Next.js",
+        "Tailwind CSS",
+        "PostgreSQL",
+        "Docker",
+        "REST API",
+        "RAG Architecture",
+        "Vector Database (Qdrant)",
+        "LMS Integration",
+        "LlamaIndex Framework"
+      ],
+      "link": "",
+      "imageUrl": ""
+    },
+    {
       "id": "proj-1",
       "title": "[Internal]Instant Redemption Portal",
       "description": "Developed an internal portal for employees to redeem customer points for rewards. Integrated with existing CRM and loyalty systems.",
@@ -254,6 +272,21 @@
       ],
       "link": "",
       "imageUrl": ""
+    },
+    {
+      "id": "proj-10",
+      "title": "[Internal]Department scoped Password Manager System",
+      "description": "Developed an internal password manager system to securely store and manage department-specific credentials. Implemented role-based access control and encryption for sensitive data.",
+      "tags": [
+        "Next.js",
+        "Tailwind CSS",
+        "PostgreSQL",
+        "Docker",
+        "REST API",
+        "n8n"
+      ],
+      "link": "",
+      "imageUrl": "public/img/pm.png"
     },
     {
       "id": "proj-4",
@@ -319,6 +352,18 @@
         "DotNet Core MVC",
         "Tailwind CSS",
         "SQL Server"
+      ],
+      "link": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "proj-9",
+      "title": "Game Daily-Login Reward System On Discord",
+      "description": "Developed a daily-login reward system for a game community on Discord. Implemented a bot to track user logins and distribute rewards automatically.",
+      "tags": [
+        "Discord API",
+        "Cloudflare Workers",
+        "Javascript"
       ],
       "link": "",
       "imageUrl": ""
