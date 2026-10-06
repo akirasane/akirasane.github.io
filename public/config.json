@@ -217,6 +217,17 @@
   ],
   "projects": [
     {
+      "id": "proj-2",
+      "title": "E-Commerce Platform with Real-Time Stock Updates With POS Integration",
+      "description": "Developed a custom e-commerce platform with product management with real-time stock updates, shopping cart, and payment integration.",
+      "tags": [
+        "Shopify",
+        "REST API"
+      ],
+      "link": "https://th.club21.com/",
+      "imageUrl": ""
+    },
+    {
       "id": "proj-0",
       "title": "[Internal]AI-Powered Knowledge Management System",
       "description": "Developed an internal knowledge management system leveraging AI technologies. Implemented features for document indexing, semantic search, and automated content summarization.",
@@ -230,6 +241,20 @@
         "Vector Database (Qdrant)",
         "LMS Integration",
         "LlamaIndex Framework"
+      ],
+      "link": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "proj-6",
+      "title": "[Internal]Warehouse Management System",
+      "description": "Developed a warehouse management system to optimize inventory tracking and order fulfillment processes. Integrated with barcode scanning for efficient operations.",
+      "tags": [
+        "Laravel",
+        "Tailwind CSS",
+        "MySQL",
+        "PHP",
+        "REST API"
       ],
       "link": "",
       "imageUrl": ""
@@ -261,17 +286,6 @@
         "REST API"
       ],
       "link": "",
-      "imageUrl": ""
-    },
-    {
-      "id": "proj-2",
-      "title": "E-Commerce Platform with Real-Time Stock Updates With POS Integration",
-      "description": "Developed a custom e-commerce platform with product management with real-time stock updates, shopping cart, and payment integration.",
-      "tags": [
-        "Shopify",
-        "REST API"
-      ],
-      "link": "https://th.club21.com/",
       "imageUrl": ""
     },
     {
@@ -321,20 +335,6 @@
       "id": "proj-5",
       "title": "[Internal]Time Attendance System",
       "description": "Designed and implemented a time attendance system to track employee working hours and attendance.",
-      "tags": [
-        "Laravel",
-        "Tailwind CSS",
-        "MySQL",
-        "PHP",
-        "REST API"
-      ],
-      "link": "",
-      "imageUrl": ""
-    },
-    {
-      "id": "proj-6",
-      "title": "[Internal]Warehouse Management System",
-      "description": "Developed a warehouse management system to optimize inventory tracking and order fulfillment processes. Integrated with barcode scanning for efficient operations.",
       "tags": [
         "Laravel",
         "Tailwind CSS",
