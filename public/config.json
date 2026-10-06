@@ -235,6 +235,21 @@
       "imageUrl": ""
     },
     {
+      "id": "proj-11",
+      "title": "ScribSalmon - Windows Meeting Notes App",
+      "description": "Built a Windows desktop app that captures system audio and microphone, transcribes meetings live or after recording (Thai-aware), and generates editable numbered summaries with Claude. Supports local faster-whisper or OpenAI Whisper, and Claude Code CLI or Anthropic API backends.",
+      "tags": [
+        "Python",
+        "React",
+        "Tailwind CSS",
+        "pywebview",
+        "faster-whisper",
+        "Anthropic API"
+      ],
+      "link": "https://github.com/akirasane/ScribSalmon",
+      "imageUrl": ""
+    },
+    {
       "id": "proj-1",
       "title": "[Internal]Instant Redemption Portal",
       "description": "Developed an internal portal for employees to redeem customer points for rewards. Integrated with existing CRM and loyalty systems.",
