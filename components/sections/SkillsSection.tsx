@@ -2,6 +2,7 @@
 
 import ScrollReveal from '@/components/reactbits/ScrollReveal'
 import BorderGlow from '@/components/reactbits/BorderGlow'
+import { resolveColor } from '@/lib/colors'
 import type { SkillCategory, SkillItem, Project } from '@/lib/types'
 
 interface SkillsSectionProps {
@@ -127,9 +128,14 @@ export default function SkillsSection({ skills, projects }: SkillsSectionProps) 
           skills.map((category) => (
             <div key={category.id} className="flex flex-col gap-4">
               <h3
-                className="text-lg font-semibold"
-                style={{ color: 'var(--accent-primary)' }}
+                className="text-lg font-semibold flex items-center gap-2"
+                style={{ color: resolveColor(category.color) }}
               >
+                <span
+                  aria-hidden
+                  className="inline-block w-2.5 h-2.5 rounded-full"
+                  style={{ background: resolveColor(category.color), boxShadow: `0 0 10px color-mix(in srgb, ${resolveColor(category.color, '#c084fc')} 60%, transparent)` }}
+                />
                 {category.category}
               </h3>
               <ScrollReveal className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">

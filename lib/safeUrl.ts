@@ -1,5 +1,7 @@
 // Config is editable remotely (admin dashboard), so treat link fields as untrusted.
 // Allowed: empty, https://..., or a scheme-less relative path. Everything else (javascript:, data:, http:, //host) becomes ''.
+import { isValidColor } from './colors'
+
 const URL_KEYS = new Set([
   'avatarUrl',
   'resumeUrl',
@@ -25,7 +27,9 @@ export function sanitizeConfig<T>(input: T): T {
   if (input && typeof input === 'object') {
     const out: Record<string, unknown> = {}
     for (const [k, v] of Object.entries(input as Record<string, unknown>)) {
-      out[k] = typeof v === 'string' && URL_KEYS.has(k) ? (isSafeUrl(v) ? v : '') : sanitizeConfig(v)
+      if (typeof v === 'string' && URL_KEYS.has(k)) out[k] = isSafeUrl(v) ? v : ''
+      else if (typeof v === 'string' && k === 'color') out[k] = isValidColor(v) ? v : ''
+      else out[k] = sanitizeConfig(v)
     }
     return out as T
   }

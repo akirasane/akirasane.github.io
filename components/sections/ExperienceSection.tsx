@@ -2,6 +2,7 @@
 
 import FadeContent from '@/components/reactbits/FadeContent'
 import BorderGlow from '@/components/reactbits/BorderGlow'
+import { resolveColor } from '@/lib/colors'
 import type { Experience } from '@/lib/types'
 
 interface ExperienceSectionProps {
@@ -48,9 +49,9 @@ export default function ExperienceSection({ experiences }: ExperienceSectionProp
                 <div
                   className="absolute left-2.5 top-2 w-3 h-3 rounded-full border-2"
                   style={{
-                    background: 'var(--accent-primary)',
+                    background: resolveColor(exp.color),
                     borderColor: 'var(--bg-secondary)',
-                    boxShadow: '0 0 12px rgba(192, 132, 252, 0.6)',
+                    boxShadow: `0 0 12px color-mix(in srgb, ${resolveColor(exp.color, '#c084fc')} 60%, transparent)`,
                   }}
                 />
 
@@ -81,7 +82,7 @@ export default function ExperienceSection({ experiences }: ExperienceSectionProp
                     </span>
                     <span
                       className="text-xs font-medium"
-                      style={{ color: 'var(--accent-primary)' }}
+                      style={{ color: resolveColor(exp.color) }}
                     >
                       {formatDate(exp.startDate)} – {exp.endDate ? formatDate(exp.endDate) : 'Present'}
                     </span>

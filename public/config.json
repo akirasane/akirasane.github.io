@@ -315,7 +315,7 @@
         "n8n"
       ],
       "link": "",
-      "imageUrl": "public/img/pm.png"
+      "imageUrl": "https://files.omelettesalmon.com/img/pm.png"
     },
     {
       "id": "proj-4",
@@ -391,7 +391,7 @@
       "issuer": "AWS Partner Network (ERT Training)",
       "issueDate": "2026-07-17",
       "expiryDate": "",
-      "credentialUrl": "/certs/aws-architecting-on-aws.pdf",
+      "credentialUrl": "https://files.omelettesalmon.com/certs/aws-architecting-on-aws.pdf",
       "imageUrl": ""
     },
     {
@@ -400,7 +400,7 @@
       "issuer": "IRIS Consulting Co., Ltd. (BOI STEM++)",
       "issueDate": "2026-06-22",
       "expiryDate": "",
-      "credentialUrl": "/certs/iris-advanced-ai-engineering.pdf",
+      "credentialUrl": "https://files.omelettesalmon.com/certs/iris-advanced-ai-engineering.pdf",
       "imageUrl": ""
     }
   ],
