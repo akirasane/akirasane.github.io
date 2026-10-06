@@ -46,3 +46,6 @@ example
 .kiro/
 
 __tests__/
+
+# Claude Code local settings
+.claude/
