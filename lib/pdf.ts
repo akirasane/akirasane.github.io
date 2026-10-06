@@ -63,7 +63,10 @@ export async function generateResumePDF(data: PortfolioData): Promise<void> {
 
   try {
     const [avatarImg, regBase64, boldBase64] = await Promise.all([
-      loadImage('/img/avatar.jpg').catch(() => null),
+      // configured avatar first (needs CORS on the file host), bundled fallback second
+      (profile.avatarUrl ? loadImage(profile.avatarUrl).catch(() => null) : Promise.resolve(null)).then(
+        (img) => img ?? loadImage('/img/avatar.jpg').catch(() => null)
+      ),
       fetchFontAsBase64('https://raw.githubusercontent.com/google/fonts/main/ofl/kanit/Kanit-Regular.ttf').catch(() => null),
       fetchFontAsBase64('https://raw.githubusercontent.com/google/fonts/main/ofl/kanit/Kanit-Bold.ttf').catch(() => null)
     ])

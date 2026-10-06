@@ -98,7 +98,7 @@ export default function AboutSection({ profile, portfolioData }: AboutSectionPro
               handle="akirasane"
               status="Online"
               contactText="Download Resume"
-              avatarUrl="/img/avatar.jpg"
+              avatarUrl={profile.avatarUrl || '/img/avatar.jpg'}
               showUserInfo={isMobile}
               enableTilt={true}
               enableMobileTilt={false}
