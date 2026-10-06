@@ -27,26 +27,49 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
 
     const EDGE_RELEASE_THRESHOLD = 4 // px of remaining scroll room before we hand off to vertical scroll
 
+    const EASE = 0.14 // fraction of remaining distance covered per frame
+
+    let target = container.scrollLeft
+    let rafId = 0
+
+    const step = () => {
+      const diff = target - container.scrollLeft
+      if (Math.abs(diff) < 0.5) {
+        container.scrollLeft = target
+        rafId = 0
+        return
+      }
+      container.scrollLeft += diff * EASE
+      rafId = requestAnimationFrame(step)
+    }
+
     const handleWheel = (e: WheelEvent) => {
       // Only lock/hijack if scroll is primarily vertical
-      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-        const scrollLeft = container.scrollLeft
-        const maxScrollLeft = container.scrollWidth - container.clientWidth
+      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return
 
-        // Lock vertically and scroll horizontally if we haven't reached the boundaries
-        if (e.deltaY > 0 && scrollLeft < maxScrollLeft - EDGE_RELEASE_THRESHOLD) {
-          e.preventDefault()
-          container.scrollLeft = Math.min(container.scrollLeft + e.deltaY, maxScrollLeft)
-        } else if (e.deltaY < 0 && scrollLeft > EDGE_RELEASE_THRESHOLD) {
-          e.preventDefault()
-          container.scrollLeft = Math.max(container.scrollLeft + e.deltaY, 0)
-        }
-      }
+      const scrollLeft = container.scrollLeft
+      const maxScrollLeft = container.scrollWidth - container.clientWidth
+
+      // Normalize line/page wheel modes to pixels
+      const delta =
+        e.deltaMode === 1 ? e.deltaY * 16 : e.deltaMode === 2 ? e.deltaY * container.clientWidth : e.deltaY
+
+      // Lock vertically and scroll horizontally if we haven't reached the boundaries
+      const canMoveRight = delta > 0 && scrollLeft < maxScrollLeft - EDGE_RELEASE_THRESHOLD
+      const canMoveLeft = delta < 0 && scrollLeft > EDGE_RELEASE_THRESHOLD
+      if (!canMoveRight && !canMoveLeft) return
+
+      e.preventDefault()
+      // Re-sync with the real position when idle (arrows, touch, tag reset may have moved it)
+      if (!rafId) target = scrollLeft
+      target = Math.min(Math.max(target + delta, 0), maxScrollLeft)
+      if (!rafId) rafId = requestAnimationFrame(step)
     }
 
     section.addEventListener('wheel', handleWheel, { passive: false })
     return () => {
       section.removeEventListener('wheel', handleWheel)
+      cancelAnimationFrame(rafId)
     }
   }, [filtered]) // Re-run when projects filtered list changes to adapt container scroll width
 
@@ -140,7 +163,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
               <div
                 ref={scrollContainerRef}
                 id="projects-container"
-                className="grid grid-rows-2 grid-flow-col gap-4 overflow-x-auto pb-4 h-[540px] snap-x snap-mandatory"
+                className="grid grid-rows-2 grid-flow-col gap-4 overflow-x-auto pb-4 h-[540px]"
                 style={{
                   scrollbarWidth: 'none',
                   msOverflowStyle: 'none',
@@ -155,7 +178,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
                 {filtered.map((project) => (
                 <FadeContent
                   key={project.id}
-                  className="shrink-0 snap-start w-[290px] sm:w-[340px] md:w-[380px] h-[250px]"
+                  className="shrink-0 w-[290px] sm:w-[340px] md:w-[380px] h-[250px]"
                 >
                   <BorderGlow
                     className="rounded-xl p-5 flex flex-col gap-3 h-full"
