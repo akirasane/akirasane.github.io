@@ -13,6 +13,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
   const [activeTag, setActiveTag] = useState<string | null>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const tagsRef = useRef<HTMLDivElement>(null)
 
   const uniqueTags = Array.from(new Set(projects.flatMap((p) => p.tags)))
 
@@ -80,6 +81,21 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
     }
   }, [activeTag])
 
+  // Wheel over the tag row scrolls tags sideways instead of the page/cards
+  useEffect(() => {
+    const row = tagsRef.current
+    if (!row) return
+    const onWheel = (e: WheelEvent) => {
+      if (row.scrollWidth <= row.clientWidth) return
+      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return
+      e.preventDefault()
+      e.stopPropagation()
+      row.scrollLeft += e.deltaY
+    }
+    row.addEventListener('wheel', onWheel, { passive: false })
+    return () => row.removeEventListener('wheel', onWheel)
+  }, [projects.length])
+
   const scroll = (direction: 'left' | 'right') => {
     const container = scrollContainerRef.current
     if (!container) return
@@ -131,7 +147,12 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
           </p>
         ) : (
           <>
-            <div className="flex flex-wrap gap-2 justify-start">
+            <div ref={tagsRef} id="projects-tags" className="flex flex-nowrap gap-2 justify-start overflow-x-auto">
+              <style dangerouslySetInnerHTML={{__html: `
+                #projects-tags { scrollbar-width: none; -ms-overflow-style: none; }
+                #projects-tags::-webkit-scrollbar { display: none; }
+                #projects-tags > button { flex-shrink: 0; white-space: nowrap; }
+              `}} />
               <button
                 onClick={() => setActiveTag(null)}
                 className="px-4 py-2.5 rounded-full text-sm font-medium transition-colors"
