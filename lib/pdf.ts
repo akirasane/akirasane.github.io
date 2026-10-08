@@ -99,38 +99,25 @@ export async function generateResumePDF(data: PortfolioData): Promise<void> {
 
   const drawAmbientBackground = () => {
     // Ambient off-white base
-    doc.setFillColor('#FAFBFD')
+    doc.setFillColor('#FFFFFF')
     doc.rect(0, 0, pageWidth, pageHeight, 'F')
-
-    // Liquid Glass glowing gradient orbs
-    // Orb 1: Top-Right (Soft Indigo)
-    doc.setFillColor('#EEF2FF')
-    doc.circle(200, 30, 60, 'F')
-
-    // Orb 2: Middle-Left (Soft Emerald)
-    doc.setFillColor('#ECFDF5')
-    doc.circle(10, 160, 70, 'F')
-
-    // Orb 3: Bottom-Right (Soft Pink)
-    doc.setFillColor('#FDF2F8')
-    doc.circle(190, 260, 65, 'F')
   }
 
   const drawPageSkeleton = () => {
     drawAmbientBackground()
 
-    // Left column glass card (Dark Slate translucent)
-    setAlpha(0.95)
-    doc.setFillColor('#0B0F19')
+    // Left column light glass card (matches HTML print layout)
+    setAlpha(1.0)
+    doc.setFillColor('#F1F3FA')
     doc.roundedRect(10, 15, 55, 267, 3, 3, 'F')
 
     // Left card subtle border
-    doc.setDrawColor('#1E293B')
+    doc.setDrawColor('#D5D9F3')
     doc.setLineWidth(0.3)
     doc.roundedRect(10, 15, 55, 267, 3, 3, 'D')
 
     // Right column glass card (Pure White translucent)
-    setAlpha(0.92)
+    setAlpha(1.0)
     doc.setFillColor('#FFFFFF')
     doc.roundedRect(70, 15, 130, 267, 3, 3, 'F')
 
@@ -166,10 +153,10 @@ export async function generateResumePDF(data: PortfolioData): Promise<void> {
   const addLeftHeader = (title: string, yVal: number) => {
     doc.setFont(fontFamily, 'bold')
     doc.setFontSize(9)
-    doc.setTextColor('#6366F1')
+    doc.setTextColor('#4F46E5')
     doc.text(title.toUpperCase(), 15, yVal)
 
-    doc.setDrawColor('#1E293B')
+    doc.setDrawColor('#C7CBF0')
     doc.setLineWidth(0.3)
     doc.line(15, yVal + 1.8, 50, yVal + 1.8)
     return yVal + 5
@@ -178,12 +165,12 @@ export async function generateResumePDF(data: PortfolioData): Promise<void> {
   const addContactItem = (label: string, value: string, yVal: number) => {
     doc.setFont(fontFamily, 'bold')
     doc.setFontSize(6.5)
-    doc.setTextColor('#94A3B8')
+    doc.setTextColor('#64748B')
     doc.text(label.toUpperCase(), 15, yVal)
 
     doc.setFont(fontFamily, 'normal')
     doc.setFontSize(8)
-    doc.setTextColor('#FFFFFF')
+    doc.setTextColor('#1E293B')
 
     const lines = doc.splitTextToSize(value, 38) as string[]
     doc.text(lines, 15, yVal + 3.5)
@@ -199,16 +186,16 @@ export async function generateResumePDF(data: PortfolioData): Promise<void> {
     const pillHeight = 4.8
 
     // Pill background
-    doc.setFillColor('#1E1B4B')
-    doc.roundedRect(x, yVal - 3.4, pillWidth, pillHeight, 1.2, 1.2, 'F')
+    doc.setFillColor('#E8EAFB')
+    doc.roundedRect(x, yVal - 3.4, pillWidth, pillHeight, 2.4, 2.4, 'F')
 
     // Pill border
-    doc.setDrawColor('#4F46E5')
+    doc.setDrawColor('#A5AAEA')
     doc.setLineWidth(0.2)
-    doc.roundedRect(x, yVal - 3.4, pillWidth, pillHeight, 1.2, 1.2, 'D')
+    doc.roundedRect(x, yVal - 3.4, pillWidth, pillHeight, 2.4, 2.4, 'D')
 
     // Pill text
-    doc.setTextColor('#FFFFFF')
+    doc.setTextColor('#4338CA')
     doc.text(text, x + 2.2, yVal)
 
     return pillWidth
@@ -217,7 +204,7 @@ export async function generateResumePDF(data: PortfolioData): Promise<void> {
   const addLeftSkills = (categoryName: string, items: typeof skills[0]['items'], yVal: number) => {
     doc.setFont(fontFamily, 'bold')
     doc.setFontSize(8)
-    doc.setTextColor('#E2E8F0')
+    doc.setTextColor('#334155')
     doc.text(categoryName, 15, yVal)
 
     let currentY = yVal + 4.5
@@ -255,11 +242,8 @@ export async function generateResumePDF(data: PortfolioData): Promise<void> {
 
       // double glowing borders
       doc.setDrawColor('#6366F1')
-      doc.setLineWidth(0.4)
-      doc.circle(centerAvatarX, centerAvatarY, avatarRadius + 0.4, 'D')
-      doc.setDrawColor('#4F46E5')
-      doc.setLineWidth(0.2)
-      doc.circle(centerAvatarX, centerAvatarY, avatarRadius + 1.0, 'D')
+      doc.setLineWidth(0.5)
+      doc.circle(centerAvatarX, centerAvatarY, avatarRadius + 0.3, 'D')
     } else {
       // Initials badge scaled up
       doc.setFillColor('#1A202C')
@@ -287,6 +271,9 @@ export async function generateResumePDF(data: PortfolioData): Promise<void> {
     yL += 1.5
     if (profile.social.email) {
       yL = addContactItem('Email', profile.social.email, yL)
+    }
+    if (data.contact?.phone) {
+      yL = addContactItem('Phone', data.contact.phone, yL)
     }
     if (profile.social.github) {
       yL = addContactItem('GitHub', profile.social.github.replace('https://', ''), yL)
@@ -2031,6 +2018,16 @@ export async function generateResumeHTML(data: PortfolioData): Promise<void> {
     </div>
   ` : ''
 
+  const phone = data.contact?.phone || ''
+  const phoneHtml = phone ? `
+    <div class="contact-item">
+      <span class="contact-label">Phone</span>
+      <span class="contact-val"><a href="tel:${phone.replace(/[^+\d]/g, '')}">${phone}</a></span>
+    </div>
+  ` : ''
+
+  const avatarSrc = profile.avatarUrl || `${currentOrigin}/img/avatar.jpg`
+
   const github = profile.social.github || ''
   const linkedin = profile.social.linkedin || ''
   const website = profile.social.website || ''
@@ -2331,7 +2328,7 @@ export async function generateResumeHTML(data: PortfolioData): Promise<void> {
     <div class="glass-card-left lg">
       <div class="avatar-wrapper">
         <div class="avatar-ring-outer"></div>
-        <img class="avatar" src="/img/avatar.jpg" alt="Avatar" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <img class="avatar" src="${avatarSrc}" alt="Avatar" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='${currentOrigin}/img/avatar.jpg';}else{this.style.display='none'; this.nextElementSibling.style.display='flex';}">
         <div style="display:none; width:140px; height:140px; border-radius:50%; background:#1a202c; color:#fff; align-items:center; justify-content:center; font-size:26px; font-weight:bold; border:2px solid #8b93ff;">
           ${(profile.name || 'Resume').split(' ').map(n => n[0]).join('').toUpperCase()}
         </div>
@@ -2340,6 +2337,7 @@ export async function generateResumeHTML(data: PortfolioData): Promise<void> {
       <div class="side-section">
         <div class="side-title">Contact</div>
         ${emailHtml}
+        ${phoneHtml}
         <div class="contact-item">
           <span class="contact-label">GitHub</span>
           <span class="contact-val"><a href="${github}" target="_blank">${formatUrlLabel(github)}</a></span>
