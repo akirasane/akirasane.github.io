@@ -27,23 +27,25 @@ export default function BlurText({
       if (!el) return
 
       const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      if (prefersReduced) return
 
       const observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
+              // Reduced motion: short plain fade, no blur or movement.
               gsap.fromTo(
                 el,
-                { opacity: 0, filter: 'blur(12px)', y: 20 },
-                {
-                  opacity: 1,
-                  filter: 'blur(0px)',
-                  y: 0,
-                  duration,
-                  delay,
-                  ease: 'power3.out',
-                }
+                prefersReduced ? { opacity: 0 } : { opacity: 0, filter: 'blur(12px)', y: 20 },
+                prefersReduced
+                  ? { opacity: 1, duration: 0.3, ease: 'none' }
+                  : {
+                      opacity: 1,
+                      filter: 'blur(0px)',
+                      y: 0,
+                      duration,
+                      delay,
+                      ease: 'power3.out',
+                    }
               )
               observer.unobserve(el)
             }
