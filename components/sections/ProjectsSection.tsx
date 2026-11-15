@@ -110,7 +110,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
     <section
       ref={sectionRef}
       id="projects"
-      className="snap-section flex flex-col items-center justify-center px-6 pt-24 pb-16 md:pt-24 md:pb-16 overflow-hidden"
+      className="snap-section flex flex-col items-center justify-center px-6 pt-28 pb-16 md:pt-28 md:pb-16 overflow-hidden"
       style={{ background: 'var(--bg-primary)' }}
     >
       <div className="w-full max-w-5xl flex flex-col gap-8">
@@ -184,7 +184,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
               <div
                 ref={scrollContainerRef}
                 id="projects-container"
-                className="grid grid-rows-2 grid-flow-col gap-4 overflow-x-auto pb-4 h-[540px]"
+                className="grid grid-rows-2 grid-flow-col gap-4 overflow-x-auto pb-4 h-[39rem]"
                 style={{
                   scrollbarWidth: 'none',
                   msOverflowStyle: 'none',
@@ -199,7 +199,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
                 {filtered.map((project) => (
                 <FadeContent
                   key={project.id}
-                  className="shrink-0 w-[290px] sm:w-[340px] md:w-[380px] h-[250px]"
+                  className="shrink-0 w-[18.125rem] sm:w-[21.25rem] md:w-[23.75rem] h-[18.5rem]"
                 >
                   <BorderGlow
                     className="rounded-xl p-5 flex flex-col gap-3 h-full"
@@ -260,7 +260,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
               ))}
               </div>
               <div
-                className="pointer-events-none absolute right-0 top-0 h-[540px] w-10 sm:hidden"
+                className="pointer-events-none absolute right-0 top-0 h-[39rem] w-10 sm:hidden"
                 style={{ background: 'linear-gradient(to left, var(--bg-primary), transparent)' }}
               />
             </div>

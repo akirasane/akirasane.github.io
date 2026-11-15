@@ -552,4 +552,26 @@ main:focus {
     filter: hue-rotate(0deg) contrast(1);
     transform: scale(1);
   }
-}
+}
+/* ---------- Large-screen scaling ----------
+   Layout and type are rem-based, so scaling the root font size scales the
+   whole page on 1080p/2K/4K instead of leaving a small column in a void. */
+@media (min-width: 1920px) {
+  html { font-size: 18px; }
+}
+@media (min-width: 2560px) {
+  html { font-size: 24px; }
+}
+@media (min-width: 3840px) {
+  html { font-size: 32px; }
+}
+
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
