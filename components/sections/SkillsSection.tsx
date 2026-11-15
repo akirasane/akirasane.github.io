@@ -1,17 +1,11 @@
 'use client'
 
 import ScrollReveal from '@/components/reactbits/ScrollReveal'
-import BorderGlow from '@/components/reactbits/BorderGlow'
 import { resolveColor } from '@/lib/colors'
-import type { SkillCategory, SkillItem, Project } from '@/lib/types'
+import type { SkillCategory, Project } from '@/lib/types'
 
 interface SkillsSectionProps {
   skills: SkillCategory[]
-  projects?: Project[]
-}
-
-interface SkillCardProps {
-  item: SkillItem
   projects?: Project[]
 }
 
@@ -40,76 +34,22 @@ function getSkillLevel(proficiency: number) {
   }
 }
 
-const countSkillProjects = (skillName: string, projects: Project[] = []) => {
-  const normSkill = skillName.toLowerCase().replace(/[^a-z0-9]/g, '')
-  return projects.filter(proj => 
-    proj.tags?.some(tag => {
-      const normTag = tag.toLowerCase().replace(/[^a-z0-9]/g, '')
-      return normSkill.includes(normTag) || normTag.includes(normSkill)
-    })
-  ).length
-}
+const MAX_STRONG_SKILLS = 10
 
-function SkillCard({ item, projects }: SkillCardProps) {
-  const level = getSkillLevel(item.proficiency)
-  const projectCount = countSkillProjects(item.name, projects)
-
-  return (
-    <BorderGlow
-      edgeSensitivity={30}
-      glowColor="40 80 80"
-      backgroundColor="#060010"
-      borderRadius={28}
-      glowRadius={40}
-      glowIntensity={1}
-      coneSpread={25}
-      animated={false}
-      colors={['#c084fc', '#f472b6', '#38bdf8']}
-    >
-      <div style={{ padding: '2em' }} className="flex flex-col gap-4">
-        <div className="flex items-center justify-between gap-2">
-          <span
-            className="font-medium text-sm md:text-base tracking-wide"
-            style={{ color: 'var(--text-primary)' }}
-          >
-            {item.name}
-          </span>
-          <span
-            className="text-[10px] md:text-xs font-semibold px-2 py-0.5 rounded-full"
-            style={{
-              color: level.color,
-              backgroundColor: level.bg,
-              border: level.border,
-            }}
-          >
-            {level.label}
-          </span>
-        </div>
-
-        <div className="flex flex-col gap-2 text-xs" style={{ color: 'var(--text-secondary)' }}>
-          <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--accent-primary)', opacity: 0.6 }} />
-            <span>{item.years} {item.years === 1 ? 'year' : 'years'} experience</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--accent-primary)', opacity: 0.6 }} />
-            <span>
-              {projectCount > 0 
-                ? `Used in ${projectCount} ${projectCount === 1 ? 'project' : 'projects'}` 
-                : 'Specialized study'}
-            </span>
-          </div>
-        </div>
-      </div>
-    </BorderGlow>
+export default function SkillsSection({ skills }: SkillsSectionProps) {
+  const all = skills.flatMap((category) =>
+    category.items.map((item) => ({ item, color: resolveColor(category.color, '#c084fc') }))
   )
-}
+  const strong = all
+    .filter(({ item }) => item.proficiency >= 70)
+    .sort((a, b) => b.item.proficiency - a.item.proficiency)
+    .slice(0, MAX_STRONG_SKILLS)
+  const exploring = all.filter(({ item }) => item.proficiency < 70).map(({ item }) => item.name)
 
-export default function SkillsSection({ skills, projects }: SkillsSectionProps) {
   return (
     <section
       id="skills"
-      className="snap-section relative flex flex-col items-center justify-center px-6 pt-24 pb-20 md:pt-24 md:pb-20 overflow-hidden"
+      className="snap-section relative flex flex-col items-center justify-center px-6 pt-28 pb-20 md:pt-28 md:pb-20 md:h-dvh md:overflow-y-auto overflow-hidden"
       style={{ background: 'var(--bg-primary)' }}
     >
       <div className="w-full max-w-4xl flex flex-col gap-10 relative z-10">
@@ -117,7 +57,7 @@ export default function SkillsSection({ skills, projects }: SkillsSectionProps) 
           Skills
         </h2>
 
-        {skills.length === 0 ? (
+        {all.length === 0 ? (
           <p
             className="text-center"
             style={{ color: 'var(--text-secondary)' }}
@@ -125,26 +65,44 @@ export default function SkillsSection({ skills, projects }: SkillsSectionProps) 
             No skills added yet.
           </p>
         ) : (
-          skills.map((category) => (
-            <div key={category.id} className="flex flex-col gap-4">
-              <h3
-                className="text-lg font-semibold flex items-center gap-2"
-                style={{ color: resolveColor(category.color) }}
+          <>
+            <ScrollReveal className="flex flex-wrap justify-center gap-[0.75rem]">
+              {strong.map(({ item, color }) => {
+                const level = getSkillLevel(item.proficiency)
+                return (
+                  <span
+                    key={item.id}
+                    className="inline-flex items-center gap-[0.625rem] rounded-full border px-[1rem] py-[0.5rem] text-[0.875rem] font-medium"
+                    style={{
+                      color: 'var(--text-primary)',
+                      borderColor: `color-mix(in srgb, ${color} 45%, transparent)`,
+                      background: `color-mix(in srgb, ${color} 10%, transparent)`,
+                    }}
+                  >
+                    {item.name}
+                    <span
+                      className="rounded-full px-[0.5rem] py-[0.125rem] text-[0.6875rem] font-semibold"
+                      style={{ color: level.color, backgroundColor: level.bg, border: level.border }}
+                    >
+                      {level.label}
+                    </span>
+                  </span>
+                )
+              })}
+            </ScrollReveal>
+
+            {exploring.length > 0 && (
+              <p
+                className="text-center text-[0.9375rem] break-words"
+                style={{ color: 'var(--text-secondary)' }}
               >
-                <span
-                  aria-hidden
-                  className="inline-block w-2.5 h-2.5 rounded-full"
-                  style={{ background: resolveColor(category.color), boxShadow: `0 0 10px color-mix(in srgb, ${resolveColor(category.color, '#c084fc')} 60%, transparent)` }}
-                />
-                {category.category}
-              </h3>
-              <ScrollReveal className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
-                {category.items.map((item) => (
-                  <SkillCard key={item.id} item={item} projects={projects} />
-                ))}
-              </ScrollReveal>
-            </div>
-          ))
+                <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>
+                  Currently exploring:
+                </span>{' '}
+                {exploring.join(', ')}
+              </p>
+            )}
+          </>
         )}
       </div>
     </section>

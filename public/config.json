@@ -19,7 +19,7 @@
     "ctaLinks": [
       {
         "label": "View My Work",
-        "target": "projects"
+        "target": "featured"
       },
       {
         "label": "About Me",

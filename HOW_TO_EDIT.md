@@ -143,6 +143,22 @@ All your portfolio content is in one file: `public/config.json`
 }
 ```
 
+## Optional Fields (Highlights, Case Studies, Proof)
+
+All fields below are optional. Omit them and the related UI is hidden.
+
+- `landing.valueStatement` (string): one-line value proposition shown in the hero.
+- `landing.availability` (`{ "status": "open" | "limited" | "closed", "text": string }`): availability badge in the hero.
+- `landing.ctaLinks[].target`: a section id. Use `"featured"` to scroll to the Featured projects block.
+- `experiences[].metrics` / `projects[].metrics` (`[{ "value": "40%", "label": "faster reports" }]`): proof points. At most 2 are rendered per item.
+- `projects[].featured` (boolean): marks a project for the Featured block. At most 3 featured projects are shown.
+- `projects[].imageUrl` + `projects[].imageAlt` (string): preview image and its alt text. If the image is missing or fails to load, it is hidden.
+- `projects[].caseStudy` (`{ "problem", "approach", "result", "stack"?: string[] }`): short problem / approach / result write-up.
+- `analystSamples[]` (`{ "id", "kind": "flow" | "erd" | "requirements", "title", "summary", "imageUrl"?, "imageAlt"?, "requirements"?: string[] }`): system analyst work samples.
+- `testimonials[]` (`{ "id", "quote", "name", "role", "company", "link"? }`): recommendations from colleagues or clients.
+
+Skills display: skill chips show items with `proficiency >= 70`, capped at 10. Everything else is listed under "Currently exploring".
+
 ## JSON Tips
 
 ### Important Rules:

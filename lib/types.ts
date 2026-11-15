@@ -7,6 +7,8 @@ export interface PortfolioData {
   projects:       Project[]
   certifications: Certification[]
   contact:        ContactInfo
+  analystSamples?: AnalystSample[]
+  testimonials?:   Testimonial[]
 }
 
 export interface Profile {
@@ -31,6 +33,8 @@ export interface LandingContent {
     label:  string
     target: string             // section id, e.g. "about", "experience"
   }>
+  valueStatement?: string
+  availability?: { status: 'open' | 'limited' | 'closed'; text: string }
 }
 
 export interface Experience {
@@ -41,6 +45,7 @@ export interface Experience {
   endDate:     string          // ISO date string or "" → display "Present"
   description: string
   color:       string          // accent color name, e.g. "indigo", "emerald"
+  metrics?:    Metric[]
 }
 
 export interface SkillCategory {
@@ -64,6 +69,10 @@ export interface Project {
   tags:        string[]        // technology tag strings
   link:        string          // optional project URL
   imageUrl:    string          // optional preview image
+  metrics?:    Metric[]
+  imageAlt?:   string
+  featured?:   boolean
+  caseStudy?:  CaseStudy
 }
 
 export interface Certification {
@@ -88,3 +97,8 @@ export interface ContactInfo {
   }
   formEndpoint: string         // external form service URL (e.g. formsubmit.co)
 }
+
+export interface Metric { value: string; label: string }
+export interface CaseStudy { problem: string; approach: string; result: string; stack?: string[] }
+export interface AnalystSample { id: string; kind: 'flow'|'erd'|'requirements'; title: string; summary: string; imageUrl?: string; imageAlt?: string; requirements?: string[] }
+export interface Testimonial { id: string; quote: string; name: string; role: string; company: string; link?: string }

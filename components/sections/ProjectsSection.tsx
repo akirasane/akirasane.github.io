@@ -3,6 +3,8 @@
 import { useState, useRef, useEffect } from 'react'
 import FadeContent from '@/components/reactbits/FadeContent'
 import BorderGlow from '@/components/reactbits/BorderGlow'
+import MetricList from '@/components/ui/MetricList'
+import ProjectMedia from '@/components/ui/ProjectMedia'
 import type { Project } from '@/lib/types'
 
 interface ProjectsSectionProps {
@@ -110,7 +112,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
     <section
       ref={sectionRef}
       id="projects"
-      className="snap-section flex flex-col items-center justify-center px-6 pt-24 pb-16 md:pt-24 md:pb-16 overflow-hidden"
+      className="snap-section flex flex-col items-center justify-center px-6 pt-28 pb-16 md:pt-28 md:pb-16 overflow-hidden"
       style={{ background: 'var(--bg-primary)' }}
     >
       <div className="w-full max-w-5xl flex flex-col gap-8">
@@ -184,7 +186,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
               <div
                 ref={scrollContainerRef}
                 id="projects-container"
-                className="grid grid-rows-2 grid-flow-col gap-4 overflow-x-auto pb-4 h-[540px]"
+                className="grid grid-rows-2 grid-flow-col gap-4 overflow-x-auto pb-4 h-[41rem]"
                 style={{
                   scrollbarWidth: 'none',
                   msOverflowStyle: 'none',
@@ -199,7 +201,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
                 {filtered.map((project) => (
                 <FadeContent
                   key={project.id}
-                  className="shrink-0 w-[290px] sm:w-[340px] md:w-[380px] h-[250px]"
+                  className="shrink-0 w-[18.125rem] sm:w-[21.25rem] md:w-[23.75rem] h-[19.5rem]"
                 >
                   <BorderGlow
                     className="rounded-xl p-5 flex flex-col gap-3 h-full"
@@ -213,22 +215,31 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
                     animated={false}
                     colors={['#c084fc', '#f472b6', '#38bdf8']}
                   >
+                    <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-hidden">
+                    <ProjectMedia
+                      src={project.imageUrl}
+                      alt={project.imageAlt}
+                      className="h-[4.5rem] w-full shrink-0 rounded-lg object-cover"
+                    />
+
                     <h3
-                      className="font-semibold text-base md:text-lg"
+                      className="shrink-0 line-clamp-2 font-semibold text-base md:text-lg"
                       style={{ color: 'var(--text-primary)' }}
                     >
                       {project.title}
                     </h3>
 
                     <p
-                      className="text-xs md:text-sm leading-relaxed flex-1 overflow-y-auto"
+                      className={`text-xs md:text-sm leading-relaxed flex-1 ${project.imageUrl ? 'min-h-[2.5rem] overflow-hidden line-clamp-2' : 'min-h-0 overflow-y-auto'}`}
                       style={{ color: 'var(--text-secondary)' }}
                     >
                       {project.description}
                     </p>
 
+                    <div className="shrink-0"><MetricList metrics={project.metrics} /></div>
+
                     {project.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-1.5">
+                      <div className={`flex shrink-0 flex-wrap gap-1.5 overflow-hidden ${project.imageUrl ? 'max-h-[1.5rem]' : 'max-h-[3.5rem]'}`}>
                         {project.tags.map((tag) => (
                           <span
                             key={tag}
@@ -249,18 +260,19 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
                         href={project.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs md:text-sm font-medium mt-auto py-2 inline-block"
+                        className="shrink-0 text-xs md:text-sm font-medium mt-auto py-1 inline-block"
                         style={{ color: 'var(--accent-primary)' }}
                       >
                         View Project →
                       </a>
                     )}
+                    </div>
                   </BorderGlow>
                 </FadeContent>
               ))}
               </div>
               <div
-                className="pointer-events-none absolute right-0 top-0 h-[540px] w-10 sm:hidden"
+                className="pointer-events-none absolute right-0 top-0 h-[41rem] w-10 sm:hidden"
                 style={{ background: 'linear-gradient(to left, var(--bg-primary), transparent)' }}
               />
             </div>
