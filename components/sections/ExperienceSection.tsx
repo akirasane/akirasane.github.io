@@ -2,6 +2,7 @@
 
 import FadeContent from '@/components/reactbits/FadeContent'
 import BorderGlow from '@/components/reactbits/BorderGlow'
+import MetricList from '@/components/ui/MetricList'
 import { resolveColor } from '@/lib/colors'
 import type { Experience } from '@/lib/types'
 
@@ -103,6 +104,8 @@ export default function ExperienceSection({ experiences }: ExperienceSectionProp
                       {exp.description}
                     </p>
                   )}
+
+                  <MetricList metrics={exp.metrics} />
                   {/* </div> */}
                 </BorderGlow>
               </FadeContent>

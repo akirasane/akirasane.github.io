@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { usePortfolioStore } from '@/lib/store'
 import Navbar from '@/components/layout/Navbar'
 import HeroSection from '@/components/sections/HeroSection'
@@ -8,19 +8,14 @@ import AboutSection from '@/components/sections/AboutSection'
 import SkillsSection from '@/components/sections/SkillsSection'
 import ExperienceSection from '@/components/sections/ExperienceSection'
 import ProjectsSection from '@/components/sections/ProjectsSection'
+import FeaturedSection from '@/components/sections/FeaturedSection'
+import AnalystProofSection from '@/components/sections/AnalystProofSection'
+import SocialProofSection from '@/components/sections/SocialProofSection'
 import CertificationsSection from '@/components/sections/CertificationsSection'
 import ContactSection from '@/components/sections/ContactSection'
 import Terminal from '@/components/Terminal'
 
-const SECTIONS = [
-  { id: 'hero', label: 'Home' },
-  { id: 'about', label: 'About' },
-  { id: 'skills', label: 'Skills' },
-  { id: 'experience', label: 'Experience' },
-  { id: 'projects', label: 'Projects' },
-  { id: 'certifications', label: 'Certifications' },
-  { id: 'contact', label: 'Contact' },
-]
+const MAX_FEATURED = 3
 
 // Boot diagnostic lines — printed one by one over 3 seconds
 const BOOT_LINES = [
@@ -183,6 +178,30 @@ export default function HomeClient() {
   const [bootDone, setBootDone] = useState(false)
   const mainRef = useRef<HTMLElement>(null)
 
+  // Featured projects (max 3) get their own case-study section and are
+  // removed from the carousel. Nav only lists sections that actually render.
+  const featuredProjects = useMemo(
+    () => data.projects.filter((p) => p.featured).slice(0, MAX_FEATURED),
+    [data.projects],
+  )
+  const carouselProjects = useMemo(
+    () => data.projects.filter((p) => !featuredProjects.includes(p)),
+    [data.projects, featuredProjects],
+  )
+  const navSections = useMemo(
+    () => [
+      { id: 'hero', label: 'Home' },
+      { id: 'about', label: 'About' },
+      { id: 'skills', label: 'Skills' },
+      { id: 'experience', label: 'Experience' },
+      ...(featuredProjects.length > 0 ? [{ id: 'featured', label: 'Case Studies' }] : []),
+      ...(carouselProjects.length > 0 ? [{ id: 'projects', label: 'Projects' }] : []),
+      { id: 'certifications', label: 'Certifications' },
+      { id: 'contact', label: 'Contact' },
+    ],
+    [featuredProjects, carouselProjects],
+  )
+
   useEffect(() => {
     const t = setTimeout(() => setBootDone(true), TOTAL_DURATION)
     return () => clearTimeout(t)
@@ -234,7 +253,7 @@ export default function HomeClient() {
 
   return (
     <>
-      <Navbar sections={SECTIONS} currentMode={mode} setMode={handleModeToggle} />
+      <Navbar sections={navSections} currentMode={mode} setMode={handleModeToggle} />
       <main
         ref={mainRef}
         tabIndex={-1}
@@ -244,8 +263,15 @@ export default function HomeClient() {
         <AboutSection profile={data.profile} portfolioData={data} />
         <SkillsSection skills={data.skills} projects={data.projects} />
         <ExperienceSection experiences={data.experiences} />
-        <ProjectsSection projects={data.projects} />
+        <FeaturedSection projects={featuredProjects} />
+        {carouselProjects.length > 0 && <ProjectsSection projects={carouselProjects} />}
+        <AnalystProofSection samples={data.analystSamples} />
         <CertificationsSection certifications={data.certifications} />
+        <SocialProofSection
+          profile={data.profile}
+          portfolioData={data}
+          testimonials={data.testimonials}
+        />
         <ContactSection contact={data.contact} />
       </main>
     </>

@@ -3,6 +3,8 @@
 import { useState, useRef, useEffect } from 'react'
 import FadeContent from '@/components/reactbits/FadeContent'
 import BorderGlow from '@/components/reactbits/BorderGlow'
+import MetricList from '@/components/ui/MetricList'
+import ProjectMedia from '@/components/ui/ProjectMedia'
 import type { Project } from '@/lib/types'
 
 interface ProjectsSectionProps {
@@ -213,6 +215,12 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
                     animated={false}
                     colors={['#c084fc', '#f472b6', '#38bdf8']}
                   >
+                    <ProjectMedia
+                      src={project.imageUrl}
+                      alt={project.imageAlt}
+                      className="h-[6.5rem] w-full shrink-0 rounded-lg object-cover"
+                    />
+
                     <h3
                       className="font-semibold text-base md:text-lg"
                       style={{ color: 'var(--text-primary)' }}
@@ -221,11 +229,13 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
                     </h3>
 
                     <p
-                      className="text-xs md:text-sm leading-relaxed flex-1 overflow-y-auto"
+                      className={`text-xs md:text-sm leading-relaxed flex-1 ${project.imageUrl ? 'min-h-0 line-clamp-2' : 'overflow-y-auto'}`}
                       style={{ color: 'var(--text-secondary)' }}
                     >
                       {project.description}
                     </p>
+
+                    <MetricList metrics={project.metrics} />
 
                     {project.tags.length > 0 && (
                       <div className="flex flex-wrap gap-1.5">

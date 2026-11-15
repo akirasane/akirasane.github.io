@@ -18,7 +18,14 @@ export default function HeroSection({ landing, title }: HeroSectionProps) {
   const tagline = landing.tagline || DEFAULT_TAGLINE
 
   const scrollTo = (target: string) => {
-    scrollToSectionId(target)
+    scrollToSectionId(document.getElementById(target) ? target : 'projects')
+  }
+
+  const availability = landing.availability
+  const availabilityDot = {
+    open: '#22c55e',
+    limited: '#f59e0b',
+    closed: '#9ca3af',
   }
 
   return (
@@ -45,7 +52,7 @@ export default function HeroSection({ landing, title }: HeroSectionProps) {
 
       {/* Content — text left, terminal preview right on desktop; stacked on mobile */}
       <div className="relative z-20 w-full max-w-6xl px-6 md:px-10 grid md:grid-cols-[1.15fr_0.85fr] gap-10 md:gap-16 items-center">
-        <div className="flex flex-col items-center md:items-start text-center md:text-left gap-5">
+        <div className="flex flex-col items-center md:items-start text-center md:text-left gap-4 md:gap-5">
           {title && (
             <span
               className="font-mono text-xs md:text-sm font-medium uppercase tracking-[0.2em]"
@@ -66,7 +73,30 @@ export default function HeroSection({ landing, title }: HeroSectionProps) {
             <BlurText text={tagline} delay={0.2} />
           </p>
 
-          {landing.ctaLinks && landing.ctaLinks.length > 0 && (
+          {landing.valueStatement && (
+            <p
+              className="max-w-xl text-sm md:text-base"
+              style={{ color: 'var(--text-secondary)' }}
+            >
+              {landing.valueStatement}
+            </p>
+          )}
+
+          {availability && availability.text && (
+            <span
+              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs md:text-sm"
+              style={{ color: 'var(--text-primary)' }}
+            >
+              <span
+                aria-hidden
+                className="inline-block h-2 w-2 rounded-full"
+                style={{ background: availabilityDot[availability.status] ?? availabilityDot.closed }}
+              />
+              {availability.text}
+            </span>
+          )}
+
+          {landing.ctaLinks &&landing.ctaLinks.length > 0 && (
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 mt-2">
               {landing.ctaLinks.map((cta, i) => (
                 <Magnet key={i}>
