@@ -2194,9 +2194,10 @@ export async function generateResumeHTML(data: PortfolioData): Promise<void> {
 
     .skill-category { margin-bottom: 14px; }
     .skill-category-title { font-size: 11px; font-weight: 600; color: var(--ink-soft); margin-bottom: 6px; }
-    .skill-items { display: flex; flex-wrap: wrap; gap: 5px; }
-    .skill-badge { display: inline-block; font-size: 10px; background: rgba(139,147,255,0.2);
-      border: 1px solid rgba(255,255,255,0.16); color: #e5e9ff; padding: 3px 9px; border-radius: 999px;
+    .skill-items { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+    .skill-badge { display: flex; align-items: center; justify-content: center; text-align: center; min-height: 24px;
+      font-size: 10px; line-height: 1.2; background: rgba(139,147,255,0.2);
+      border: 1px solid rgba(255,255,255,0.16); color: #e5e9ff; padding: 3px 6px; border-radius: 999px;
       backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.18); }
 
     .header-name { font-size: 26px; font-weight: 700; color: #ffffff; letter-spacing: -0.5px; text-transform: uppercase; }
@@ -2238,10 +2239,15 @@ export async function generateResumeHTML(data: PortfolioData): Promise<void> {
       .no-print { display: none !important; }
       .orb { display: none !important; }
 
+      html, body {
+        height: 297mm !important; max-height: 297mm !important;
+        overflow: hidden !important; margin: 0 !important; padding: 0 !important;
+      }
       body {
         background: #ffffff !important;
         color: #0f172a !important;
         display: block !important;
+        min-height: 0 !important;
       }
 
       .page-container {
@@ -2387,17 +2393,34 @@ export async function generateResumeHTML(data: PortfolioData): Promise<void> {
     (function () {
       var MM_TO_PX = 96 / 25.4;          // 1mm at 96dpi
       var A4_H = 297 * MM_TO_PX;         // ~1122.5px
+      // Transform does not shrink the layout box, so scale from top-left, widen the
+      // box by 1/s (so it still fills 210mm after scaling) and clip html/body in print CSS.
+      function reset(page) {
+        page.style.transform = '';
+        page.style.width = '';
+        page.style.minHeight = '';
+      }
       function fitToPage() {
         var page = document.querySelector('.page-container');
         if (!page) return;
-        page.style.transform = 'none';
-        page.style.transformOrigin = 'top center';
+        reset(page);
+        var printing = window.matchMedia('print').matches || window.__printing;
+        if (!printing) return;
         var h = page.scrollHeight;
-        if (h > A4_H) page.style.transform = 'scale(' + (A4_H / h).toFixed(4) + ')';
+        if (h <= A4_H) return;
+        var s = A4_H / h;
+        for (var i = 0; i < 3; i++) {   // widening reflows text shorter; refine once or twice
+          page.style.width = (210 / s) + 'mm';
+          page.style.minHeight = (297 / s) + 'mm';
+          var h2 = page.scrollHeight;
+          if (h2 * s <= A4_H + 0.5) break;
+          s = A4_H / h2;
+        }
+        page.style.transformOrigin = 'top left';
+        page.style.transform = 'scale(' + s.toFixed(4) + ')';
       }
-      window.addEventListener('load', fitToPage);
-      window.addEventListener('resize', fitToPage);
-      window.addEventListener('beforeprint', fitToPage);
+      window.addEventListener('beforeprint', function () { window.__printing = true; fitToPage(); });
+      window.addEventListener('afterprint', function () { window.__printing = false; fitToPage(); });
     })();
   </script>
 
