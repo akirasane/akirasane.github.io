@@ -2037,9 +2037,11 @@ export async function generateResumeHTML(data: PortfolioData): Promise<void> {
   }
 
   const skillsHtml = skills.map(cat => {
-    const itemsHtml = cat.items.map(item => `
-      <span class="skill-badge">${item.name} (${item.years}y)</span>
-    `).join('')
+    const itemsHtml = cat.items.map(item => {
+      const label = `${item.name} (${item.years}y)`
+      const wide = label.length > 15 ? ' wide' : ''
+      return `<span class="skill-badge${wide}">${label}</span>`
+    }).join('')
     return `
       <div class="skill-category">
         <div class="skill-category-title">${cat.category}</div>
@@ -2197,8 +2199,9 @@ export async function generateResumeHTML(data: PortfolioData): Promise<void> {
     .skill-items { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
     .skill-badge { display: flex; align-items: center; justify-content: center; text-align: center; min-height: 24px;
       font-size: 10px; line-height: 1.2; background: rgba(139,147,255,0.2);
-      border: 1px solid rgba(255,255,255,0.16); color: #e5e9ff; padding: 3px 6px; border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.16); color: #e5e9ff; padding: 4px 8px; border-radius: 4px;
       backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.18); }
+    .skill-badge.wide { grid-column: 1 / -1; }
 
     .header-name { font-size: 26px; font-weight: 700; color: #ffffff; letter-spacing: -0.5px; text-transform: uppercase; }
     .header-title { font-size: 12px; font-weight: 700; color: var(--accent); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
